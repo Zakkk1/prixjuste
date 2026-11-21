@@ -1,0 +1,78 @@
+name: Vérifier des pages (identification sans jeton)
+
+# Lancé à la main (ou par la routine Claude programmée, dont le conteneur n'a pas accès aux sites
+# marchands). Deux usages :
+#  - « pages » : une page par ligne, « URL [--taille T] [--filtre F] » ; chaque page passe par
+#    `python -m prixjuste verifier` (robots.txt, User-Agent explicite, aucun contournement).
+#  - « articles » : ids séparés par des espaces ; `premier-releve` puis publication de data/.
+on:
+  workflow_dispatch:
+    inputs:
+      pages:
+        description: "Une page par ligne : URL [--taille T] [--filtre F]"
+        required: false
+        default: ""
+      articles:
+        description: "Ids d'articles à relever pour la première fois (séparés par des espaces)"
+        required: false
+        default: ""
+
+concurrency:
+  group: verifier
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install truststore
+
+      - name: Vérifier les pages
+        if: inputs.pages != ''
+        env:
+          PAGES: ${{ inputs.pages }}
+        run: |
+          python - <<'PY'
+          import os, shlex, subprocess, sys
+          lignes = [l.strip() for l in os.environ["PAGES"].replace("\\n", "\n").splitlines() if l.strip()]
+          resume = ["| Page | Résultat |", "|---|---|"]
+          for l in lignes:
+              args = shlex.split(l)
+              if not args or not args[0].startswith("https://"):
+                  continue
+              print(f"\n=== {l}", flush=True)
+              r = subprocess.run([sys.executable, "-m", "prixjuste", "verifier", *args],
+                                 capture_output=True, text=True, timeout=120)
+              print(r.stdout + r.stderr, flush=True)
+              fin = (r.stdout.strip().splitlines() or ["?"])[-1]
+              resume.append(f"| {l.replace('|', '/')} | {fin.replace('|', '/')} |")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write("\n".join(resume) + "\n")
+          PY
+
+      - name: Premier relevé
+        if: inputs.articles != ''
+        env:
+          ARTICLES: ${{ inputs.articles }}
+        run: |
+          for id in $ARTICLES; do
+            case "$id" in *[!a-z0-9-]*) echo "id ignoré : $id"; continue;; esac
+            python -m prixjuste premier-releve "$id" --minutes 6 | tee -a "$GITHUB_STEP_SUMMARY"
+          done
+
+      - name: Publier les données
+        if: inputs.articles != ''
+        env:
+          ARTICLES: ${{ inputs.articles }}
+        run: |
+          .github/scripts/publier-donnees.sh "Premier relevé : $ARTICLES"
