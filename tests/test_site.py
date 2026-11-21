@@ -21,7 +21,7 @@ def test_site_complet(tmp_path):
     assert "Contrôle des promos" in fiche and "trompeuse" in fiche
     assert "archives seulement" in fiche and "bloqué" in fiche
     data = json.loads((sortie / "data.json").read_text(encoding="utf-8"))
-    assert {a["id"] for a in data["articles"]} == {"mcmurdo", "timberland"}
+    assert {a["id"] for a in data["articles"]} >= {"mcmurdo", "timberland"}  # les vrais ajouts s'y ajoutent
 
 
 def test_aucune_dependance_externe_hors_polices(tmp_path):
