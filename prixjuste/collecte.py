@@ -133,8 +133,10 @@ def resumer(offres, filtre=None, taille=None):
     dispo = [o for o in offres if o["en_stock"]]
     stock_connu = any(o["en_stock"] is not None for o in offres) and not taille_inconnue
     base = dispo if dispo else offres
+    meilleure = min(base, key=lambda o: o["prix"])
     return {
-        "prix": min(o["prix"] for o in base),
+        "prix": meilleure["prix"],
+        "livraison": meilleure.get("livraison"),
         "devise": base[0]["devise"],
         "en_stock": (1 if dispo else 0) if stock_connu else None,
         "n_offres": len(offres),
@@ -160,12 +162,22 @@ def releve_direct(url, filtre=None, taille=None):
     return lire_page(telecharger(url), filtre, taille)
 
 
+HORS_UE = (".ch", ".uk", ".us", ".no", ".ca", ".au", ".jp", ".cn", ".hk", ".tr", ".is")
+
+
+def hors_ue(url):
+    """Marchand hors Union européenne d'après son domaine : droits de douane et TVA à l'import possibles."""
+    host = urllib.parse.urlsplit(url or "").netloc.lower().split(":")[0]
+    return host.endswith(HORS_UE)
+
+
 # ---------------------------------------------------------------- orchestration
 
 def _ligne(art, lien, source, ts, r, prix_barre=None, note=None):
     return {"ts": ts, "lien": cle(lien), "marchand": lien.get("marchand", "?"),
             "exact": bool(lien.get("exact", True)), "source": source, "prix": r["prix"],
-            "devise": r.get("devise", "EUR"), "en_stock": r.get("en_stock"), "n_offres": r.get("n_offres"),
+            "devise": r.get("devise", "EUR"), "livraison": r.get("livraison"), "en_stock": r.get("en_stock"),
+            "n_offres": r.get("n_offres"),
             "n_dispo": r.get("n_dispo"), "prix_barre": prix_barre, "note": note}
 
 

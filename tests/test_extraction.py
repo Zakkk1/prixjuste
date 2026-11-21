@@ -34,7 +34,8 @@ def test_aggregate_sans_detail_et_graph(page):
 
 def test_repli_meta(page):
     _, offres = extraire_offres(page("meta_seulement.html"))
-    assert offres == [{"prix": 89.90, "devise": "EUR", "en_stock": None, "sku": "", "nom": "", "taille": ""}]
+    assert offres == [{"prix": 89.90, "devise": "EUR", "en_stock": None, "sku": "", "nom": "", "taille": "",
+                       "livraison": None}]
 
 
 def test_json_irregulier_et_price_specification(page):
@@ -54,3 +55,14 @@ def test_prix_nombre():
     assert prix_nombre(230) == 230.0
     assert prix_nombre("gratuit") is None
     assert prix_nombre(None) is None
+
+
+def test_livraison_publiee(page):
+    _, offres = extraire_offres(page("livraison.html"))
+    assert offres[0]["prix"] == 220.0 and offres[0]["livraison"] == 4.99  # tarif vers la France
+
+
+def test_hors_ue():
+    from prixjuste.collecte import hors_ue
+    assert hors_ue("https://www.boutique.ch/p") and hors_ue("https://shop.co.uk/x")
+    assert not hors_ue("https://www.e.leclerc/fp/x") and not hors_ue("https://tascon.es/p")

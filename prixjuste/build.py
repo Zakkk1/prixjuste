@@ -12,7 +12,7 @@ import shutil
 from pathlib import Path
 
 from . import VERSION, analyse
-from .collecte import cle
+from .collecte import cle, hors_ue
 from .donnees import Depot, maintenant
 
 ICI = Path(__file__).resolve().parent
@@ -432,8 +432,16 @@ def bloc_marchands(art, obs, journal):
     L = []
 
     def ligne(nom, url, detail, statut, classe, o):
-        prix = (f'<span class="m-prix">{euros(o["prix"])}<small>{date_fr(o["ts"])}</small></span>'
-                if o else '<span class="m-prix nul">—</span>')
+        if o:
+            livr = o.get("livraison")
+            frais = ("" if livr is None else " · livraison offerte" if livr == 0
+                     else f" · +{euros(livr)} livraison")
+            rupture = " · rupture" if o.get("en_stock") == 0 else ""
+            prix = f'<span class="m-prix">{euros(o["prix"])}<small>{date_fr(o["ts"])}{rupture}{frais}</small></span>'
+        else:
+            prix = '<span class="m-prix nul">—</span>'
+        if url and hors_ue(url):
+            detail = " · ".join(x for x in (detail, "hors UE : droits et TVA à l'import possibles") if x)
         nom_html = f'<a href="{e(url)}" rel="noopener nofollow">{e(nom)}</a>' if url else e(nom)
         return (f'<li><span class="m-nom">{nom_html}</span>{prix}'
                 f'<span class="m-det">{e(detail)}</span><span class="m-statut s-{classe}">{e(statut)}</span></li>')
@@ -451,7 +459,10 @@ def bloc_marchands(art, obs, journal):
         if taille and taille.replace(".", ",") in (lien.get("coloris") or "").replace(".", ","):
             taille = None  # déjà dit dans le coloris (« Jaune · 39,5 »)
         detail = " · ".join(x for x in (lien.get("coloris"), taille and f"taille {taille}") if x and x.strip() != "?")
-        L.append(ligne(lien.get("marchand", "?"), lien["url"], detail, statut, classe, dernier_prix.get(k)))
+        o = dernier_prix.get(k)
+        cout = (o.get("en_stock") == 0, o["prix"] + (o.get("livraison") or 0)) if o else (True, float("inf"))
+        L.append((cout, ligne(lien.get("marchand", "?"), lien["url"], detail, statut, classe, o)))
+    L = [x for _, x in sorted(L, key=lambda t: t[0])]  # du coût réel le plus bas au plus haut
     manuels = {}
     for o in obs:
         if o.get("source") == "manuel":

@@ -10,7 +10,7 @@ def offres(page, nom):
 
 def test_taille_exacte_en_stock(page):
     r = collecte.resumer(offres(page, "variantes_tailles.html"), taille="40")
-    assert r == {"prix": 199.0, "devise": "EUR", "en_stock": 1, "n_offres": 1, "n_dispo": 1}
+    assert r == {"prix": 199.0, "livraison": None, "devise": "EUR", "en_stock": 1, "n_offres": 1, "n_dispo": 1}
 
 
 def test_taille_avec_virgule_en_rupture(page):

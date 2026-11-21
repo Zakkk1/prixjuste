@@ -63,6 +63,23 @@ def _charger(bloc):
             return None
 
 
+def livraison(offre, pays="FR"):
+    """Frais de livraison publiés (OfferShippingDetails) : vers la France si précisé, sinon le moins cher."""
+    tarifs = []
+    for d in _liste(offre.get("shippingDetails")):
+        if not isinstance(d, dict):
+            continue
+        rate = d.get("shippingRate")
+        rate = rate[0] if isinstance(rate, list) and rate else rate
+        v = prix_nombre(rate.get("value") if isinstance(rate, dict) else None)
+        if v is None:
+            continue
+        dest = [x.get("addressCountry") for x in _liste(d.get("shippingDestination")) if isinstance(x, dict)]
+        dest = [c for x in dest for c in _liste(x)]
+        tarifs.append((0 if pays in dest else 1, v))
+    return min(tarifs)[1] if tarifs else None
+
+
 def extraire_offres(html):
     """Renvoie (nom_produit, [{prix, devise, en_stock, sku, nom, taille}, ...])."""
     offres, nom_produit = [], None
@@ -105,12 +122,13 @@ def extraire_offres(html):
                         "sku": str(s.get("sku") or sku_produit),
                         "nom": str(s.get("name") or ""),
                         "taille": normaliser_taille(s.get("size") or taille),
+                        "livraison": livraison(s) if livraison(s) is not None else livraison(o),
                     })
     if not offres:
         m = META_PRICE_RE.search(html)
         if m and prix_nombre(m.group(1)):
             offres.append({"prix": prix_nombre(m.group(1)), "devise": "EUR", "en_stock": None,
-                           "sku": "", "nom": "", "taille": ""})
+                           "sku": "", "nom": "", "taille": "", "livraison": None})
     return nom_produit, _dedoublonner(offres)
 
 
