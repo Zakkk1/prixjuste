@@ -20,22 +20,6 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --papier: #131211;
-    --encre: #F2EDE3;
-    --encre-2: #B5AFA3;
-    --filet: rgba(242, 237, 227, .12);
-    --filet-2: rgba(242, 237, 227, .28);
-    --achete: #66C394;
-    --attends: #98B4FF;
-    --surveille: #E8AE66;
-    --bidon: #FF8378;
-    --donnees: #ABA598;
-    --melange: screen;
-    color-scheme: dark;
-  }
-}
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }

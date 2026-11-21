@@ -277,9 +277,8 @@ def page(titre, corps, prefixe="", description="", classe=""):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#F3EFE6" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141312" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F4F0E7">
 <meta name="description" content="{e(description or 'Achète, attends ou méfie-toi : verdicts tirés de vrais prix relevés.')}">
 <title>{e(titre)}</title>
 {FONTS}
