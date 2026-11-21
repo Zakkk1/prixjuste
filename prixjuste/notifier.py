@@ -44,9 +44,18 @@ def message(art, res, nouveaux):
                 f"de moins que les {euros(pr['prix'])} payés. Tu peux le renvoyer et le racheter, ou demander un geste "
                 f"commercial, jusqu'au {pr['fin_retractation']:%d/%m/%Y} (rétractation de 14 jours).")
     if "alerte" in nouveaux and act:
-        lignes += ["", f"Le prix est passé sous ton alerte : {euros(act['prix'])} chez {act.get('marchand')} "
-                       f"(alerte {euros(res['chiffres']['alerte'])})."]
+        lignes += ["", f"Le prix est passé sous ton alerte de {euros(res['chiffres']['alerte'])} : "
+                       f"{euros(act['prix'])} chez {act.get('marchand')}."]
     return "\n".join(lignes)
+
+
+def _url_minuscule(url):
+    """https://Zakkk1.github.io/x -> https://zakkk1.github.io/x (le nom d'hôte seulement)."""
+    if "://" not in url:
+        return url
+    schema, reste = url.split("://", 1)
+    hote, _, chemin = reste.partition("/")
+    return f"{schema}://{hote.lower()}" + (f"/{chemin}" if chemin else "")
 
 
 class GitHub:
@@ -70,6 +79,7 @@ class GitHub:
 
 
 def notifier(depot, github, pages_url="", aujourdhui=None, log=print, mention=None):
+    pages_url = _url_minuscule(pages_url)
     f = depot.racine / "signaux.json"
     etat = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
     envoyes = 0
