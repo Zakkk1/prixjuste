@@ -73,3 +73,11 @@ def test_bloc_sur_le_comptoir(tmp_path):
     index = (sortie / "index.html").read_text(encoding="utf-8")
     assert '<details class="archives plan" data-plan=' in index and "Plan d'achat sous budget" in index
     assert "budget_mois" not in index  # le budget n'est jamais publié
+
+
+def test_evenements_sur_la_courbe(tmp_path):
+    sortie = build.construire(Depot(DATA), tmp_path / "site", aujourdhui=AUJ, quand="x")
+    fiche = (sortie / "a" / "mcmurdo.html").read_text(encoding="utf-8")
+    assert 'class="evt"><title>Soldes d&#x27;hiver' in fiche
+    assert "Black Friday : 27/11/2026" in fiche
+    assert "archive web · soldes d&#x27;hiver" in fiche  # la lecture au doigt nomme l'événement

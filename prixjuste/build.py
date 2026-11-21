@@ -205,6 +205,14 @@ def courbe(ident, res, obs, auj, W, H, suffixe):
                 vus += 1
         m = dt.date(m.year + (m.month == 12), m.month % 12 + 1, 1)
 
+    # grands événements de prix (soldes, Black Friday) : un trait discret posé sur l'axe du temps
+    evts = [(a, b, t.split(" (")[0]) for a, b, t in agenda.evenements_commerciaux(d0 - dt.timedelta(days=40), d1)
+            if b >= d0]
+    for a, b, t in evts:
+        x0, x1 = X(max(a, d0)), X(min(b, d1))
+        s.append(f'<line x1="{x0:.1f}" x2="{max(x1, x0 + 3):.1f}" y1="{H - mb - 2}" y2="{H - mb - 2}" class="evt">'
+                 f'<title>{e(t)} : {date_fr(a)} – {date_fr(b)}</title></line>')
+
     # alerte : pointillé
     if c.get("alerte") and lo < c["alerte"] < hi:
         ya = Y(c["alerte"])
@@ -235,8 +243,10 @@ def courbe(ident, res, obs, auj, W, H, suffixe):
             s.append(f'<rect x="{x - 3.2:.1f}" y="{y - 3.2:.1f}" width="6.4" height="6.4" class="pt-plein"/>')
         else:
             s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" class="pt-plein"/>')
+        evt = next((t for a, b, t in evts if a <= d <= b), None)
         donnees.append([round(x / W * 100, 2), round(y / H * 100, 2),
-                        f"{date_fr(d)} · {euros(p)} · {marchand} · {SOURCES.get(src, src)}"])
+                        f"{date_fr(d)} · {euros(p)} · {marchand} · {SOURCES.get(src, src)}"
+                        + (f" · {evt.lower() if evt.startswith('Soldes') else evt}" if evt else "")])
     s.append(f'<circle r="6" class="curseur" cx="-10" cy="-10"/>')
     s.append("</svg>")
     return "".join(s), donnees
@@ -251,7 +261,8 @@ def figure_courbe(art, res, obs, auj):
     return (f'<figure class="courbe" data-points="{e(pts)}">{etroite[0]}{large[0]}'
             '<figcaption class="legende"><span class="k-plein">relevé direct</span>'
             '<span class="k-creux">archive web</span><span class="k-carre">saisie</span>'
-            '<span class="k-hach">fenêtre conseillée</span><span class="k-alerte">alerte</span></figcaption>'
+            '<span class="k-hach">fenêtre conseillée</span><span class="k-alerte">alerte</span>'
+            '<span class="k-evt">soldes, Black Friday</span></figcaption>'
             '<output class="lecture" aria-live="polite">Touche la courbe pour lire un relevé.</output></figure>')
 
 

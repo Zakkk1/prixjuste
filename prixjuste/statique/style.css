@@ -322,6 +322,7 @@ h1 label { font: inherit; color: inherit; letter-spacing: inherit; }
 .pt-creux { fill: var(--papier); stroke: var(--encre); stroke-width: 1.3; }
 .hachure { stroke: var(--encre); stroke-width: 1; opacity: .26; }
 .alerte { stroke: var(--encre); stroke-width: 1; stroke-dasharray: 2 3; }
+.evt { stroke: var(--surveille); stroke-width: 3; opacity: .7; stroke-linecap: butt; }
 .auj { stroke: var(--filet-2); stroke-width: 1; stroke-dasharray: 1 3; }
 .curseur { fill: none; stroke: var(--encre); stroke-width: 1.5; pointer-events: none; visibility: hidden; }
 .curseur.vu { visibility: visible; }
@@ -332,6 +333,7 @@ h1 label { font: inherit; color: inherit; letter-spacing: inherit; }
 .k-carre::before { width: 7px; height: 7px; background: var(--encre); }
 .k-hach::before { width: 14px; height: 9px; background: repeating-linear-gradient(45deg, var(--filet-2) 0 1px, transparent 1px 4px); }
 .k-alerte::before { width: 16px; height: 0; border-top: 1.5px dotted var(--encre); vertical-align: 3px !important; }
+.k-evt::before { width: 14px; height: 0; border-top: 3px solid var(--surveille); opacity: .7; vertical-align: 3px !important; }
 .lecture { display: block; margin-top: 10px; min-height: 1.5em; font-size: 12px; }
 
 /* promos */
