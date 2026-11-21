@@ -11,3 +11,7 @@
   construis les idées de `docs/IDEES.md` dans l'ordre de priorité (notifications GitHub, coût réel, protection après
   achat, profil de tailles, calendrier .ics, plan sous budget, risque de rupture, carte 9:16…). Contrainte qui prime :
   l'écran reste propre et sobre, rien d'inutile. Tu peux proposer d'autres idées utiles si elles respectent cette contrainte.
+- **Enchaînement automatique.** Une routine passe toutes les heures et prend la suite si personne n'a poussé depuis
+  30 minutes. Donc : pousse sur `main` au moins toutes les 20 minutes pendant que tu travailles, et termine TOUJOURS
+  en mettant à jour `docs/ETAT.md`, dont la première ligne doit être exactement `RELAIS: oui` (il reste du travail
+  utile) ou `RELAIS: non` (tout est fini et vérifié, la chaîne s'arrête).
