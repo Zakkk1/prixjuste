@@ -1,0 +1,2 @@
+# Relevés, journal, captures : fichiers append-only, deux ajouts simultanés se fusionnent ligne à ligne
+data/**/*.jsonl merge=union

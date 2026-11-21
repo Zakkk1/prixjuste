@@ -8,8 +8,10 @@ on:
   issues:
     types: [labeled]
 
+# une file par issue : une demande n'est jamais annulée par le relevé quotidien ou une autre demande
+# (les fichiers append-only fusionnent ligne à ligne, voir .gitattributes)
 concurrency:
-  group: donnees
+  group: ajout-${{ github.event.issue.number }}
   cancel-in-progress: false
 
 permissions:
