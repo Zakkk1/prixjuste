@@ -32,9 +32,16 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
 - Vérifié en ligne sur https://zakkk1.github.io/prixjuste/ (mobile 400 px et 800 px, clair et sombre).
 - `site.yml` redéploie le site quand le code du site ou un article change, sans relever de prix.
 
+## Design « Météo des prix » (21/11, choisi par l'utilisateur parmi 3 pistes)
+- Clair uniquement, Manrope, cartes blanches ; photo produit (lue dans la page déjà relevée, sinon archives web).
+- Fiche : jauge « ce prix est bas / dans la moyenne / plutôt élevé » sur 12 mois, carte Prévision (verdict +
+  prix médians des 4 prochains mois relevés les années passées), courbe, repères, marchands.
+- Vérifié en ligne (mobile et ordinateur). Maquettes des 3 pistes : canevas de design privé de l'utilisateur.
+
 ## Demandes en texte libre
 - Identifiées sans jeton par la routine Claude programmée (toutes les 3 h), procédure dans `CLAUDE.md`.
 - Demande n°3 (Patagonia Better Sweater noir, M) identifiée le 21/11 : 4 pages lisibles, issue fermée avec le détail.
+- Demande n°4 (équivalent moins cher des Timberland) identifiée de bout en bout par la routine : 2 CAT Colorado 2.0.
 - Demande n°4 (équivalents moins chers des Timberland 6-Inch, pointure 39,5 → 40 chez CAT) identifiée le 21/11 par la
   routine via le workflow « Vérifier des pages » : CAT Colorado 2.0 Hiker WP jaune miel (90,99 €, Sportano) et
   CAT Colorado 2.0 WP Pyramid (151,16 €, Butyjana) ; premier relevé publié, issue fermée avec le détail.
