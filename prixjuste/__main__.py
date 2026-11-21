@@ -15,6 +15,7 @@
 import argparse
 import os
 import sys
+import time
 import uuid
 from pathlib import Path
 
@@ -84,7 +85,7 @@ def cmd_issue(depot, a):
     _sortie_github(mode="liens" if art["statut"] == "suivi" else "a_identifier", id=art["id"])
 
 
-def cmd_premier_releve(depot, ident, max_captures):
+def cmd_premier_releve(depot, ident, max_captures, minutes=15):
     art = depot.article(ident)
     if not art:
         sys.exit(f"Article inconnu : {ident}")
@@ -93,7 +94,7 @@ def cmd_premier_releve(depot, ident, max_captures):
         depot.ecrire_article(art)
     print(f"# {art['nom']}")
     collecte.collecter_article(depot, art)
-    collecte.historique_article(depot, art, max_captures)
+    collecte.historique_article(depot, art, max_captures, fin=time.time() + minutes * 60)
     texte = ajout.compte_rendu(art, depot.releves(ident), depot.journal(ident))
     print(texte)
     _sortie_github(message=texte)
@@ -149,6 +150,7 @@ def main(argv=None):
     h = sp.add_parser("historique")
     h.add_argument("--max", type=int, default=40)
     h.add_argument("--article")
+    h.add_argument("--minutes", type=float, help="durée maximale (la suite à la prochaine passe)")
     pr = sp.add_parser("prix")
     pr.add_argument("id")
     pr.add_argument("prix", type=float)
@@ -164,6 +166,7 @@ def main(argv=None):
     prr = sp.add_parser("premier-releve")
     prr.add_argument("id")
     prr.add_argument("--max", type=int, default=40)
+    prr.add_argument("--minutes", type=float, default=15)
     sp.add_parser("notifier")
     ve = sp.add_parser("verifier")
     ve.add_argument("url")
@@ -177,9 +180,10 @@ def main(argv=None):
             print(f"# {art['nom']}")
             collecte.collecter_article(depot, art)
     elif a.cmd == "historique":
+        fin = time.time() + a.minutes * 60 if a.minutes else None
         for art in _articles(depot, a.article):
             print(f"# {art['nom']}")
-            collecte.historique_article(depot, art, a.max)
+            collecte.historique_article(depot, art, a.max, fin=fin)
     elif a.cmd == "prix":
         art = depot.article(a.id)
         if not art:
@@ -194,7 +198,7 @@ def main(argv=None):
     elif a.cmd == "issue":
         cmd_issue(depot, a)
     elif a.cmd == "premier-releve":
-        cmd_premier_releve(depot, a.id, a.max)
+        cmd_premier_releve(depot, a.id, a.max, a.minutes)
     elif a.cmd == "notifier":
         from . import notifier
         gh = notifier.depuis_environnement()

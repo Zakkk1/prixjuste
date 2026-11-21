@@ -43,12 +43,15 @@ jobs:
       - name: Relevé direct (1 visite par page et par jour, robots.txt respecté)
         run: python -m prixjuste collecter
 
-      - name: Archives Wayback
+      - name: Publier les relevés du jour
+        run: .github/scripts/publier-donnees.sh "Relevé du $(TZ=Europe/Paris date +%d/%m/%Y)"
+
+      - name: Archives Wayback (25 min au plus, la suite la fois suivante)
         env:
           HISTORIQUE: ${{ inputs.historique }}
         run: |
           if [ "$HISTORIQUE" = "true" ] || [ "$(date -u +%u)" = "1" ]; then
-            python -m prixjuste historique
+            python -m prixjuste historique --minutes 25
           else
             echo "Pas aujourd'hui (le lundi seulement)."
           fi
@@ -59,8 +62,8 @@ jobs:
           PAGES_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
         run: python -m prixjuste notifier
 
-      - name: Publier les relevés
-        run: .github/scripts/publier-donnees.sh "Relevé du $(TZ=Europe/Paris date +%d/%m/%Y)"
+      - name: Publier archives et notifications
+        run: .github/scripts/publier-donnees.sh "Archives et notifications du $(TZ=Europe/Paris date +%d/%m/%Y)"
 
       - run: python -m prixjuste verdicts
 

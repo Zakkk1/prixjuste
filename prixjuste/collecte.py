@@ -204,11 +204,15 @@ def collecter_article(depot, art, log=print, pause=PAUSE):
     return n
 
 
-def historique_article(depot, art, max_captures=40, log=print, pause=1.5):
-    """Import des captures Wayback non encore lues, pour tous les liens (suivis et historiques)."""
+def historique_article(depot, art, max_captures=40, log=print, pause=1.5, fin=None):
+    """Import des captures Wayback non encore lues, pour tous les liens (suivis et historiques).
+    `fin` : heure (time.time()) à ne pas dépasser ; le reste sera lu à la prochaine passe."""
     total = 0
     vues = depot.captures_vues(art["id"])
     for lien in art.get("liens", []) + art.get("liens_historiques", []):
+        if fin and time.time() > fin:
+            log("  [archives] temps écoulé : la suite à la prochaine passe")
+            break
         k = cle(lien)
         try:
             caps = wayback.captures(telecharger, lien["url"], max_captures)
@@ -219,6 +223,8 @@ def historique_article(depot, art, max_captures=40, log=print, pause=1.5):
         nouvelles = [c for c in caps if (k, c[0]) not in vues]
         n_ok = 0
         for ts, original in nouvelles:
+            if fin and time.time() > fin:
+                break
             try:
                 r = lire_page(telecharger(wayback.url_capture(ts, original)), lien.get("filtre"), lien.get("taille"))
             except Exception as e:
