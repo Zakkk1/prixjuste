@@ -1,0 +1,23 @@
+{
+  "id": "test-bout-bout-parka-mcmurdo-viladomat",
+  "statut": "suivi",
+  "cree_le": "2026-11-21",
+  "issue": 1,
+  "demande": "Test de bout en bout — parka McMurdo (Viladomat)",
+  "nom": "Test de bout en bout — parka McMurdo (Viladomat)",
+  "variante": "taille L",
+  "categorie": "vetement_hiver",
+  "urgence": "pas_urgent",
+  "budget_max": 350.0,
+  "taille": "L",
+  "autres_coloris_ok": true,
+  "liens": [
+    {
+      "marchand": "Viladomat",
+      "url": "https://www.viladomat.com/en/men-s-mountainstyle-jackets/85268-799122-m-mcmurdo-parka.html",
+      "exact": true,
+      "taille": "L"
+    }
+  ],
+  "liens_historiques": []
+}
