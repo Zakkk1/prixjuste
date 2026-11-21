@@ -9,6 +9,7 @@ import html
 import json
 import os
 import shutil
+import urllib.parse
 from pathlib import Path
 
 from . import VERSION, agenda, ajout, analyse, plan
@@ -550,7 +551,7 @@ def form_prix(art):
             '<button type="submit">Envoyer ce prix →</button></form></details>')
 
 
-def fiche(art, res, obs, journal, quand, auj):
+def fiche(art, res, obs, journal, quand, auj, voisins=None):
     code = etat_article(art, res)
     act = res.get("actuel")
     sous = sous_tampon_code(code, res)
@@ -558,7 +559,8 @@ def fiche(art, res, obs, journal, quand, auj):
     corps = [entete("../", quand), '<main class="fiche">',
              '<a class="retour" href="../index.html">← Le comptoir</a>',
              f'<h1 class="nom-fiche">{e(art["nom"])}</h1>',
-             f'<p class="var-fiche">{e(variante)}</p>' if variante else ""]
+             f'<p class="var-fiche">{e(variante)}</p>' if variante else "",
+             liens_parentes(art, voisins or {})]
 
     if code == "attente":
         num = art.get("issue")
@@ -598,10 +600,45 @@ def fiche(art, res, obs, journal, quand, auj):
     corps.append('<h2 class="rubrique">Contrôle des promos</h2>' + bloc_promos(res))
     corps.append('<h2 class="rubrique">Où c\'est relevé</h2>' + bloc_marchands(art, obs, journal))
     corps.append(f'<p class="repere"><b>Repère de saison</b> (règle générale, pas une donnée sur cet article) : {e(res["repere"])}</p>')
-    corps.append(form_prix(art) + ("" if art.get("achat") else form_achat(art, act)) + carte(art, res, code, auj))
+    corps.append(form_prix(art) + ("" if art.get("achat") else form_achat(art, act)) + carte(art, res, code, auj) + lien_equivalent(art))
     corps += ["</main>", pied("../")]
     return page(f"{art['nom']} — PrixJuste", "".join(corps), "../",
                 description=f"{TAMPONS[code][1][0]} — {titre}", classe="p-fiche")
+
+
+def lien_equivalent(art):
+    """Lien discret : ouvre une demande « ajout » pré-remplie ; Claude (si activé) cherche 2 ou 3 équivalents
+    moins chers, suivis ensuite comme les autres articles (docs/IDEES.md, idée 10)."""
+    if art.get("achat") or art.get("equivalent_de"):
+        return ""
+    taille = art.get("taille") or next((l["taille"] for l in art.get("liens", []) if l.get("taille")), None)
+    lignes = [f"Objet : équivalent moins cher de {art['nom']}", f"Équivalent de : {art['id']}"]
+    if taille:
+        lignes.append(f"Taille : {taille}")
+    lignes.append(f"Urgence : {art.get('urgence', 'pas_urgent')}")
+    if art.get("acheter_avant"):
+        lignes.append(f"Avant le : {art['acheter_avant']}")
+    lignes += ["Liens :", "(aucun : à identifier)", "", "<!-- prixjuste:equivalent -->"]
+    q = urllib.parse.urlencode({"title": f"Ajout : équivalent de {art['nom']}", "body": "\n".join(lignes),
+                                "labels": "ajout"}, quote_via=urllib.parse.quote)
+    return (f'<p class="equivalent"><a href="https://github.com/{DEPOT_GITHUB}/issues/new?{e(q)}">'
+            'Trouver un équivalent moins cher →</a> <span>par Claude, s\'il est activé (voir LISEZMOI)</span></p>')
+
+
+def liens_parentes(art, voisins):
+    """Une ligne sous le titre : l'original d'un équivalent, ou les équivalents d'un original."""
+    if art.get("equivalent_de"):
+        o = voisins.get(art["equivalent_de"])
+        if not o:
+            return ""
+        pourquoi = f" — {e(art['pourquoi'])}" if art.get("pourquoi") else ""
+        return (f'<p class="parente">Équivalent proposé pour <a href="{e(o["id"])}.html">{e(o["nom"])}</a>'
+                f'{pourquoi}</p>')
+    alts = [a for a in voisins.values() if a.get("equivalent_de") == art["id"] and a.get("statut") == "suivi"]
+    if not alts:
+        return ""
+    return ('<p class="parente">À comparer : ' + ", ".join(
+        f'<a href="{e(a["id"])}.html">{e(a["nom"])}</a>' for a in sorted(alts, key=lambda a: a["nom"])) + "</p>")
 
 
 def form_achat(art, act):
@@ -711,7 +748,8 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
     (sortie / ".nojekyll").write_text("")
 
     lignes, exports, pour_agenda = [], [], []
-    for art in depot.articles():
+    voisins = {a["id"]: a for a in depot.articles()}
+    for art in voisins.values():
         obs = analyse.filtrer_obs(art, depot.releves(art["id"]))
         res = analyse.analyser(art, obs, auj)
         pour_agenda.append((art, res))
@@ -719,7 +757,7 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
         jusqu = res.get("jusqu_a") or dt.date.max
         lignes.append(((ORDRE[code], jusqu, art["nom"].lower()), ligne_comptoir(art, res, obs, auj)))
         (sortie / "a" / f"{art['id']}.html").write_text(
-            fiche(art, res, obs, depot.journal(art["id"]), quand, auj), encoding="utf-8")
+            fiche(art, res, obs, depot.journal(art["id"]), quand, auj, voisins), encoding="utf-8")
         exports.append(export(art, res, code))
     lignes.sort(key=lambda x: x[0])
     proprio, nom_depot = DEPOT_GITHUB.split("/")

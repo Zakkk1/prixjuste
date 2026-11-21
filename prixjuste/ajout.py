@@ -166,12 +166,16 @@ def lire_demande(titre, corps):
         "acheter_avant": _date_iso(ch.get("avant le") or ch.get("date limite")),
         "budget_max": _nombre(ch.get("budget")),
         "liens": liens_du_texte(corps),
+        "equivalent_de": (ch.get("equivalent de") or "").strip() or None,
     }
 
 
 def creer_article(depot, demande, issue=None):
     """Crée data/articles/<id>.json. Renvoie l'article."""
     objet = demande["objet"] or "Objet sans nom"
+    origine = depot.article(demande["equivalent_de"]) if demande.get("equivalent_de") else None
+    if demande.get("equivalent_de") and not origine:
+        demande = dict(demande, equivalent_de=None)
     note_taille = None
     if not demande.get("taille"):  # taille absente : celle du profil, expliquée
         demande = dict(demande)
@@ -185,7 +189,7 @@ def creer_article(depot, demande, issue=None):
         "demande": objet,
         "nom": objet,
         "variante": variante or None,
-        "categorie": deviner_categorie(objet),
+        "categorie": (origine or {}).get("categorie") or deviner_categorie(objet),
         "urgence": demande["urgence"],
         "acheter_avant": demande.get("acheter_avant"),
         "budget_max": demande.get("budget_max"),
@@ -193,6 +197,7 @@ def creer_article(depot, demande, issue=None):
         "note_taille": note_taille,
         "coloris": demande.get("coloris"),
         "autres_coloris_ok": not demande.get("coloris"),
+        "equivalent_de": demande.get("equivalent_de"),
         "liens": [],
         "liens_historiques": [],
     }

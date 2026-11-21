@@ -81,3 +81,34 @@ def test_evenements_sur_la_courbe(tmp_path):
     assert 'class="evt"><title>Soldes d&#x27;hiver' in fiche
     assert "Black Friday : 27/11/2026" in fiche
     assert "archive web · soldes d&#x27;hiver" in fiche  # la lecture au doigt nomme l'événement
+
+
+def test_equivalent_du_lien_a_l_article(tmp_path):
+    import html
+    import urllib.parse
+
+    from prixjuste import ajout
+    d = Depot(tmp_path / "data")
+    orig = {"id": "boots", "nom": "Boots X", "statut": "suivi", "categorie": "chaussures", "urgence": "bientot",
+            "liens": [{"marchand": "M", "url": "https://m.fr/x", "taille": "40"}]}
+    d.ecrire_article(orig)
+    lien = build.lien_equivalent(orig)
+    q = urllib.parse.parse_qs(urllib.parse.urlsplit(html.unescape(re.search(r'href="([^"]+)"', lien).group(1))).query)
+    assert q["labels"] == ["ajout"] and "prixjuste:equivalent" in q["body"][0]
+    dem = ajout.lire_demande(q["title"][0], q["body"][0])
+    assert dem["equivalent_de"] == "boots" and dem["taille"] == "40" and not dem["liens"]
+    art = ajout.creer_article(d, dem, issue=9)
+    assert art["statut"] == "a_identifier" and art["equivalent_de"] == "boots" and art["categorie"] == "chaussures"
+    # une fois identifié : chacun pointe vers l'autre, en une ligne
+    art.update(statut="suivi", nom="Boots Y", pourquoi="Même cuir, semelle moins épaisse.")
+    voisins = {"boots": orig, art["id"]: art}
+    assert "À comparer : <a" in build.liens_parentes(orig, voisins) and "Boots Y" in build.liens_parentes(orig, voisins)
+    assert "Équivalent proposé pour" in build.liens_parentes(art, voisins) and "semelle" in build.liens_parentes(art, voisins)
+    assert build.lien_equivalent(art) == ""  # pas d'équivalent d'équivalent
+
+
+def test_equivalent_d_un_article_inconnu_ignore(tmp_path):
+    from prixjuste import ajout
+    d = Depot(tmp_path / "data")
+    art = ajout.creer_article(d, ajout.lire_demande("Ajout : x", "Objet : x\nÉquivalent de : nexistepas\nLiens :\n"))
+    assert "equivalent_de" not in art

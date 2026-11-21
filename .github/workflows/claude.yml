@@ -120,6 +120,13 @@ jobs:
                Tu peux ajouter "liens_historiques" (anciennes références du même produit, utiles pour l'historique).
             5. Si tu ne trouves aucune page LISIBLE, laisse "statut": "a_identifier" et écris dans le champ
                "note_identification" une phrase qui explique pourquoi (ex. tous les marchands bloquent les robots).
+            Cas particulier : si l'article contient "equivalent_de", la demande est de trouver des ÉQUIVALENTS MOINS
+            CHERS de l'article data/articles/<equivalent_de>.json (lis-le). Cherche 2 ou 3 autres produits (pas le
+            même modèle) pour le même usage, de qualité comparable, moins chers que son prix habituel. Le premier
+            remplace data/articles/${{ steps.article.outputs.id }}.json ; les autres vont dans
+            data/articles/${{ steps.article.outputs.id }}-2.json et -3.json, avec les mêmes champs (id = nom du
+            fichier, même issue, même "equivalent_de"). Pour chacun, ajoute "pourquoi" : une phrase factuelle
+            (prix habituel, matière, ce qu'on perd ou gagne par rapport à l'original). Mêmes règles de pages LISIBLES.
             Ne modifie aucun autre fichier. Ne commite pas : le workflow s'en charge.
 
       - name: Contrôler le résultat
@@ -142,7 +149,13 @@ jobs:
         if: steps.controle.outputs.ok == 'true'
         env:
           ARTICLE: ${{ steps.article.outputs.id }}
-        run: python -m prixjuste premier-releve "$ARTICLE"
+        run: |
+          # d'abord les équivalents supplémentaires créés pour la même issue, puis l'article de la demande
+          # (son compte rendu est celui qui est publié sur l'issue)
+          for ID in $(python -c "from prixjuste.donnees import Depot; import os; print(' '.join(a['id'] for a in Depot().articles() if str(a.get('issue')) == os.environ['NUMERO'] and a.get('statut') == 'suivi' and a['id'] != os.environ['ARTICLE']))"); do
+            python -m prixjuste premier-releve "$ID" || echo "::warning::premier relevé de $ID en échec"
+          done
+          python -m prixjuste premier-releve "$ARTICLE"
 
       - name: Publier
         env:
