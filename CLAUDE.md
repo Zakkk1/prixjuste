@@ -22,11 +22,18 @@
   2. Trouver la référence exacte (marque, modèle, code fabricant), puis 3 à 6 pages produit de marchands FR/UE.
   3. `python -m prixjuste verifier "<url>"` (+ `--taille` ou `--filtre "re:..."` pour viser la taille) : ne garder
      que les pages « LISIBLE ». Jamais de contournement d'un refus.
-  4. Réécrire l'article : `statut: "suivi"`, `nom`, `reference`, `variante` (coloris · taille), `categorie`,
-     `autres_coloris_ok`, `liens` (marchand, url, coloris, `taille` ou `filtre`, `exact`). Rien trouvé de lisible :
-     garder `a_identifier` et expliquer dans `note_identification`.
-  5. `python -m prixjuste premier-releve <id> --minutes 6`, commiter `data/`, pousser. Si `gh` est disponible,
-     commenter l'issue de la demande (verdict, prix, pages) et la fermer.
+  4. L'utilisateur CHOISIT lui-même, comme dans une recherche en boutique : proposer 3 à 5 produits qui
+     correspondent (modèles, coloris ou marchands différents ; le plus probable d'abord ; un seul si la demande
+     désigne déjà un produit exact). Réécrire l'article avec `statut: "a_choisir"` et `candidats` : une liste de
+     `{nom, reference, variante, categorie, image, prix, marchand, url, liens, note, autres_coloris_ok}` où
+     `image` = la ligne « Photo : » de `verifier` (photo publiée par la page), `prix`/`marchand`/`url` = la page
+     lisible la moins chère, `liens` = toutes les pages LISIBLES de ce produit (marchand, url, coloris, `taille` ou
+     `filtre`, `exact`), `note` = une phrase factuelle (ce qui le distingue). Rien de lisible : garder `a_identifier`
+     et expliquer dans `note_identification`. Si le conteneur n'accède pas aux sites marchands, lancer le
+     workflow `verifier.yml` (champ « pages ») et lire son résumé.
+  5. Pas de `premier-releve` : il est lancé par le workflow d'ajout quand l'utilisateur touche « C'est celui-là »
+     sur la fiche (issue étiquetée `choix`, traitée sans IA). Commiter `data/`, pousser. Si `gh` est disponible,
+     commenter l'issue de la demande (« N propositions avec photo : choisis sur <fiche> ») et la fermer.
   Cas « équivalent » : si l'article contient `equivalent_de`, la demande est de trouver des ÉQUIVALENTS MOINS CHERS
   de `data/articles/<equivalent_de>.json` (le lire). Chercher 2 ou 3 autres produits (pas le même modèle), même usage,
   qualité comparable, moins chers que son prix habituel, dans la même taille. Le premier remplace l'article ; les

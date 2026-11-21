@@ -40,6 +40,7 @@ jobs:
           gh label create "à-identifier" --color 7A766E --description "Texte libre : en attente d'identification" --force
           gh label create achat --color 1A1917 --description "Article acheté : protection après achat" --force
           gh label create suivi --color 23479A --description "Notifications d'un article suivi" --force
+          gh label create choix --color 1E3A6E --description "Produit choisi parmi les propositions" --force
 
       - name: Relevé direct (1 visite par page et par jour, robots.txt respecté)
         run: python -m prixjuste collecter

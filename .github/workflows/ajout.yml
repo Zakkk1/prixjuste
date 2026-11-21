@@ -1,4 +1,4 @@
-name: Ajout (issue « ajout », « prix » ou « achat »)
+name: Ajout (issue « ajout », « prix », « achat » ou « choix »)
 
 # Déclenché quand l'étiquette « ajout » ou « prix » est posée sur une issue (le lien du site la pose
 # à la création). Sans IA : avec des liens marchands, l'article est créé et relevé tout de suite ;
@@ -21,7 +21,7 @@ jobs:
   traiter:
     # seulement les demandes écrites par le propriétaire du dépôt ou ses collaborateurs
     if: >-
-      contains(fromJSON('["ajout","prix","achat"]'), github.event.label.name) &&
+      contains(fromJSON('["ajout","prix","achat","choix"]'), github.event.label.name) &&
       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
     runs-on: ubuntu-latest
     timeout-minutes: 40

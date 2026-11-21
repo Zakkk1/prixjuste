@@ -225,6 +225,37 @@ def completer_liens(depot, art, demande):
     return art
 
 
+def lire_choix(titre, corps, articles):
+    """Issue « choix » (bouton « C'est celui-là » d'une fiche à choisir) -> (article, numéro 1..n) ou ValueError."""
+    ch = lire_champs(corps)
+    ident = (ch.get("article") or "").strip()
+    art = next((a for a in articles if a["id"] == ident), None)
+    if not art:
+        raise ValueError(f"Article inconnu : « {ident} ».")
+    cands = art.get("candidats") or []
+    try:
+        n = int(str(ch.get("choix") or "").strip())
+    except ValueError:
+        n = 0
+    if not 1 <= n <= len(cands):
+        raise ValueError(f"Choix « {ch.get('choix')} » invalide : {len(cands)} proposition(s) pour cet article.")
+    return art, n
+
+
+def appliquer_choix(depot, art, n):
+    """L'utilisateur a choisi la proposition n : elle devient l'article suivi (sans IA)."""
+    c = art["candidats"][n - 1]
+    for k in ("nom", "reference", "variante", "categorie", "image", "autres_coloris_ok"):
+        if c.get(k) is not None:
+            art[k] = c[k]
+    art["liens"] = c.get("liens") or []
+    art["liens_historiques"] = c.get("liens_historiques") or art.get("liens_historiques") or []
+    art["statut"] = "suivi" if art["liens"] else "a_identifier"
+    art.pop("candidats", None)
+    depot.ecrire_article(art)
+    return art
+
+
 def lire_prix_vu(titre, corps, articles):
     """Issue « prix » -> dict {article, prix, barre, marchand, date, rupture} ou ValueError."""
     ch = lire_champs(corps)

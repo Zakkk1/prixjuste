@@ -110,14 +110,15 @@ jobs:
             3. Pour chaque page candidate, lance `python -m prixjuste verifier "<url>"` (ajoute `--taille "<taille>"`
                si une taille est demandée). Ne garde QUE les pages qui répondent « LISIBLE ». Cette commande
                respecte robots.txt et s'annonce comme robot : ne cherche jamais à contourner un refus.
-            4. Réécris data/articles/${{ steps.article.outputs.id }}.json en gardant id, cree_le, issue, demande,
-               urgence, acheter_avant, budget_max, taille, coloris, et en complétant :
-               "statut": "suivi", "nom" (nom commercial court et exact), "reference" (code fabricant),
-               "variante" (coloris · taille), "categorie" (vetement_hiver, vetement_ete, chaussures, electronique,
-               composants_pc ou autre), "autres_coloris_ok" (false si un coloris précis est demandé),
-               "liens": [{"marchand": "...", "url": "...", "coloris": "...", "taille": "40" (seulement si la page
-               détaille les tailles), "exact": true}].
-               Tu peux ajouter "liens_historiques" (anciennes références du même produit, utiles pour l'historique).
+            4. L'utilisateur choisit lui-même, comme dans une recherche en boutique. Réécris
+               data/articles/${{ steps.article.outputs.id }}.json en gardant id, cree_le, issue, demande, urgence,
+               acheter_avant, budget_max, taille, coloris, avec "statut": "a_choisir" et "candidats" : 3 à 5 produits
+               qui correspondent (le plus probable d'abord ; un seul si la demande désigne un produit exact), chacun
+               {"nom", "reference", "variante" (coloris · taille), "categorie" (vetement_hiver, vetement_ete,
+               chaussures, electronique, composants_pc ou autre), "image" (la ligne « Photo : » de verifier),
+               "prix" et "marchand" et "url" (la page lisible la moins chère), "note" (une phrase factuelle),
+               "autres_coloris_ok", "liens": [{"marchand", "url", "coloris", "taille" (seulement si la page détaille
+               les tailles), "exact": true}] (toutes ses pages LISIBLES)}.
             5. Si tu ne trouves aucune page LISIBLE, laisse "statut": "a_identifier" et écris dans le champ
                "note_identification" une phrase qui explique pourquoi (ex. tous les marchands bloquent les robots).
             Cas particulier : si l'article contient "equivalent_de", la demande est de trouver des ÉQUIVALENTS MOINS
@@ -139,8 +140,11 @@ jobs:
           from prixjuste.donnees import Depot
           a = Depot().article(os.environ["ARTICLE"])
           ok = a.get("statut") == "suivi" and any(str(l.get("url", "")).startswith("http") for l in a.get("liens", []))
+          choisir = a.get("statut") == "a_choisir" and any(c.get("liens") for c in a.get("candidats", []))
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write(f"ok={'true' if ok else 'false'}\n")
+              f.write(f"choisir={'true' if choisir else 'false'}\n")
+              f.write(f"n={len(a.get('candidats', []))}\n")
           print(json.dumps(a, ensure_ascii=False, indent=1))
           PY
 
@@ -166,12 +170,19 @@ jobs:
       - name: Répondre sur l'issue
         env:
           OK: ${{ steps.controle.outputs.ok }}
+          CHOISIR: ${{ steps.controle.outputs.choisir }}
+          N: ${{ steps.controle.outputs.n }}
           ARTICLE: ${{ steps.article.outputs.id }}
           MESSAGE: ${{ steps.releve.outputs.message }}
           PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
         run: |
           PAGES="${PAGES,,}"
-          if [ "$OK" = "true" ]; then
+          if [ "$CHOISIR" = "true" ]; then
+            { echo "$N proposition(s) avec photo pour ta demande : choisis la bonne sur la fiche, le suivi des prix démarre aussitôt."; echo; echo "Fiche : $PAGES/a/$ARTICLE.html"; } > reponse.md
+            gh issue comment "$NUMERO" --body-file reponse.md
+            gh issue edit "$NUMERO" --remove-label "à-identifier" || true
+            gh issue close "$NUMERO" --reason completed
+          elif [ "$OK" = "true" ]; then
             { echo "Produit identifié et suivi : \`$ARTICLE\`."; echo; echo "$MESSAGE"; echo; echo "Fiche : $PAGES/a/$ARTICLE.html"; } > reponse.md
             gh issue comment "$NUMERO" --body-file reponse.md
             gh issue edit "$NUMERO" --remove-label "à-identifier" || true

@@ -301,3 +301,26 @@ main { padding-bottom: 32px; }
   .courbe-etroite { display: none; }
   .courbe-large { display: block; }
 }
+
+/* ------------------------------------------------------------- propositions à choisir */
+.choix .aide a { font-weight: 700; }
+.candidats { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 12px; }
+.candidat {
+  display: grid; grid-template-columns: 84px minmax(0, 1fr); grid-template-areas: "ph txt" "act act";
+  gap: 12px 14px; padding: 14px; border: 1.5px solid var(--filet); border-radius: 16px;
+}
+.c-photo {
+  grid-area: ph; display: flex; align-items: center; justify-content: center; overflow: hidden;
+  width: 84px; height: 84px; border-radius: 14px; background: #F1F4F8; font: 800 26px/1 var(--texte); color: #8A93A3;
+}
+.c-photo img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.c-txt { grid-area: txt; min-width: 0; }
+.c-nom { font: 800 16px/1.3 var(--texte); }
+.c-var, .c-note { margin-top: 2px; font-size: 13px; color: var(--encre-2); }
+.c-prix { margin-top: 6px; font-weight: 700; }
+.c-actions { grid-area: act; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.c-choisir {
+  display: inline-flex; align-items: center; min-height: 46px; padding: 0 18px; border-radius: 12px;
+  background: var(--marine); color: #FFFFFF; font-weight: 700; text-decoration: none;
+}
+.c-voir { font-size: 14px; font-weight: 600; }

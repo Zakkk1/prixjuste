@@ -21,6 +21,7 @@ import uuid
 from pathlib import Path
 
 from . import ajout, analyse, collecte
+from .sources import jsonld
 from .donnees import Depot
 
 
@@ -67,6 +68,16 @@ def cmd_issue(depot, a):
                  + (f" (barré {ajout.euros(p['barre'])})" if p["barre"] else "") + ".\n\n"
                  + ajout.compte_rendu(art, depot.releves(art["id"]), depot.journal(art["id"])))
         _sortie_github(mode="prix", id=art["id"], message=texte)
+        return
+    if "choix" in labels:
+        try:
+            art, n = ajout.lire_choix(titre, corps, depot.articles())
+        except ValueError as e:
+            _sortie_github(mode="erreur", message=str(e))
+            return
+        art = ajout.appliquer_choix(depot, art, n)
+        _sortie_github(mode="liens" if art["statut"] == "suivi" else "erreur", id=art["id"],
+                       message="" if art["statut"] == "suivi" else "Cette proposition n'a aucune page lisible.")
         return
     if "achat" in labels:
         try:
@@ -134,6 +145,9 @@ def cmd_verifier(a):
               + (" (page anti-robot)" if collecte.CAPTCHA_RE.search(html) else ""))
         return 1
     print(f"Produit : {nom}")
+    photo = jsonld.image_produit(html)
+    if photo:
+        print(f"Photo : {photo}")
     tailles = sorted({o["taille"] for o in offres if o.get("taille")})
     if tailles:
         print("Tailles décrites : " + ", ".join(tailles))

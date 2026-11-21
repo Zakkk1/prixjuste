@@ -30,9 +30,10 @@ TAMPONS = {  # code -> (classe, lignes du tampon)
     "bidon": ("bidon", ["BIDON"]),
     "donnees": ("donnees", ["PAS ASSEZ", "DE DONNÉES"]),
     "attente": ("donnees", ["EN ATTENTE"]),
+    "choisir": ("attends", ["À CHOISIR"]),
     "paye": ("donnees", ["PAYÉ"]),
 }
-ORDRE = {"acheter": 0, "bidon": 1, "surveiller": 2, "attendre": 3, "donnees": 4, "attente": 5, "paye": 6}
+ORDRE = {"choisir": -1, "acheter": 0, "bidon": 1, "surveiller": 2, "attendre": 3, "donnees": 4, "attente": 5, "paye": 6}
 SOURCES = {"direct": "relevé en direct", "archive": "archive web", "manuel": "saisie manuelle"}
 LECTURE = {"ok": ("lu", "ok"), "bloqué": ("bloqué", "bloque"), "vide": ("pas de prix lisible", "vide"),
            "erreur": ("erreur de lecture", "vide")}
@@ -159,7 +160,7 @@ def bloc_prevision(art, res, code, auj):
 
 
 def vignette(art, classe="vignette"):
-    img = art.get("image")
+    img = art.get("image") or next((c.get("image") for c in art.get("candidats") or [] if c.get("image")), None)
     if img:
         return (f'<span class="{classe}"><img src="{e(img)}" alt="" referrerpolicy="no-referrer" '
                 'onerror="this.remove()"></span>')
@@ -402,6 +403,8 @@ def pied(prefixe):
 def etat_article(art, res):
     if art.get("statut") == "a_identifier":
         return "attente"
+    if art.get("statut") == "a_choisir":
+        return "choisir"
     if art.get("achat"):
         return "paye"
     return res["verdict"][0]
@@ -436,7 +439,11 @@ def ligne_comptoir(art, res, obs, auj):
     jg = ""
     if code == "attente":
         prix = '<span class="prix-ligne nul">—</span><span class="chez">identification en cours</span>'
-        phrase = "Claude cherche la référence exacte et les marchands : le suivi démarre juste après."
+        phrase = "Claude cherche le produit et des marchands : des propositions avec photo arrivent ici."
+    elif code == "choisir":
+        n = len(art.get("candidats") or [])
+        prix = f'<span class="prix-ligne">{n} proposition{"s" if n > 1 else ""}</span>'
+        phrase = "Touche pour choisir le bon produit : le suivi des prix démarre aussitôt."
     else:
         act = res.get("actuel")
         prix = (f'<span class="prix-ligne">{euros(act["prix"])}</span><span class="chez">chez {e(act.get("marchand"))}</span>'
@@ -655,6 +662,11 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None):
         corps += ["</main>", pied("../")]
         return page(f"{art['nom']} — PrixJuste", "".join(corps), "../", classe="p-fiche")
 
+    if code == "choisir":
+        corps.append(bloc_candidats(art))
+        corps += ["</main>", pied("../")]
+        return page(f"{art['nom']} — PrixJuste", "".join(corps), "../", classe="p-fiche")
+
     titre = res["verdict"][1] if code != "paye" else "Acheté"
     corps.append(bloc_jauge(jauge(res, auj)))
     corps.append(bloc_prevision(art, res, code, auj))
@@ -673,6 +685,32 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None):
     corps += ["</main>", pied("../")]
     return page(f"{art['nom']} — PrixJuste", "".join(corps), "../",
                 description=f"{TAMPONS[code][1][0]} — {titre}", classe="p-fiche")
+
+
+def bloc_candidats(art):
+    """Propositions trouvées pour une demande en texte libre : on choisit d'un geste, le suivi démarre sans IA."""
+    L = []
+    for i, c in enumerate(art.get("candidats") or [], 1):
+        corps = "\n".join([f"Article : {art['id']}", f"Choix : {i}", "", "<!-- prixjuste:choix -->"])
+        q = urllib.parse.urlencode({"title": f"Choix : {c.get('nom', art['nom'])}", "body": corps, "labels": "choix"},
+                                   quote_via=urllib.parse.quote)
+        prix = (f'{euros(c["prix"])} chez {e(c.get("marchand") or "?")}' if c.get("prix") is not None
+                else e(c.get("marchand") or ""))
+        voir = (f'<a class="c-voir" href="{e(c["url"])}" rel="noopener nofollow">voir la page</a>' if c.get("url") else "")
+        L.append(f'<li class="candidat">{vignette(c, "c-photo")}<div class="c-txt">'
+                 f'<p class="c-nom">{e(c.get("nom", "?"))}</p>'
+                 + (f'<p class="c-var">{e(c["variante"])}</p>' if c.get("variante") else "")
+                 + f'<p class="c-prix">{prix}</p>'
+                 + (f'<p class="c-note">{e(c["note"])}</p>' if c.get("note") else "")
+                 + f'</div><div class="c-actions"><a class="c-choisir" href="https://github.com/{DEPOT_GITHUB}/issues/new?{e(q)}">'
+                 f'C’est celui-là</a>{voir}</div></li>')
+    num = art.get("issue")
+    autre = (f' Aucun ne va ? Précise ta <a href="https://github.com/{DEPOT_GITHUB}/issues/{num}">demande n°{num}</a> '
+             'en y collant un lien produit.' if num else "")
+    return (f'<section class="carte choix"><h2 class="rubrique">Lequel veux-tu suivre ?</h2>'
+            f'<p class="aide">Trouvés pour « {e(art.get("demande", art["nom"]))} ». Touche le bon : la demande s’ouvre '
+            f'sur GitHub, il reste à appuyer sur « Create », et le suivi démarre.{autre}</p>'
+            f'<ol class="candidats">{"".join(L)}</ol></section>')
 
 
 def lien_equivalent(art):

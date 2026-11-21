@@ -301,6 +301,11 @@ def _verdict(res, article, c, actuel, prix_hist, meilleur_mois, tendance, limite
     if p <= c["min_12m"] * 1.05 or (p <= c["p25"] * 1.02 and p < c["mediane"]):
         res["verdict"] = ("acheter", "Bon prix : tu peux acheter",
                           f"{p:.0f} € fait partie des prix les plus bas vus sur 12 mois (plus bas : {c['min_12m']:.0f} €).")
+        # cohérence avec la prévision : si un mois a déjà fait mieux, on le dit (sans changer le verdict)
+        if meilleur_mois and c["meilleur_mois_prix"] <= p * 0.95 and c["fenetre_dates"][0] <= limite:
+            nom = MOIS_AFFICHE[c["fenetre"][0] - 1]
+            res["notes"].append(f"Déjà vu vers {c['meilleur_mois_prix']:.0f} € en {nom} : si tu peux attendre, "
+                                f"environ {p - c['meilleur_mois_prix']:.0f} € de moins possible.")
     elif meilleur_mois:
         debut, fin = c["fenetre"]
         d0, d1 = c["fenetre_dates"]
