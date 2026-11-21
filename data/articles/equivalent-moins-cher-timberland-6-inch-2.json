@@ -1,0 +1,32 @@
+{
+  "id": "equivalent-moins-cher-timberland-6-inch-2",
+  "statut": "suivi",
+  "cree_le": "2026-11-21",
+  "issue": 4,
+  "demande": "équivalent moins cher de Timberland 6-Inch Premium homme (imperméable)",
+  "categorie": "chaussures",
+  "urgence": "pas_urgent",
+  "taille": "39.5",
+  "equivalent_de": "timberland",
+  "nom": "CAT Colorado 2.0 WP homme",
+  "reference": "P110967 (coloris Pyramid, marron)",
+  "variante": "Marron (Pyramid) · pointure 40",
+  "autres_coloris_ok": true,
+  "pourquoi": "Environ 150 € au lieu d'environ 220 € ; boot 6 pouces en nubuck imperméable (membrane) très proche de la Timberland, en marron et non en jaune.",
+  "liens": [
+    {
+      "marchand": "Butyjana (France)",
+      "coloris": "Marron Pyramid · pointure non détaillée sur la page",
+      "exact": true,
+      "url": "https://www.butyjana.fr/caterpillar-colorado-2-0-wp-p110967.html"
+    },
+    {
+      "marchand": "Natural Shoes (Italie)",
+      "coloris": "Marron Pyramid · du 41 au 46 seulement",
+      "filtre": "PYR",
+      "exact": false,
+      "url": "https://www.naturalshoes.it/en/products/cat-colorado-2-0-wp-uomo-stivaletti-impermeabili-in-nabuk"
+    }
+  ],
+  "liens_historiques": []
+}

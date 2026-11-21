@@ -1,16 +1,31 @@
 {
   "id": "equivalent-moins-cher-timberland-6-inch",
-  "statut": "a_identifier",
+  "statut": "suivi",
   "cree_le": "2026-11-21",
   "issue": 4,
   "demande": "équivalent moins cher de Timberland 6-Inch Premium homme (imperméable)",
-  "nom": "équivalent moins cher de Timberland 6-Inch Premium homme (imperméable)",
-  "variante": "taille 39.5",
   "categorie": "chaussures",
   "urgence": "pas_urgent",
   "taille": "39.5",
-  "autres_coloris_ok": true,
   "equivalent_de": "timberland",
-  "liens": [],
+  "nom": "CAT Colorado 2.0 Hiker WP homme",
+  "reference": "P726349 (coloris Honey Reset, jaune miel)",
+  "variante": "Jaune miel (Honey Reset) · pointure 40 (CAT ne fait pas de demi-pointure)",
+  "autres_coloris_ok": true,
+  "pourquoi": "Environ 91 € au lieu d'environ 220 € pour la Timberland ; botte de marche en cuir velours imperméable (membrane), même allure jaune, mais cuir moins épais et semelle moins durable que la Premium.",
+  "liens": [
+    {
+      "marchand": "Sportano (France)",
+      "coloris": "Jaune miel · pointure non détaillée sur la page",
+      "exact": true,
+      "url": "https://sportano.fr/p/774751/chaussures-homme-caterpillar-colorado-2-0-hiker-wp-honey-reset"
+    },
+    {
+      "marchand": "Sportano (international)",
+      "coloris": "Jaune miel · pointure non détaillée sur la page",
+      "exact": true,
+      "url": "https://sportano.com/p/774751/men-s-shoes-caterpillar-colorado-2-0-hiker-wp-honey-reset"
+    }
+  ],
   "liens_historiques": []
 }
