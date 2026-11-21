@@ -47,3 +47,18 @@ def test_choix_invalide(tmp_path):
     import pytest
     with pytest.raises(ValueError):
         ajout.lire_choix("", "Article : casque\nChoix : 7\n", d.articles())
+
+
+def test_ou_l_acheter_montre_le_prix_le_plus_recent(tmp_path):
+    d = Depot(tmp_path / "data")
+    lien = {"marchand": "M", "url": "https://m.test/p", "exact": True}
+    d.ecrire_article({"id": "x", "nom": "X", "statut": "suivi", "liens": [lien]})
+    from prixjuste.collecte import cle
+    base = {"lien": cle(lien), "marchand": "M", "exact": True, "devise": "EUR", "en_stock": 1}
+    d.ajouter_releve("x", dict(base, ts="2026-11-21T08:00:00", source="direct", prix=150.0))
+    d.ajouter_releve("x", dict(base, ts="2025-07-15T10:00:00", source="archive", prix=105.0))
+    sortie = build.construire(d, tmp_path / "site", aujourdhui=dt.date(2026, 11, 21), quand="x")
+    fiche = (sortie / "a" / "x.html").read_text(encoding="utf-8")
+    bloc = fiche[fiche.index('class="marchands"'):]
+    ligne = bloc.split("</li>")[0]
+    assert "150,00" in ligne and "21/11/2026" in ligne and "105,00" not in ligne

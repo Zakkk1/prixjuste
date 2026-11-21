@@ -556,8 +556,9 @@ def bloc_marchands(art, obs, journal):
     for j in journal:
         if j["action"] == "direct":
             dernier_essai[j["lien"]] = j
-    for o in obs:
-        dernier_prix[o["lien"]] = o
+    for o in obs:  # le relevé le plus RÉCENT de chaque page (les archives arrivent après les relevés du jour)
+        if o["lien"] not in dernier_prix or o["ts"] >= dernier_prix[o["lien"]]["ts"]:
+            dernier_prix[o["lien"]] = o
     L = []
 
     def ligne(nom, url, detail, statut, classe, o):
