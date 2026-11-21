@@ -15,7 +15,17 @@ Site : https://zakkk1.github.io/prixjuste/
 - **Sans lien** : la demande attend que Claude trouve la référence exacte et des pages lisibles (voir plus bas).
   Pour aller plus vite : modifie la demande pour y coller un lien, puis retire et remets l'étiquette `ajout`.
 
-Un prix vu en magasin ou sur un site bloqué : sur la fiche, **J'ai vu un prix** (même principe).
+Sur chaque fiche, même principe (une demande pré-remplie sur GitHub) :
+- **J'ai vu un prix** : un prix vu en magasin ou sur un site bloqué.
+- **Je l'ai acheté** : le prix reste surveillé pendant les 14 jours de rétractation (s'il baisse, tu es prévenu
+  pour renvoyer et racheter) ; la fin de la garantie légale de 2 ans est notée.
+- **Carte 9:16** : une image verticale à partager (prix, historique réel, tampon, sources).
+
+## Être prévenu
+
+Quand un article passe à ACHÈTE, tombe sous son alerte ou affiche une promo bidon, l'issue « Suivi : <article> »
+reçoit un message (une fois par changement) : l'app GitHub du téléphone te notifie. L'agenda des fenêtres d'achat
+et des soldes s'ajoute au calendrier du téléphone depuis le lien « ajouter à mon agenda » du comptoir.
 
 ## Lire un verdict
 
@@ -49,7 +59,8 @@ archives publiques du web ou de ta saisie. Tant que le secret Claude n'existe pa
 
 ## Pour qui veut regarder sous le capot
 
-- `data/articles/*.json` les objets suivis · `data/releves/*.jsonl` un prix par ligne, jamais réécrit.
+- `data/articles/*.json` les objets suivis · `data/releves/*.jsonl` un prix par ligne, jamais réécrit ·
+  `data/profil.json` tes tailles habituelles (pointure, ajustements par marque).
 - `prixjuste/` le code (Python, sans dépendance) · `tests/` (`python -m pytest`).
 - `.github/workflows/` : `releve.yml` (chaque matin), `ajout.yml` (demandes), `claude.yml` (identification), `tests.yml`.
 - En local : `python -m prixjuste verdicts`, `python -m prixjuste site`, `python -m prixjuste verifier <url>`.
