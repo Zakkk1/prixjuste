@@ -1,16 +1,44 @@
 {
   "id": "patagonia-sweater-fleece-jacket-taille-m",
-  "statut": "a_identifier",
+  "statut": "suivi",
   "cree_le": "2026-11-21",
   "issue": 3,
   "demande": "patagonia sweater fleece jacket, taille M",
-  "nom": "patagonia sweater fleece jacket, taille M",
-  "variante": "noir · taille M",
-  "categorie": "autre",
+  "nom": "Patagonia Better Sweater homme",
+  "reference": "25528 (polaire zippée, noir BLK)",
+  "variante": "Noir · taille M",
+  "categorie": "vetement_hiver",
   "urgence": "pas_urgent",
   "taille": "M",
   "coloris": "noir",
   "autres_coloris_ok": false,
-  "liens": [],
+  "liens": [
+    {
+      "marchand": "Hawaiisurf",
+      "coloris": "Noir · M",
+      "filtre": "re:BLACK-M\\b",
+      "exact": true,
+      "url": "https://www.hawaiisurf.com/en/collections/outdoor/products/better-sweater-fleece-jacket-veste-polaire-zipee-homme-1"
+    },
+    {
+      "marchand": "END. (Espagne)",
+      "coloris": "Noir · M",
+      "filtre": "re:Medium-Black",
+      "exact": true,
+      "url": "https://endclothing.com/es/patagonia-better-sweater-jacket-25528-blk.html"
+    },
+    {
+      "marchand": "Alpinstore",
+      "coloris": "Noir · toutes tailles",
+      "exact": true,
+      "url": "https://www.alpinstore.com/en/210627-patagonia-better-sweater-black-men-s-zip-jacket.html"
+    },
+    {
+      "marchand": "i-run",
+      "coloris": "Noir ou gris chiné (prix commun) · toutes tailles",
+      "exact": true,
+      "url": "https://www.i-run.fr/vetement_sport_homme/Polaires_c1164/Patagonia_m318/Patagonia-Better-Sweater_Patagonia_fiche_96039.html"
+    }
+  ],
   "liens_historiques": []
 }
