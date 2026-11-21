@@ -248,7 +248,9 @@ def _verdict(res, article, c, actuel, prix_hist, meilleur_mois, tendance, limite
     elif tendance is not None and tendance < -8:
         res["notes"].append(f"Tendance baissière ({tendance:.0f} % sur 90 jours).")
 
-    if p <= c["p25"] * 1.02 or p <= c["min_12m"] * 1.05:
+    # « bon prix » : proche du plus bas, ou dans le quart le moins cher ET sous le prix habituel
+    # (sur un historique plat, le 1er quartile vaut le prix habituel : ce n'est pas une affaire)
+    if p <= c["min_12m"] * 1.05 or (p <= c["p25"] * 1.02 and p < c["mediane"]):
         res["verdict"] = ("acheter", "Bon prix : tu peux acheter",
                           f"{p:.0f} € fait partie des prix les plus bas vus sur 12 mois (plus bas : {c['min_12m']:.0f} €).")
     elif meilleur_mois:
