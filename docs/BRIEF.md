@@ -66,10 +66,11 @@ budget, liens si on en a). Le bouton ouvre une **issue GitHub pré-remplie** (UR
 
 ### Hébergement du site
 
-Compte GitHub gratuit : **GitHub Pages refuse les dépôts privés** (testé : HTTP 422). Décision en attente de
-l'utilisateur (dépôt public + Pages, ou autre). Construire de façon à ce que le déploiement soit une étape isolée
-du workflow (`actions/deploy-pages`), activable dès que l'hébergement est tranché. En attendant, le workflow publie
-`site/` comme artefact téléchargeable du run.
+**Décidé par l'utilisateur : dépôt public + GitHub Pages.** Le dépôt est public et Pages est activé en mode
+« GitHub Actions » (`build_type=workflow`). URL : https://zakkk1.github.io/prixjuste/ . Déployer `site/` avec
+`actions/upload-pages-artifact` + `actions/deploy-pages` à la fin de `releve.yml` et `ajout.yml` (permissions
+`pages: write`, `id-token: write`, environnement `github-pages`). Le site étant public : ne jamais y afficher de
+donnée personnelle autre que les articles suivis (pas de nom, pas d'e-mail).
 
 ## Le site — direction artistique : « Étiquette »
 
@@ -113,6 +114,6 @@ le tampon a un texte réel (pas une image). Pas de framework lourd : HTML/CSS/JS
 - [ ] `releve.yml` tourne chaque jour sur GitHub Actions et commite les relevés ; testé via `workflow_dispatch`.
 - [ ] `ajout.yml` : ajout par liens fonctionne de bout en bout (testé avec une vraie issue, puis fermée).
 - [ ] `claude.yml` prêt, inactif tant que le secret n'existe pas, étape d'activation documentée.
-- [ ] Site généré conforme à la direction artistique, vérifié à 375 px et en desktop, clair et sombre.
+- [ ] Site généré conforme à la direction artistique, vérifié à 375 px et en desktop, clair et sombre, et en ligne sur https://zakkk1.github.io/prixjuste/ .
 - [ ] Tests pytest verts en CI.
 - [ ] LISEZMOI.md court : comment ajouter un objet, lire un verdict, activer Claude, ce qui est bloqué et pourquoi.
