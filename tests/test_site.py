@@ -41,3 +41,13 @@ def test_article_en_attente(tmp_path):
     sortie = build.construire(d, tmp_path / "site", aujourdhui=dt.date(2026, 11, 21))
     assert "EN ATTENTE" in (sortie / "index.html").read_text(encoding="utf-8")
     assert "/issues/7" in (sortie / "a" / "doudoune.html").read_text(encoding="utf-8")
+
+
+def test_carte_9_16_sans_donnee_personnelle(tmp_path):
+    import html as h
+    sortie = build.construire(Depot(DATA), tmp_path / "site", aujourdhui=dt.date(2026, 11, 21))
+    fiche = (sortie / "a" / "mcmurdo.html").read_text(encoding="utf-8")
+    m = re.search(r'data-carte="([^"]+)"', fiche)
+    d = json.loads(h.unescape(m.group(1)))
+    assert d["tampon"] == ["ATTENDS"] and d["prix"].startswith("373,90")
+    assert set(d) >= {"nom", "serie", "fiabilite", "date"} and "issue" not in d

@@ -574,7 +574,7 @@ def fiche(art, res, obs, journal, quand, auj):
     corps.append('<h2 class="rubrique">Contrôle des promos</h2>' + bloc_promos(res))
     corps.append('<h2 class="rubrique">Où c\'est relevé</h2>' + bloc_marchands(art, obs, journal))
     corps.append(f'<p class="repere"><b>Repère de saison</b> (règle générale, pas une donnée sur cet article) : {e(res["repere"])}</p>')
-    corps.append(form_prix(art) + ("" if art.get("achat") else form_achat(art, act)))
+    corps.append(form_prix(art) + ("" if art.get("achat") else form_achat(art, act)) + carte(art, res, code, auj))
     corps += ["</main>", pied("../")]
     return page(f"{art['nom']} — PrixJuste", "".join(corps), "../",
                 description=f"{TAMPONS[code][1][0]} — {titre}", classe="p-fiche")
@@ -590,6 +590,32 @@ def form_achat(art, act):
             f'<label>Où<input name="marchand" value="{e(act.get("marchand", "")) if act else ""}"></label></div>'
             '<label>Le<input name="date" type="date"></label>'
             '<button type="submit">Noter l\'achat →</button></form></details>')
+
+
+def carte(art, res, code, auj):
+    """Bouton « Carte 9:16 » : image verticale factuelle (prix, historique, tampon, sources), dessinée
+    dans le navigateur, sans service tiers ni nom de personne."""
+    act = res.get("actuel")
+    if not act:
+        return ""
+    c = res["chiffres"]
+    promo = next((p for p in res["promos"] if p["ts"] == act["ts"] and p["marchand"] == act.get("marchand")), None)
+    donnees = {
+        "nom": art["nom"], "variante": art.get("variante") or "", "prix": euros(act["prix"]),
+        "chez": act.get("marchand"), "le": date_fr(act["ts"]),
+        "tampon": TAMPONS[code][1], "classe": TAMPONS[code][0], "sous": sous_tampon_code(code, res) or "",
+        "titre": res["verdict"][1] if code != "paye" else "Acheté", "explication": res["verdict"][2],
+        "barre": euros(promo["barre"]) if promo else "", "remise": pct(promo["remise_affichee"]) if promo else "",
+        "douteuse": bool(promo and promo["douteuse"]),
+        "min": euros(c["min_12m"]) if c.get("min_12m") is not None else "",
+        "min_le": date_fr(c["min_12m_date"]) if c.get("min_12m_date") else "",
+        "serie": [[(d - auj).days, v["prix"], v["source"]] for d, v in res["serie"].items() if 0 <= (auj - d).days <= 400],
+        "fiabilite": f'fiabilité {c.get("fiabilite")} · {c.get("n_releves", 0)} jours de prix · {c.get("n_sources", 0)} sources',
+        "date": date_fr(auj),
+    }
+    return (f'<div class="carte-zone"><button type="button" class="bouton-carte" '
+            f'data-carte="{e(json.dumps(donnees, ensure_ascii=False, separators=(",", ":")))}">Carte 9:16</button>'
+            '<p class="aide">Image verticale à partager : le prix, l\'historique réel et le tampon, avec la date.</p></div>')
 
 
 # ---------------------------------------------------------------- ajouter

@@ -385,6 +385,10 @@ h1 label { font: inherit; color: inherit; letter-spacing: inherit; }
 .case { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--encre); min-height: 32px; }
 .case input { width: 18px; height: 18px; margin: 0; accent-color: var(--encre); }
 
+.carte-zone { margin-top: 10px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.bouton-carte { background: transparent; color: var(--encre); border: 1.5px solid var(--encre); }
+.carte-zone .aide { flex: 1; min-width: 180px; }
+
 /* ------------------------------------------------------------- ajouter */
 
 .form-ajout { display: grid; gap: 18px; padding-top: 18px; }

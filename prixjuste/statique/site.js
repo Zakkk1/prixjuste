@@ -121,3 +121,122 @@
     });
   });
 })();
+
+// Carte 9:16 « preuve » : dessinée sur un canevas, téléchargée en PNG. Rien n'est envoyé nulle part.
+(function () {
+  "use strict";
+  var bouton = document.querySelector(".bouton-carte");
+  if (!bouton) return;
+  var ENCRE = "#1A1917", PAPIER = "#F3EFE6", GRIS = "#57534C";
+  var TAMPON = { achete: "#1F6B45", attends: "#23479A", surveille: "#9A5B12", bidon: "#B3261E", donnees: "#7A766E" };
+  var COND = '"Barlow Condensed", "Arial Narrow", sans-serif', MONO = '"JetBrains Mono", monospace';
+
+  function lignes(ctx, texte, largeur) {
+    var mots = String(texte).split(/\s+/), res = [], cour = "";
+    mots.forEach(function (m) {
+      var essai = cour ? cour + " " + m : m;
+      if (ctx.measureText(essai).width > largeur && cour) { res.push(cour); cour = m; } else { cour = essai; }
+    });
+    if (cour) res.push(cour);
+    return res;
+  }
+
+  function perfore(ctx, y) {
+    ctx.fillStyle = "rgba(26,25,23,.35)";
+    for (var x = 84; x < 1000; x += 18) { ctx.beginPath(); ctx.arc(x, y, 3, 0, 7); ctx.fill(); }
+  }
+
+  function dessiner(d) {
+    var cv = document.createElement("canvas");
+    cv.width = 1080; cv.height = 1920;
+    var ctx = cv.getContext("2d");
+    ctx.fillStyle = PAPIER; ctx.fillRect(0, 0, 1080, 1920);
+    var M = 84, L = 1080 - 2 * M, y = 150;
+
+    ctx.fillStyle = ENCRE; ctx.font = "700 46px " + COND; ctx.textBaseline = "alphabetic";
+    ctx.fillText("PRIX", M, y);
+    var w = ctx.measureText("PRIX ").width;
+    ctx.fillRect(M + w, y - 42, ctx.measureText("JUSTE").width + 14, 52);
+    ctx.fillStyle = PAPIER; ctx.fillText("JUSTE", M + w + 7, y);
+    ctx.fillStyle = GRIS; ctx.font = "400 26px " + MONO; ctx.textAlign = "right";
+    ctx.fillText("relevé du " + d.date, 1080 - M, y); ctx.textAlign = "left";
+    perfore(ctx, y + 44);
+
+    y += 170; ctx.fillStyle = ENCRE; ctx.font = "700 92px " + COND;
+    lignes(ctx, d.nom.toUpperCase(), L).slice(0, 3).forEach(function (l) { ctx.fillText(l, M, y); y += 88; });
+    ctx.fillStyle = GRIS; ctx.font = "400 28px " + MONO;
+    lignes(ctx, d.variante, L).slice(0, 2).forEach(function (l) { ctx.fillText(l, M, y); y += 40; });
+
+    y += 70; ctx.fillStyle = GRIS; ctx.font = "500 26px " + MONO; ctx.fillText("MEILLEUR PRIX RELEVÉ", M, y);
+    y += 150; ctx.fillStyle = ENCRE; ctx.font = "700 170px " + MONO; ctx.fillText(d.prix, M - 6, y);
+    y += 60; ctx.font = "400 30px " + MONO; ctx.fillStyle = GRIS;
+    var sous = "chez " + d.chez + " · le " + d.le;
+    if (d.barre) sous = "prix barré affiché " + d.barre + " (" + d.remise + ") · " + sous;
+    lignes(ctx, sous, L).slice(0, 2).forEach(function (l) { ctx.fillText(l, M, y); y += 42; });
+
+    // tampon : sa propre bande, il ne couvre jamais le texte
+    var couleur = TAMPON[d.classe] || TAMPON.donnees;
+    var h = d.tampon.length > 1 ? 190 : 140 + (d.sous ? 40 : 0);
+    ctx.save(); ctx.translate(1080 - M - 230, y + 40 + h / 2); ctx.rotate(-6 * Math.PI / 180);
+    ctx.globalAlpha = .9; ctx.strokeStyle = couleur; ctx.fillStyle = couleur;
+    ctx.lineWidth = 8; ctx.strokeRect(-220, -h / 2, 440, h);
+    ctx.lineWidth = 3; ctx.strokeRect(-204, -h / 2 + 16, 408, h - 32);
+    ctx.font = "700 " + (d.tampon.length > 1 ? 54 : 80) + "px " + COND; ctx.textAlign = "center";
+    var ty = d.tampon.length > 1 ? -12 : (d.sous ? 6 : 28);
+    d.tampon.forEach(function (t, i) { ctx.fillText(t.split("").join(String.fromCharCode(8202)), 0, ty + i * 58); });
+    if (d.sous) { ctx.font = "700 26px " + MONO; ctx.fillText(d.sous, 0, ty + 46); }
+    ctx.restore();
+
+    y += h + 130; ctx.fillStyle = ENCRE; ctx.font = "700 48px " + COND;
+    lignes(ctx, d.titre.toUpperCase(), L).slice(0, 2).forEach(function (l) { ctx.fillText(l, M, y); y += 54; });
+    ctx.font = "400 30px " + MONO;
+    lignes(ctx, d.explication, L).slice(0, 4).forEach(function (l) { ctx.fillText(l, M, y); y += 44; });
+
+    // courbe en escalier : 12 mois
+    var gx = M, gy = y + 50, gw = L, gh = Math.min(300, 1640 - gy);
+    if (d.serie.length > 1 && gh > 120) {
+      var xs = d.serie.map(function (p) { return p[0]; }), ps = d.serie.map(function (p) { return p[1]; });
+      var x0 = Math.min.apply(null, xs), x1 = 0, lo = Math.min.apply(null, ps), hi = Math.max.apply(null, ps);
+      var pad = Math.max((hi - lo) * .15, 8); lo -= pad; hi += pad;
+      var X = function (v) { return gx + (v - x0) / ((x1 - x0) || 1) * gw; };
+      var Y = function (v) { return gy + (hi - v) / (hi - lo) * gh; };
+      ctx.strokeStyle = "rgba(26,25,23,.35)"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(gx, gy + gh); ctx.lineTo(gx + gw, gy + gh); ctx.stroke();
+      ctx.strokeStyle = ENCRE; ctx.lineWidth = 4; ctx.beginPath();
+      d.serie.forEach(function (p, i) {
+        var x = X(p[0]), yy = Y(p[1]);
+        if (i === 0) ctx.moveTo(x, yy); else { ctx.lineTo(x, Y(d.serie[i - 1][1])); ctx.lineTo(x, yy); }
+      });
+      ctx.lineTo(X(0), Y(d.serie[d.serie.length - 1][1])); ctx.stroke();
+      d.serie.forEach(function (p) {
+        ctx.beginPath(); ctx.arc(X(p[0]), Y(p[1]), 8, 0, 7);
+        if (p[2] === "archive") { ctx.fillStyle = PAPIER; ctx.fill(); ctx.lineWidth = 3; ctx.stroke(); }
+        else { ctx.fillStyle = ENCRE; ctx.fill(); }
+      });
+      ctx.fillStyle = GRIS; ctx.font = "400 24px " + MONO;
+      var leg = "meilleur prix du jour, 12 derniers mois" + (d.min ? " · plus bas " + d.min + " le " + d.min_le : "");
+      lignes(ctx, leg, L).slice(0, 2).forEach(function (l, i) { ctx.fillText(l, gx, gy + gh + 44 + i * 34); });
+    }
+
+    perfore(ctx, 1760);
+    ctx.fillStyle = GRIS; ctx.font = "400 24px " + MONO;
+    ctx.fillText(d.fiabilite, M, 1812);
+    lignes(ctx, "Prix réellement relevés : sites marchands, archives du web, saisies. Aucun contournement.", L)
+      .slice(0, 2).forEach(function (l, i) { ctx.fillText(l, M, 1850 + i * 34); });
+    return cv;
+  }
+
+  bouton.addEventListener("click", function () {
+    var d = JSON.parse(bouton.dataset.carte);
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {
+      var cv = dessiner(d);
+      cv.toBlob(function (blob) {
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "prixjuste-" + d.nom.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + ".png";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+      }, "image/png");
+    });
+  });
+})();
