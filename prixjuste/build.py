@@ -638,6 +638,8 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None):
                      f'<p class="prix-geant">{euros(act["prix"])}{barre}</p>')
     elif code == "attente":
         prix_html = '<p class="lbl">Identification en cours</p>'
+    elif code == "choisir":
+        prix_html = '<p class="lbl">Choisis le bon produit ci-dessous : le suivi des prix démarre aussitôt.</p>'
     else:
         prix_html = ('<p class="lbl">Aucun site lisible ces 3 derniers jours</p><p class="prix-geant nul">—</p>')
 
