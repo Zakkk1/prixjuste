@@ -1,0 +1,89 @@
+{
+  "id": "mcmurdo",
+  "statut": "suivi",
+  "cree_le": "2026-11-19",
+  "nom": "The North Face McMurdo Parka homme",
+  "reference": "NF0A5GJF (DryVent, duvet 600)",
+  "variante": "Taille et coloris à préciser",
+  "categorie": "vetement_hiver",
+  "urgence": "pas_urgent",
+  "acheter_avant": "2027-11-01",
+  "budget_max": 300,
+  "autres_coloris_ok": true,
+  "liens": [
+    {
+      "marchand": "The North Face (officiel)",
+      "coloris": "Summit Navy",
+      "exact": true,
+      "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF"
+    },
+    {
+      "marchand": "Snowleader",
+      "coloris": "Summit Navy",
+      "exact": true,
+      "url": "https://www.snowleader.com/m-mcmurdo-parka-summit-navy-THEN06142.html"
+    },
+    {
+      "marchand": "Snowleader",
+      "coloris": "Dark Chestnut",
+      "exact": true,
+      "url": "https://www.snowleader.com/m-mcmurdo-parka-dark-chestnut-THEN06143.html"
+    },
+    {
+      "marchand": "Weekendbee",
+      "coloris": "Black",
+      "exact": true,
+      "url": "https://www.weekendbee.com/fr/products/mens-mcmurdo-parka"
+    },
+    {
+      "marchand": "Viladomat",
+      "coloris": "?",
+      "exact": true,
+      "url": "https://www.viladomat.com/en/men-s-mountainstyle-jackets/85268-799122-m-mcmurdo-parka.html"
+    }
+  ],
+  "liens_historiques": [
+    {
+      "marchand": "The North Face (officiel)",
+      "coloris": "code 8K2",
+      "exact": true,
+      "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF?color=8K2"
+    },
+    {
+      "marchand": "The North Face (officiel)",
+      "coloris": "code EKP",
+      "exact": true,
+      "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF?color=EKP"
+    },
+    {
+      "marchand": "The North Face (officiel)",
+      "coloris": "code KX7",
+      "exact": true,
+      "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF?color=KX7"
+    },
+    {
+      "marchand": "Snowleader",
+      "coloris": "TNF Black (saison 2025)",
+      "exact": true,
+      "url": "https://www.snowleader.com/m-mcmurdo-parka-tnf-black-tnf-black-THEN05331.html"
+    },
+    {
+      "marchand": "Snowleader",
+      "coloris": "Smoked Pearl (saison 2025)",
+      "exact": true,
+      "url": "https://www.snowleader.com/m-mcmurdo-parka-smoked-pearl-smoked-pearl-THEN05330.html"
+    },
+    {
+      "marchand": "Snowleader",
+      "coloris": "Woodland Green (saison 2025)",
+      "exact": true,
+      "url": "https://www.snowleader.com/m-mcmurdo-parka-woodland-green-THEN05329.html"
+    },
+    {
+      "marchand": "Snowleader",
+      "coloris": "Moss Green (saison 2024)",
+      "exact": true,
+      "url": "https://www.snowleader.com/m-mcmurdo-parka-moss-green-tnf-black-THEN04608.html"
+    }
+  ]
+}
