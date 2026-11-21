@@ -8,6 +8,7 @@
   python -m prixjuste issue --numero N                traite une issue « ajout » ou « prix »
                                                       (titre/corps lus dans ISSUE_TITLE / ISSUE_BODY)
   python -m prixjuste premier-releve ID               relevé + archives + compte rendu (après un ajout)
+  python -m prixjuste notifier                        commente l'issue « Suivi » d'un article quand son verdict change
   python -m prixjuste verifier URL [--taille T] [--filtre F]
                                                       la page est-elle lisible honnêtement ? (robots.txt, prix)
 """
@@ -163,6 +164,7 @@ def main(argv=None):
     prr = sp.add_parser("premier-releve")
     prr.add_argument("id")
     prr.add_argument("--max", type=int, default=40)
+    sp.add_parser("notifier")
     ve = sp.add_parser("verifier")
     ve.add_argument("url")
     ve.add_argument("--taille")
@@ -193,6 +195,14 @@ def main(argv=None):
         cmd_issue(depot, a)
     elif a.cmd == "premier-releve":
         cmd_premier_releve(depot, a.id, a.max)
+    elif a.cmd == "notifier":
+        from . import notifier
+        gh = notifier.depuis_environnement()
+        if not gh:
+            print("Pas de jeton GitHub : simulation, aucune notification envoyée.")
+        pages = os.environ.get("PAGES_URL", "")
+        n = notifier.notifier(depot, gh, pages, mention=os.environ.get("GITHUB_REPOSITORY_OWNER"))
+        print(f"{n} notification(s).")
     elif a.cmd == "verifier":
         sys.exit(cmd_verifier(a))
 
