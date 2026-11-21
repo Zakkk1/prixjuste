@@ -27,3 +27,9 @@
      garder `a_identifier` et expliquer dans `note_identification`.
   5. `python -m prixjuste premier-releve <id> --minutes 6`, commiter `data/`, pousser. Si `gh` est disponible,
      commenter l'issue de la demande (verdict, prix, pages) et la fermer.
+  Cas « équivalent » : si l'article contient `equivalent_de`, la demande est de trouver des ÉQUIVALENTS MOINS CHERS
+  de `data/articles/<equivalent_de>.json` (le lire). Chercher 2 ou 3 autres produits (pas le même modèle), même usage,
+  qualité comparable, moins chers que son prix habituel, dans la même taille. Le premier remplace l'article ; les
+  autres vont dans `<id>-2.json`, `<id>-3.json` (id = nom du fichier, même `issue`, même `equivalent_de`). Chacun a un
+  champ `pourquoi` : une phrase factuelle (prix habituel, matière, ce qu'on perd ou gagne). Mêmes règles de pages
+  LISIBLES, puis `premier-releve` pour chacun.
