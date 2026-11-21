@@ -171,3 +171,14 @@ def test_pas_de_fenetre_sur_4_jours():
     obs = [o("2026-01-10", 150), o("2026-03-10", 200), o("2026-06-10", 210), o("2026-11-20", 220)]
     res = analyse.analyser(ART, obs, AUJ)
     assert "fenetre" not in res["chiffres"] and res["verdict"][0] == "donnees"
+
+
+def test_rupture_de_taille_avance_la_date():
+    prix = {1: 150, 2: 165}
+    obs = annee(lambda m: prix.get(m, 220)) + [o(AUJ, 220)]
+    r = o("2026-01-20", 150, marchand="Shop", en_stock=0)
+    r["lien"] = "https://shop.fr/p#taille=40"
+    res = analyse.analyser(ART, obs + [r], AUJ)
+    assert res["verdict"][0] == "attendre"
+    assert res["jusqu_a"] == dt.date(2027, 1, 15)
+    assert "Ta taille a déjà manqué" in res["verdict"][2] and "janvier 2026" in res["verdict"][2]

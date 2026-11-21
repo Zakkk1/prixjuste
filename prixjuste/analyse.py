@@ -129,6 +129,21 @@ def filtrer_obs(article, obs):
     return [o for o in obs if o.get("exact", True)]
 
 
+def rupture_taille(obs, fenetre):
+    """Ta taille (liens suivis pour une taille précise) a-t-elle été en rupture pendant les mois de la
+    fenêtre, les années passées ? Renvoie « marchand, mois année » du premier cas, ou None."""
+    debut, fin = fenetre
+    mois, m = {debut}, debut
+    while m != fin:
+        m = m % 12 + 1
+        mois.add(m)
+    for o in sorted(obs, key=lambda o: o["ts"]):
+        if "#taille=" in (o.get("lien") or "") and o.get("en_stock") == 0 and _date(o["ts"]).month in mois:
+            d = _date(o["ts"])
+            return f"{o.get('marchand')}, {MOIS_AFFICHE[d.month - 1]} {d.year}"
+    return None
+
+
 def fiabilite(n):
     """Fiabilité d'un verdict selon le nombre de jours de prix connus sur ~12 mois."""
     return "faible" if n < 15 else ("moyenne" if n < 60 else "bonne")
@@ -148,7 +163,7 @@ def analyser(article, obs, aujourdhui=None):
         limite = auj + dt.timedelta(days=URGENCE_JOURS.get(article.get("urgence", "pas_urgent"), 365))
 
     res = {"serie": serie, "limite": limite, "repere": repere_txt, "notes": [], "chiffres": {},
-           "jusqu_a": None}
+           "jusqu_a": None, "_obs": obs}
     c = res["chiffres"]
 
     # Prix actuel = meilleur relevé des 3 derniers jours (en stock ou stock inconnu)
@@ -223,6 +238,7 @@ def analyser(article, obs, aujourdhui=None):
     _verdict(res, article, c, actuel, prix_hist, meilleur_mois, tendance, limite, auj, repere_txt)
     _alerte(c, article.get("budget_max"))
     _bidon(res)
+    del res["_obs"]
     pr = protection(article, auj)
     res["protection"] = pr
     if pr and pr["en_retractation"] and actuel and actuel["prix"] <= pr["prix"] - max(5, pr["prix"] * 0.05):
@@ -296,6 +312,12 @@ def _verdict(res, article, c, actuel, prix_hist, meilleur_mois, tendance, limite
             if c.get("meilleur_mois_dispo") is not None and c["meilleur_mois_dispo"] <= 2:
                 txt += " Attention : à ce moment-là il ne restait que peu de tailles en stock."
             res["jusqu_a"] = min(d1, limite)
+            rupt = rupture_taille(res["_obs"], c["fenetre"])
+            if rupt:
+                res["jusqu_a"] = min(d0 + dt.timedelta(days=14), d1, limite)
+                c["rupture_taille"] = rupt
+                txt += (f" Ta taille a déjà manqué à cette période ({rupt}) : achète au début de la fenêtre, "
+                        f"pas après le {res['jusqu_a']:%d/%m/%Y}.")
             if tendance is not None and tendance > 8:
                 res["verdict"] = ("surveiller", f"Plutôt attendre {nom_mois}, mais le prix monte", txt)
             else:
