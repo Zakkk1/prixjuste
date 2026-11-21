@@ -20,6 +20,12 @@ Sur chaque fiche, même principe (une demande pré-remplie sur GitHub) :
 - **Je l'ai acheté** : le prix reste surveillé pendant les 14 jours de rétractation (s'il baisse, tu es prévenu
   pour renvoyer et racheter) ; la fin de la garantie légale de 2 ans est notée.
 - **Carte 9:16** : une image verticale à partager (prix, historique réel, tampon, sources).
+- **Trouver un équivalent moins cher** : Claude (s'il est activé) propose 2 ou 3 produits comparables moins chers,
+  suivis ensuite comme les autres ; les fiches se renvoient l'une à l'autre (« À comparer »).
+
+Sur le comptoir, **Plan d'achat sous budget** (replié) : indique un budget par mois, chaque article est placé dans
+son mois historiquement le moins cher avant sa date limite, sans dépasser le budget. Le budget reste sur ton
+appareil, il n'est jamais publié. Sur les courbes, un trait ocre sur l'axe marque les soldes et le Black Friday.
 
 ## Être prévenu
 
@@ -42,7 +48,7 @@ d'où vient chaque prix (relevé direct, archive web, saisie) et quels sites ne 
 
 ## Activer Claude (identification en texte libre)
 
-Seule étape qui utilise l'IA, et seulement pour les demandes sans lien. Sur ton ordinateur :
+Seules étapes qui utilisent l'IA : les demandes sans lien et la recherche d'équivalents. Sur ton ordinateur :
 
 1. Lance `claude setup-token` et copie le jeton affiché.
 2. Sur GitHub : dépôt → **Settings → Secrets and variables → Actions → New repository secret**,
