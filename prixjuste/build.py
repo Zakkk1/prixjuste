@@ -136,143 +136,130 @@ def _graduations(lo, hi, n=4):
 
 
 def courbe(ident, res, obs, auj, W, H, suffixe):
-    pts = _points(obs, auj)
-    if not pts:
-        return ""
+    """Une seule chose à lire : le meilleur prix de chaque jour sur les 12 derniers mois.
+    Le prix d'aujourd'hui et le plus bas sont écrits sur la courbe ; l'alerte est une ligne. Rien d'autre."""
     c = res["chiffres"]
-    ml, mr, mt, mb = 44, 10, 22, 26
-    d0 = min(p[0] for p in pts)
-    d1 = max(auj, max(p[0] for p in pts))
-    fen = c.get("fenetre_dates")
-    if fen and (fen[1] - auj).days <= 200:
-        d1 = max(d1, fen[1])
-    if (d1 - d0).days < 60:
-        d0 = d1 - dt.timedelta(days=60)
-    prix = [p[1] for p in pts] + ([c["alerte"]] if c.get("alerte") else [])
-    lo, hi = min(prix), max(prix)
-    pad = max((hi - lo) * 0.14, 8)
-    lo, hi = max(0, lo - pad), hi + pad
+    jours = sorted((d, v) for d, v in res["serie"].items() if 0 <= (auj - d).days <= 365)
+    if not jours:
+        return ""
+    fs = 12.5 if suffixe == "etroite" else 13
+    ml, mr, mt, mb = 50, 10, 30, 30
+    d0, d1 = auj - dt.timedelta(days=365), auj  # toujours 12 mois pleins : chaque point tombe à son vrai mois
     span = (d1 - d0).days or 1
+    prix = [v["prix"] for _, v in jours] + ([c["alerte"]] if c.get("alerte") else [])
+    lo, hi = min(prix), max(prix)
+    pad = max((hi - lo) * 0.18, hi * 0.04)
+    lo, hi = max(0, lo - pad), hi + pad
     X = lambda d: ml + (d - d0).days / span * (W - ml - mr)
     Y = lambda v: mt + (hi - v) / (hi - lo) * (H - mt - mb)
-    hid = f"hachure-{ident}-{suffixe}"
+    largeur = lambda t: len(t) * fs * 0.6
+
     s = [f'<svg class="courbe-svg courbe-{suffixe}" viewBox="0 0 {W} {H}" role="img" '
-         f'aria-label="Historique du meilleur prix, du {date_fr(d0)} au {date_fr(min(d1, auj))}">',
-         f'<defs><pattern id="{hid}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
-         f'<line x1="0" y1="0" x2="0" y2="6" class="hachure"/></pattern></defs>']
+         f'aria-label="Meilleur prix de chaque jour, du {date_fr(d0)} au {date_fr(d1)}" style="--fs:{fs}px">']
 
-    # fenêtre d'achat conseillée : chaque occurrence des mois de la fenêtre, hachurée
-    if c.get("fenetre"):
-        debut, fin = c["fenetre"]
-        mois = [debut]
-        while mois[-1] != fin:
-            mois.append(mois[-1] % 12 + 1)
-        an = d0.year - 1
-        while an <= d1.year:
-            a = dt.date(an, debut, 1)
-            an_fin = an + (1 if fin < debut else 0)
-            b = analyse._fin_de_mois(an_fin, fin)
-            x0, x1 = max(a, d0), min(b, d1)
-            if x0 < x1:
-                s.append(f'<rect x="{X(x0):.1f}" y="{mt}" width="{X(x1) - X(x0):.1f}" height="{H - mt - mb}" '
-                         f'fill="url(#{hid})" class="fenetre"/>')
-                if (a > auj or (a <= auj <= b)) and abs(X(x0) - X(auj)) > 64 and abs(X(x1) - X(auj)) > 64:
-                    if X(x0) + 60 > W:
-                        s.append(f'<text x="{X(x1):.1f}" y="{mt - 8}" text-anchor="end" class="t-fen">fenêtre</text>')
-                    else:
-                        s.append(f'<text x="{X(x0) + 3:.1f}" y="{mt - 8}" class="t-fen">fenêtre</text>')
-            an += 1
-
-    # axe des prix : quelques repères, pas de grille lourde
-    for v in _graduations(lo, hi):
+    # repères de prix : 3 lignes fines, la valeur dans la marge de gauche
+    for v in _graduations(lo, hi, 3):
         y = Y(v)
-        s.append(f'<line x1="{ml - 4}" x2="{ml}" y1="{y:.1f}" y2="{y:.1f}" class="tic"/>'
-                 f'<text x="{ml - 7}" y="{y + 3.5:.1f}" text-anchor="end" class="t-axe">{v:.0f}</text>')
-    s.append(f'<line x1="{ml}" x2="{ml}" y1="{mt}" y2="{H - mb}" class="axe"/>'
-             f'<line x1="{ml}" x2="{W - mr}" y1="{H - mb}" y2="{H - mb}" class="axe"/>')
+        s.append(f'<line x1="{ml}" x2="{W - mr}" y1="{y:.1f}" y2="{y:.1f}" class="grille"/>'
+                 f'<text x="{ml - 8}" y="{y + fs * 0.35:.1f}" text-anchor="end" class="t-axe">{v:.0f} €</text>')
 
-    # mois
-    m, vus, dernier_x, dernier_l = dt.date(d0.year, d0.month, 1), 0, -99, 0
+    # mois : un sur deux si la place manque ; l'année sur janvier et sur le premier mois
+    m, dernier_fin, premier = dt.date(d0.year, d0.month, 1), -1e9, True
+    if m < d0:
+        m = dt.date(m.year + (m.month == 12), m.month % 12 + 1, 1)
     while m <= d1:
         x = X(m)
-        if m >= d0:
-            s.append(f'<line x1="{x:.1f}" x2="{x:.1f}" y1="{H - mb}" y2="{H - mb + 4}" class="tic"/>')
-            lab = MOIS_COURT[m.month - 1]
-            if m.month == 1 or vus == 0:
-                lab += f" {m.year % 100:02d}"
-            if x - dernier_x >= dernier_l * 6.4 + 10 and x + len(lab) * 6.4 < W:
-                s.append(f'<text x="{x + 2:.1f}" y="{H - mb + 16}" class="t-axe">{e(lab)}</text>')
-                dernier_x, dernier_l = x, len(lab)
-                vus += 1
+        lab = MOIS_COURT[m.month - 1] + (f" {m.year}" if m.month == 1 or premier else "")
+        if x - dernier_fin >= 12 and x + largeur(lab) <= W:
+            s.append(f'<text x="{x:.1f}" y="{H - 9}" class="t-axe">{e(lab)}</text>')
+            dernier_fin, premier = x + largeur(lab), False
         m = dt.date(m.year + (m.month == 12), m.month % 12 + 1, 1)
+    s.append(f'<line x1="{ml}" x2="{W - mr}" y1="{H - mb}" y2="{H - mb}" class="axe"/>')
 
-    # grands événements de prix (soldes, Black Friday) : un trait discret posé sur l'axe du temps
-    evts = [(a, b, t.split(" (")[0]) for a, b, t in agenda.evenements_commerciaux(d0 - dt.timedelta(days=40), d1)
-            if b >= d0]
-    for a, b, t in evts:
-        x0, x1 = X(max(a, d0)), X(min(b, d1))
-        s.append(f'<line x1="{x0:.1f}" x2="{max(x1, x0 + 3):.1f}" y1="{H - mb - 2}" y2="{H - mb - 2}" class="evt">'
-                 f'<title>{e(t)} : {date_fr(a)} – {date_fr(b)}</title></line>')
+    # zones occupées par le tracé (points et marches verticales) : les libellés les évitent
+    serie = [(d, v["prix"]) for d, v in jours]
+    occupe = [(X(d) - 6, Y(p) - 6, X(d) + 6, Y(p) + 6) for d, p in serie]
+    for (da, pa), (db, pb) in zip(serie, serie[1:]):
+        if (db - da).days <= 45:
+            occupe.append((X(db) - 4, min(Y(pa), Y(pb)), X(db) + 4, max(Y(pa), Y(pb))))
+            occupe.append((X(da), Y(pa) - 3, X(db), Y(pa) + 3))
 
-    # alerte : pointillé
+    def place(candidats, w):
+        """Premier emplacement (x de début, ligne de base) dont le texte ne touche pas le tracé."""
+        for tx, ty in candidats:
+            tx = min(max(tx, ml), W - mr - w)
+            boite = (tx - 3, ty - fs, tx + w + 3, ty + 4)
+            if not any(a < boite[2] and boite[0] < c_ and b < boite[3] and boite[1] < d_ for a, b, c_, d_ in occupe):
+                occupe.append(boite)
+                return tx, ty
+        tx, ty = candidats[0] if candidats else (ml, mt + fs)
+        return min(max(tx, ml), W - mr - w), ty
+
+    # alerte : la ligne sous laquelle il faut acheter
     if c.get("alerte") and lo < c["alerte"] < hi:
         ya = Y(c["alerte"])
-        s.append(f'<line x1="{ml}" x2="{W - mr}" y1="{ya:.1f}" y2="{ya:.1f}" class="alerte"/>'
-                 f'<text x="{W - mr}" y="{ya - 5:.1f}" text-anchor="end" class="t-alerte">alerte {c["alerte"]:.0f} €</text>')
+        t = f'acheter sous {c["alerte"]:.0f} €'
+        w = largeur(t)
+        s.append(f'<line x1="{ml}" x2="{W - mr}" y1="{ya:.1f}" y2="{ya:.1f}" class="alerte"/>')
+        cands = [(x, y) for y in (ya - 6, ya + fs + 4) for x in (W - mr - w, ml + 6, (W - w) / 2, ml + (W - ml) * .25, ml + (W - ml) * .6)]
+        tx, ty = place(cands, w)
+        s.append(f'<text x="{tx:.1f}" y="{ty:.1f}" class="t-alerte">{t}</text>')
 
-    # aujourd'hui
-    if auj < d1:
-        xt = X(auj)
-        s.append(f'<line x1="{xt:.1f}" x2="{xt:.1f}" y1="{mt}" y2="{H - mb}" class="auj"/>'
-                 f'<text x="{xt:.1f}" y="{mt - 8}" text-anchor="middle" class="t-axe">auj.</text>')
+    # le trait : un palier par jour connu, interrompu quand on n'a pas de prix pendant plus de 45 jours
+    chemin = _chemin_escalier(serie, X, Y)
+    s.append(f'<path d="{chemin}" class="trait"/>')
 
-    # meilleur prix du jour : trait d'encre en escalier, prolongé jusqu'à aujourd'hui s'il est récent
-    serie = [(d, v["prix"]) for d, v in res["serie"].items() if d >= d0 and d <= auj]
-    if serie:
-        chemin = _chemin_escalier(serie, X, Y)
-        if (auj - serie[-1][0]).days <= 3:
-            chemin += f" H{X(auj):.1f}"
-        s.append(f'<path d="{chemin}" class="trait"/>')
-
-    # relevés : plein = direct, creux = archive, carré = saisie manuelle
     donnees = []
-    for d, p, src, marchand in pts:
-        x, y = X(d), Y(p)
-        if src == "archive":
-            s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" class="pt-creux"/>')
-        elif src == "manuel":
-            s.append(f'<rect x="{x - 3.2:.1f}" y="{y - 3.2:.1f}" width="6.4" height="6.4" class="pt-plein"/>')
-        else:
-            s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" class="pt-plein"/>')
-        evt = next((t for a, b, t in evts if a <= d <= b), None)
+    for d, v in jours:
+        x, y = X(d), Y(v["prix"])
+        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.5" class="pt"/>')
         donnees.append([round(x / W * 100, 2), round(y / H * 100, 2),
-                        f"{date_fr(d)} · {euros(p)} · {marchand} · {SOURCES.get(src, src)}"
-                        + (f" · {evt.lower() if evt.startswith('Soldes') else evt}" if evt else "")])
-    s.append(f'<circle r="6" class="curseur" cx="-10" cy="-10"/>')
+                        f"{date_fr(d)} : {euros(v['prix'])} chez {v.get('marchand') or '?'} "
+                        f"({SOURCES.get(v.get('source'), v.get('source'))})"])
+
+    # étiquettes : le prix du dernier jour connu, et le plus bas s'il est différent
+    def etiquette(d, p, texte, classe):
+        x, y = X(d), Y(p)
+        w = largeur(texte)
+        cands = [(x - w / 2, y - 11), (x - w / 2, y + fs + 10), (x + 10, y + fs * .35), (x - w - 10, y + fs * .35),
+                 (x + 10, y - 11), (x + 10, y + fs + 10)]
+        tx, ty = place([(cx, cy) for cx, cy in cands if cy - fs > 0 and cy < H - mb], w)
+        return f'<text x="{tx:.1f}" y="{ty:.1f}" class="{classe}">{e(texte)}</text>'
+
+    d_der, v_der = jours[-1]
+    xd, yd = X(d_der), Y(v_der["prix"])
+    s.append(f'<circle cx="{xd:.1f}" cy="{yd:.1f}" r="5.5" class="pt-fort"/>')
+    t = euros(v_der["prix"], False).replace(" €", " €")
+    w = largeur(t) * 1.1
+    tx, ty = place([(xd - w - 12, yd + fs * .35), (xd - w / 2, yd - 12), (xd - w / 2, yd + fs + 12),
+                    (xd - w - 12, yd - 12), (xd - w - 12, yd + fs + 12)], w)
+    s.append(f'<text x="{tx:.1f}" y="{ty:.1f}" class="t-fort">{e(t)}</text>')
+    d_min, v_min = min(jours, key=lambda t: t[1]["prix"])
+    if v_min["prix"] < v_der["prix"] - 0.5 and abs(X(d_min) - X(d_der)) > 70:
+        s.append(etiquette(d_min, v_min["prix"], f'plus bas {euros(v_min["prix"], False)}'.replace(" €", " €"), "t-min"))
+
+    s.append('<circle r="7" class="curseur" cx="-10" cy="-10"/>')
     s.append("</svg>")
     return "".join(s), donnees
 
 
 def figure_courbe(art, res, obs, auj):
-    etroite = courbe(art["id"], res, obs, auj, 360, 220, "etroite")
+    etroite = courbe(art["id"], res, obs, auj, 360, 230, "etroite")
     if not etroite:
         return '<p class="vide-txt">Pas encore de courbe : aucun prix en stock relevé.</p>'
-    large = courbe(art["id"], res, obs, auj, 720, 270, "large")
+    large = courbe(art["id"], res, obs, auj, 720, 280, "large")
     pts = json.dumps({"etroite": etroite[1], "large": large[1]}, ensure_ascii=False, separators=(",", ":"))
     return (f'<figure class="courbe" data-points="{e(pts)}">{etroite[0]}{large[0]}'
-            '<figcaption class="legende"><span class="k-plein">relevé direct</span>'
-            '<span class="k-creux">archive web</span><span class="k-carre">saisie</span>'
-            '<span class="k-hach">fenêtre conseillée</span><span class="k-alerte">alerte</span>'
-            '<span class="k-evt">soldes, Black Friday</span></figcaption>'
-            '<output class="lecture" aria-live="polite">Touche la courbe pour lire un relevé.</output></figure>')
+            '<output class="lecture" aria-live="polite">Meilleur prix de chaque jour, tous marchands confondus. '
+            'Touche un point pour le détail.</output></figure>')
 
 
 # ---------------------------------------------------------------- morceaux de page
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700'
-         '&family=JetBrains+Mono:wght@400;500;700&display=swap">')
+         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600'
+         '&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">')
 
 FILTRE_ENCRE = ('<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">'
                 '<filter id="encre" x="-5%" y="-10%" width="110%" height="120%">'
@@ -368,12 +355,10 @@ def ligne_comptoir(art, res, obs, auj):
         prix = (f'<span class="prix-ligne">{euros(act["prix"])}</span><span class="chez">chez {e(act.get("marchand"))}</span>'
                 if act else '<span class="prix-ligne nul">—</span><span class="chez">aucun prix lisible ces 3 jours</span>')
         phrase = phrase_achat(res) if code == "paye" else res["verdict"][2]
-        spark = sparkline(res, obs, auj)
     return (f'<li><a class="etiquette" href="{href}">'
             f'<span class="nom">{e(art["nom"])}</span>'
             f'<span class="var">{e(variante)}</span>'
             f'<span class="prix-bloc">{prix}</span>'
-            f'<span class="spark-bloc">{spark}</span>'
             f'<span class="tampon-bloc">{tampon(code, sous_tampon_code(code, res), "petit")}</span>'
             f'<span class="phrase">{e(phrase)}</span>'
             '</a></li>')
@@ -438,19 +423,9 @@ def ticket(art, res):
     if c.get("fenetre"):
         debut, fin = c["fenetre"]
         nom = MOIS[debut - 1] + ("" if debut == fin else "–" + MOIS[fin - 1])
-        a, b = c["fenetre_dates"]
-        L.append(_ligne_ticket("Fenêtre d'achat conseillée", e(nom),
-                               f'du {date_fr(a)} au {date_fr(b)} · vers {euros(c["meilleur_mois_prix"], False)}'))
-    else:
-        L.append(_ligne_ticket("Fenêtre d'achat conseillée", "—", "il faut des prix sur au moins 3 mois différents"))
+        L.append(_ligne_ticket("Mois le moins cher", e(nom), f'vers {euros(c["meilleur_mois_prix"], False)}'))
     if c.get("alerte"):
         L.append(_ligne_ticket("Alerte", f'sous {euros(c["alerte"], False)}', "achète si le prix passe dessous"))
-    else:
-        L.append(_ligne_ticket("Alerte", "—", "pas calculée sur moins de 5 jours de prix"))
-    L.append(_ligne_ticket("À acheter avant", date_fr(res["limite"]),
-                           "date choisie" if art.get("acheter_avant") else f"urgence : {e(art.get('urgence', 'pas_urgent').replace('_', ' '))}"))
-    if art.get("budget_max"):
-        L.append(_ligne_ticket("Budget", euros(art["budget_max"], False)))
     pr = res.get("protection")
     if pr:
         L.append(_ligne_ticket("Payé", euros(pr["prix"]), f'{e(pr["marchand"])} · {date_fr(pr["date"])}'))
@@ -460,14 +435,13 @@ def ticket(art, res):
                                "2 ans de garantie de conformité, à demander au vendeur"))
     n = c.get("n_releves", 0)
     L.append(_ligne_ticket("Fiabilité", e(c.get("fiabilite", "faible")),
-                           f'{n} jour{"s" if n > 1 else ""} de prix sur 12 mois · {c.get("n_sources", 0)} source(s)'))
+                           f'{n} jour{"s" if n > 1 else ""} de prix connus sur 12 mois'))
     return '<dl class="ticket">' + "".join(L) + "</dl>"
 
 
 def bloc_promos(res):
     if not res["promos"]:
-        return ('<p class="vide-txt">Aucun prix barré relevé ces 3 derniers jours. Quand un marchand affiche une '
-                'réduction, elle est comparée à ce qu\'il pratiquait vraiment dans les 30 jours d\'avant.</p>')
+        return ""
     L = []
     for pr in res["promos"]:
         etat = "trompeuse" if pr["douteuse"] else "conforme"
@@ -555,11 +529,15 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None):
     code = etat_article(art, res)
     act = res.get("actuel")
     sous = sous_tampon_code(code, res)
-    variante = " · ".join(x for x in (art.get("reference"), art.get("variante")) if x)
+    variante = art.get("variante") or art.get("reference") or ""
+    cadre = [f'à acheter avant le {date_fr(res["limite"])}']
+    if art.get("budget_max"):
+        cadre.append(f'budget {euros(art["budget_max"], False)}')
     corps = [entete("../", quand), '<main class="fiche">',
              '<a class="retour" href="../index.html">← Le comptoir</a>',
              f'<h1 class="nom-fiche">{e(art["nom"])}</h1>',
              f'<p class="var-fiche">{e(variante)}</p>' if variante else "",
+             f'<p class="cadre-fiche">{e(" · ".join(cadre))}</p>',
              liens_parentes(art, voisins or {})]
 
     if code == "attente":
@@ -581,10 +559,9 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None):
         promo = next((p for p in res["promos"] if p["ts"] == act["ts"] and p["marchand"] == act.get("marchand")), None)
         if promo and not promo["douteuse"]:  # ancien prix barré affiché seulement s'il est réel
             barre = f'<s class="barre">{euros(promo["barre"])}</s> <span class="remise">{pct(promo["remise_affichee"])}</span>'
-        prix_html = (f'<p class="lbl">Meilleur prix actuel</p>'
+        prix_html = (f'<p class="lbl">Meilleur prix aujourd\'hui</p>'
                      f'<p class="prix-geant">{euros(act["prix"])}</p>'
-                     f'<p class="ou">{barre}{" · " if barre else ""}chez {e(act.get("marchand"))} · '
-                     f'{SOURCES.get(act.get("source"), "")} du {date_fr(act["ts"])}</p>')
+                     f'<p class="ou">{barre}{" · " if barre else ""}chez {e(act.get("marchand"))}</p>')
     else:
         prix_html = ('<p class="lbl">Meilleur prix actuel</p><p class="prix-geant nul">—</p>'
                      '<p class="ou">aucun site lisible ces 3 derniers jours</p>')
@@ -595,12 +572,16 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None):
                  f'<div class="verdict-zone"><p class="verdict-titre">{e(titre)}</p>'
                  f'<p class="verdict-expli">{e(expli)}</p>'
                  + (f'<ul class="notes">{notes}</ul>' if notes else "") + '</div></section>')
-    corps.append('<h2 class="rubrique">Le ticket</h2>' + ticket(art, res))
-    corps.append('<h2 class="rubrique">La courbe</h2>' + figure_courbe(art, res, obs, auj))
-    corps.append('<h2 class="rubrique">Contrôle des promos</h2>' + bloc_promos(res))
-    corps.append('<h2 class="rubrique">Où c\'est relevé</h2>' + bloc_marchands(art, obs, journal))
-    corps.append(f'<p class="repere"><b>Repère de saison</b> (règle générale, pas une donnée sur cet article) : {e(res["repere"])}</p>')
-    corps.append(form_prix(art) + ("" if art.get("achat") else form_achat(art, act)) + carte(art, res, code, auj) + lien_equivalent(art))
+    corps.append('<h2 class="rubrique">Les 12 derniers mois</h2>' + figure_courbe(art, res, obs, auj))
+    corps.append('<h2 class="rubrique">Repères</h2>' + ticket(art, res))
+    if res["chiffres"].get("fiabilite", "faible") == "faible":
+        corps.append(f'<p class="repere">Encore peu de prix connus. En général : {e(res["repere"])}</p>')
+    promos = bloc_promos(res)
+    if promos:
+        corps.append('<h2 class="rubrique">Contrôle des promos</h2>' + promos)
+    corps.append('<h2 class="rubrique">Où l\'acheter</h2>' + bloc_marchands(art, obs, journal))
+    corps.append('<div class="actions">' + form_prix(art) + ("" if art.get("achat") else form_achat(art, act))
+                 + carte(art, res, code, auj) + '</div>' + lien_equivalent(art))
     corps += ["</main>", pied("../")]
     return page(f"{art['nom']} — PrixJuste", "".join(corps), "../",
                 description=f"{TAMPONS[code][1][0]} — {titre}", classe="p-fiche")

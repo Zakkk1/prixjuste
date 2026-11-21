@@ -75,12 +75,13 @@ def test_bloc_sur_le_comptoir(tmp_path):
     assert "budget_mois" not in index  # le budget n'est jamais publié
 
 
-def test_evenements_sur_la_courbe(tmp_path):
+def test_courbe_sobre(tmp_path):
+    """La courbe ne montre que le meilleur prix du jour : pas de hachures, pas de repères de soldes, pas de légende."""
     sortie = build.construire(Depot(DATA), tmp_path / "site", aujourdhui=AUJ, quand="x")
     fiche = (sortie / "a" / "mcmurdo.html").read_text(encoding="utf-8")
-    assert 'class="evt"><title>Soldes d&#x27;hiver' in fiche
-    assert "Black Friday : 27/11/2026" in fiche
-    assert "archive web · soldes d&#x27;hiver" in fiche  # la lecture au doigt nomme l'événement
+    assert 'class="evt"' not in fiche and "hachure" not in fiche and 'class="legende"' not in fiche
+    assert 'class="t-fort"' in fiche  # le prix du jour est écrit sur la courbe
+    assert "plus bas" in fiche
 
 
 def test_equivalent_du_lien_a_l_article(tmp_path):

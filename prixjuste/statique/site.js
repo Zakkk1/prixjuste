@@ -129,7 +129,7 @@
   if (!bouton) return;
   var ENCRE = "#1A1917", PAPIER = "#F3EFE6", GRIS = "#57534C";
   var TAMPON = { achete: "#1F6B45", attends: "#23479A", surveille: "#9A5B12", bidon: "#B3261E", donnees: "#7A766E" };
-  var COND = '"Barlow Condensed", "Arial Narrow", sans-serif', MONO = '"JetBrains Mono", monospace';
+  var COND = '"IBM Plex Sans Condensed", "Arial Narrow", sans-serif', MONO = '"IBM Plex Mono", monospace';
 
   function lignes(ctx, texte, largeur) {
     var mots = String(texte).split(/\s+/), res = [], cour = "";

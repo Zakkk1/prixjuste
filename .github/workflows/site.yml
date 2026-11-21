@@ -1,0 +1,47 @@
+name: Site (design)
+
+# Reconstruit et redéploie le site quand son code change, SANS relever de prix
+# (la collecte reste une fois par jour, dans releve.yml).
+on:
+  push:
+    branches: [main]
+    paths:
+      - "prixjuste/build.py"
+      - "prixjuste/statique/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Construire le site
+        env:
+          PAGES_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: python -m prixjuste site --sortie site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deployer:
+    needs: construire
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - id: pages
+        uses: actions/deploy-pages@v4
