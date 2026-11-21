@@ -1,6 +1,6 @@
 name: Site (design)
 
-# Reconstruit et redéploie le site quand son code change, SANS relever de prix
+# Reconstruit et redéploie le site quand son code ou un article change, SANS relever de prix
 # (la collecte reste une fois par jour, dans releve.yml).
 on:
   push:
@@ -8,6 +8,7 @@ on:
     paths:
       - "prixjuste/build.py"
       - "prixjuste/statique/**"
+      - "data/articles/**"
   workflow_dispatch:
 
 permissions:

@@ -12,8 +12,9 @@ Site : https://zakkk1.github.io/prixjuste/
 3. Le bouton ouvre GitHub avec la demande déjà écrite : appuie sur **Create**.
 
 - **Avec des liens** : l'article est créé, relevé, et la demande reçoit le premier verdict puis se ferme (2 à 15 min).
-- **Sans lien** : la demande attend que Claude trouve la référence exacte et des pages lisibles (voir plus bas).
-  Pour aller plus vite : modifie la demande pour y coller un lien, puis retire et remets l'étiquette `ajout`.
+- **Sans lien** : Claude trouve la référence exacte et des pages lisibles, au plus tard dans les 3 heures (une
+  routine passe régulièrement, rien à configurer), puis commente et ferme la demande. Pour aller plus vite :
+  colle un lien dans la demande, puis retire et remets l'étiquette `ajout`.
 
 Sur chaque fiche, même principe (une demande pré-remplie sur GitHub) :
 - **J'ai vu un prix** : un prix vu en magasin ou sur un site bloqué.
@@ -46,9 +47,10 @@ et des soldes s'ajoute au calendrier du téléphone depuis le lien « ajouter à
 Chaque fiche dit sur combien de jours de prix le verdict repose (**fiabilité** faible < 15, moyenne < 60, bonne au-delà),
 d'où vient chaque prix (relevé direct, archive web, saisie) et quels sites ne se laissent pas lire.
 
-## Activer Claude (identification en texte libre)
+## Identification immédiate (facultatif)
 
-Seules étapes qui utilisent l'IA : les demandes sans lien et la recherche d'équivalents. Sur ton ordinateur :
+Seules étapes qui utilisent l'IA : les demandes sans lien et la recherche d'équivalents. Elles marchent déjà sans
+rien faire (routine toutes les 3 heures). Pour qu'elles se fassent dans la minute, sur ton ordinateur :
 
 1. Lance `claude setup-token` et copie le jeton affiché.
 2. Sur GitHub : dépôt → **Settings → Secrets and variables → Actions → New repository secret**,
@@ -60,8 +62,8 @@ Seules étapes qui utilisent l'IA : les demandes sans lien et la recherche d'éq
 L'outil s'annonce comme un robot (`PrixJuste/1.0`), respecte `robots.txt` et lit chaque page une fois par jour au plus.
 Quand un site refuse, il est marqué **bloqué** et **on ne contourne jamais** (pas de faux navigateur, pas de proxy).
 Aujourd'hui : **Snowleader** (robots.txt l'interdit) et **Weekendbee** (page anti-robot) — leurs prix viennent des
-archives publiques du web ou de ta saisie. Tant que le secret Claude n'existe pas, les demandes sans lien restent
-« en attente d'identification ».
+archives publiques du web ou de ta saisie. Les demandes sans lien attendent au plus
+3 heures leur identification.
 
 ## Pour qui veut regarder sous le capot
 

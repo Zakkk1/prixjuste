@@ -2,7 +2,7 @@ RELAIS: non
 
 # État de la construction
 
-Dernière mise à jour : 21/11/2026, ~14 h 15 UTC (maillon horaire). Tout le BRIEF et toutes les idées de IDEES.md sont faits.
+Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les idées de IDEES.md sont faits ; design refait pour la lisibilité.
 
 ## Définition de fini (docs/BRIEF.md) — atteinte
 - [x] Données migrées SQLite → `data/` ; `prixjuste.db` retiré.
@@ -20,14 +20,25 @@ Dernière mise à jour : 21/11/2026, ~14 h 15 UTC (maillon horaire). Tout le BRI
 - [x] 6 Plan d'achat sous budget : bloc replié sur le comptoir, budget gardé sur l'appareil (localStorage, jamais
       publié) ; même algorithme Python/JS, vérifié l'un contre l'autre par les tests (node).
 - [x] 7 Risque de rupture · 8 Carte 9:16
-- [x] 9 Soldes et Black Friday : trait ocre sur l'axe de la courbe, nommés dans la lecture au doigt.
+- [x] 9 Soldes et Black Friday : retirés de la courbe le 21/11 (illisible) ; ils restent dans l'agenda .ics.
 - [x] 10 Équivalents moins chers : lien sur la fiche → demande « ajout » pré-remplie → `claude.yml` (si le secret
       existe) propose 2 ou 3 articles liés à l'original (« À comparer »). Non testé de bout en bout : secret absent.
 
+## Design refait (21/11, après retour de l'utilisateur : « illisible »)
+- Texte IBM Plex Sans 16 px, prix IBM Plex Mono, titres IBM Plex Sans Condensed ; contraste renforcé.
+- Courbe : 12 mois pleins, un point par jour, prix du jour et plus bas écrits dessus, ligne « acheter sous X € » ;
+  plus de hachures, repères de soldes ni légende. Libellés placés hors du tracé.
+- Fiche allégée (5 repères, promos seulement s'il y en a, actions regroupées) ; comptoir sans mini-courbe.
+- Vérifié en ligne sur https://zakkk1.github.io/prixjuste/ (mobile 400 px et 800 px, clair et sombre).
+- `site.yml` redéploie le site quand le code du site ou un article change, sans relever de prix.
+
+## Demandes en texte libre
+- Identifiées sans jeton par la routine Claude programmée (toutes les 3 h), procédure dans `CLAUDE.md`.
+- Demande n°3 (Patagonia Better Sweater noir, M) identifiée le 21/11 : 4 pages lisibles, issue fermée avec le détail.
+- Facultatif : le secret `CLAUDE_CODE_OAUTH_TOKEN` (LISEZMOI) rend l'identification immédiate via `claude.yml`.
+
 ## Ce que l'utilisateur doit faire
-- Ouvrir https://zakkk1.github.io/prixjuste/ et vérifier à l'œil (le conteneur ne peut pas l'atteindre).
-- Facultatif : ajouter le secret `CLAUDE_CODE_OAUTH_TOKEN` (LISEZMOI) pour l'identification en texte libre et les
-  équivalents.
+- Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
 
 ## Points d'attention
 - Wayback est lent : plafonné à 25 min par passe, reprise à la passe suivante.
