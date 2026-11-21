@@ -87,3 +87,10 @@ def test_compte_rendu(depot):
 def test_euros():
     assert ajout.euros(1299.9) == "1 299,90 €"
     assert ajout.euros(230.0) == "230 €"
+
+
+def test_demande_completee_par_des_liens(depot):
+    art = ajout.creer_article(depot, ajout.lire_demande("Ajout : doudoune légère", ""), issue=5)
+    ajout.completer_liens(depot, art, ajout.lire_demande("", "Objet : doudoune\nhttps://a.fr/doudoune"))
+    art = depot.article(art["id"])
+    assert art["statut"] == "suivi" and art["liens"][0]["url"] == "https://a.fr/doudoune"

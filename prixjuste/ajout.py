@@ -167,14 +167,26 @@ def creer_article(depot, demande, issue=None):
         "liens": [],
         "liens_historiques": [],
     }
-    for u in demande["liens"]:
-        lien = {"marchand": nom_marchand(u), "url": u, "exact": True}
-        if demande.get("coloris"):
-            lien["coloris"] = demande["coloris"]
-        if demande.get("taille"):
-            lien["taille"] = demande["taille"].replace(",", ".")
-        art["liens"].append(lien)
+    art["liens"] = [_lien(u, demande) for u in demande["liens"]]
     art = {k: v for k, v in art.items() if v is not None}
+    depot.ecrire_article(art)
+    return art
+
+
+def _lien(url, demande):
+    lien = {"marchand": nom_marchand(url), "url": url, "exact": True}
+    if demande.get("coloris"):
+        lien["coloris"] = demande["coloris"]
+    if demande.get("taille"):
+        lien["taille"] = demande["taille"].replace(",", ".")
+    return lien
+
+
+def completer_liens(depot, art, demande):
+    """Ajoute à un article en attente les liens apparus dans sa demande ; il passe « suivi »."""
+    connus = {l["url"] for l in art.get("liens", [])}
+    art.setdefault("liens", []).extend(_lien(u, demande) for u in demande["liens"] if u not in connus)
+    art["statut"] = "suivi"
     depot.ecrire_article(art)
     return art
 

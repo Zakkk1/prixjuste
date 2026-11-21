@@ -8,10 +8,13 @@
   python -m prixjuste issue --numero N                traite une issue « ajout » ou « prix »
                                                       (titre/corps lus dans ISSUE_TITLE / ISSUE_BODY)
   python -m prixjuste premier-releve ID               relevé + archives + compte rendu (après un ajout)
+  python -m prixjuste verifier URL [--taille T] [--filtre F]
+                                                      la page est-elle lisible honnêtement ? (robots.txt, prix)
 """
 import argparse
 import os
 import sys
+import uuid
 from pathlib import Path
 
 from . import ajout, analyse, collecte
@@ -34,7 +37,8 @@ def _sortie_github(**kv):
     for k, v in kv.items():
         v = "" if v is None else str(v)
         if "\n" in v:
-            lignes.append(f"{k}<<FIN_PRIXJUSTE\n{v}\nFIN_PRIXJUSTE")
+            fin = "FIN_" + uuid.uuid4().hex
+            lignes.append(f"{k}<<{fin}\n{v}\n{fin}")
         else:
             lignes.append(f"{k}={v}")
     if f:
@@ -62,11 +66,16 @@ def cmd_issue(depot, a):
         _sortie_github(mode="prix", id=art["id"], message=texte)
         return
     # ajout : une issue déjà traitée ne crée pas de doublon
+    demande = ajout.lire_demande(titre, corps)
     for art in depot.articles():
         if str(art.get("issue")) == str(a.numero):
-            _sortie_github(mode="deja", id=art["id"], statut=art.get("statut"))
+            if art.get("statut") == "a_identifier" and demande["liens"]:
+                # la demande a été complétée avec des liens : le suivi démarre sans attendre Claude
+                ajout.completer_liens(depot, art, demande)
+                _sortie_github(mode="liens", id=art["id"])
+            else:
+                _sortie_github(mode="deja", id=art["id"], statut=art.get("statut"))
             return
-    demande = ajout.lire_demande(titre, corps)
     if not demande["objet"] and not demande["liens"]:
         _sortie_github(mode="erreur", message="Je n'ai trouvé ni objet ni lien dans cette demande.")
         return
@@ -87,6 +96,38 @@ def cmd_premier_releve(depot, ident, max_captures):
     texte = ajout.compte_rendu(art, depot.releves(ident), depot.journal(ident))
     print(texte)
     _sortie_github(message=texte)
+
+
+def cmd_verifier(a):
+    """Code de sortie 0 si la page est autorisée par robots.txt et publie un prix lisible."""
+    try:
+        if not collecte.robots_autorise(a.url):
+            print("NON LISIBLE : robots.txt interdit cette page (ou le site bloque les robots)")
+            return 1
+        html = collecte.telecharger(a.url)
+    except collecte.Bloque as e:
+        print(f"NON LISIBLE : {e}")
+        return 1
+    except Exception as e:
+        print(f"NON LISIBLE : {e!r:.200}")
+        return 1
+    nom, offres = collecte.extraire_offres(html)
+    if not offres:
+        print("NON LISIBLE : aucun prix publié en JSON-LD schema.org sur cette page"
+              + (" (page anti-robot)" if collecte.CAPTCHA_RE.search(html) else ""))
+        return 1
+    print(f"Produit : {nom}")
+    tailles = sorted({o["taille"] for o in offres if o.get("taille")})
+    if tailles:
+        print("Tailles décrites : " + ", ".join(tailles))
+    for o in offres[:12]:
+        print(f"  {o['prix']:.2f} {o['devise']}  stock={o['en_stock']}  taille={o['taille'] or '-'}  {o['sku']} {o['nom']}"[:160])
+    r = collecte.resumer(offres, a.filtre, a.taille)
+    if not r:
+        print("NON LISIBLE : aucune offre ne correspond à cette taille / ce filtre")
+        return 1
+    print(f"LISIBLE : {r['prix']:.2f} {r['devise']} (en stock : {r['en_stock']}, offres : {r['n_offres']})")
+    return 0
 
 
 def cmd_verdicts(depot):
@@ -122,6 +163,10 @@ def main(argv=None):
     prr = sp.add_parser("premier-releve")
     prr.add_argument("id")
     prr.add_argument("--max", type=int, default=40)
+    ve = sp.add_parser("verifier")
+    ve.add_argument("url")
+    ve.add_argument("--taille")
+    ve.add_argument("--filtre")
     a = p.parse_args(argv)
     depot = Depot(a.data) if a.data else Depot()
 
@@ -148,6 +193,8 @@ def main(argv=None):
         cmd_issue(depot, a)
     elif a.cmd == "premier-releve":
         cmd_premier_releve(depot, a.id, a.max)
+    elif a.cmd == "verifier":
+        sys.exit(cmd_verifier(a))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,81 @@
+name: Relevé quotidien
+
+on:
+  schedule:
+    - cron: "41 4 * * *"   # 05:41 à Paris l'hiver, 06:41 l'été
+  workflow_dispatch:
+    inputs:
+      historique:
+        description: "Relire aussi les archives Wayback (fait d'office le lundi)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: donnees
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  releve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install truststore
+
+      - name: Étiquettes des demandes (idempotent)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create ajout --color 1F6B45 --description "Ajouter un objet à suivre" --force
+          gh label create prix --color 9A5B12 --description "Prix vu à la main" --force
+          gh label create "à-identifier" --color 7A766E --description "Texte libre : en attente d'identification" --force
+
+      - name: Relevé direct (1 visite par page et par jour, robots.txt respecté)
+        run: python -m prixjuste collecter
+
+      - name: Archives Wayback
+        env:
+          HISTORIQUE: ${{ inputs.historique }}
+        run: |
+          if [ "$HISTORIQUE" = "true" ] || [ "$(date -u +%u)" = "1" ]; then
+            python -m prixjuste historique
+          else
+            echo "Pas aujourd'hui (le lundi seulement)."
+          fi
+
+      - name: Publier les relevés
+        run: .github/scripts/publier-donnees.sh "Relevé du $(TZ=Europe/Paris date +%d/%m/%Y)"
+
+      - run: python -m prixjuste verdicts
+
+      - name: Construire le site
+        run: python -m prixjuste site --sortie site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deployer:
+    needs: releve
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - id: pages
+        uses: actions/deploy-pages@v4
