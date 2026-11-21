@@ -240,3 +240,60 @@
     });
   });
 })();
+
+// Plan d'achat sous budget : le budget mensuel reste sur cet appareil (localStorage), rien n'est envoyé.
+(function () {
+  "use strict";
+  var bloc = document.querySelector(".plan[data-plan]");
+  if (!bloc) return;
+  // <repartir> même algorithme que prixjuste/plan.py:repartir (testé contre lui)
+  function repartir(cands, budget) {
+    var plafond = budget > 0 ? budget : Infinity, depense = {}, plan = {}, hors = [], total = 0, maintenant = 0;
+    var minP = function (a) { return Math.min.apply(null, a.mois.map(function (m) { return m[1]; })); };
+    var ordre = cands.articles.map(function (a, i) { return [a, i]; }).sort(function (x, y) {
+      var a = x[0], b = y[0];
+      return (a.mois.length - b.mois.length) || ((b.maintenant - minP(b)) - (a.maintenant - minP(a))) || (x[1] - y[1]);
+    }).map(function (x) { return x[0]; });
+    ordre.forEach(function (a) {
+      var choix = a.mois.slice().sort(function (x, y) { return (x[1] - y[1]) || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0); });
+      var ok = choix.filter(function (m) { return (depense[m[0]] || 0) + m[1] <= plafond; })[0];
+      if (!ok) { hors.push(a.id); return; }
+      depense[ok[0]] = (depense[ok[0]] || 0) + ok[1];
+      (plan[ok[0]] = plan[ok[0]] || []).push([a.id, ok[1]]);
+      total += ok[1]; maintenant += a.maintenant;
+    });
+    var tri = {};
+    Object.keys(plan).sort().forEach(function (k) { tri[k] = plan[k]; });
+    return { mois: tri, hors: hors, total: Math.round(total * 100) / 100, economie: Math.round((maintenant - total) * 100) / 100 };
+  }
+  // </repartir>
+  var MOIS = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  var cands = JSON.parse(bloc.dataset.plan), noms = {};
+  cands.articles.forEach(function (a) { noms[a.id] = a.nom; });
+  var champ = bloc.querySelector("input"), frise = bloc.querySelector(".frise"), bilan = bloc.querySelector(".plan-bilan");
+  function eur(x) { return x.toLocaleString("fr-FR", { maximumFractionDigits: x % 1 ? 2 : 0, minimumFractionDigits: x % 1 ? 2 : 0 }) + " €"; }
+  function el(tag, cls, txt) { var n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; }
+  function afficher() {
+    var budget = parseFloat(String(champ.value).replace(",", ".").replace(/[^\d.]/g, "")) || 0;
+    try { localStorage.setItem("prixjuste-budget-mois", champ.value); } catch (e) { /* stockage indisponible */ }
+    var r = repartir(cands, budget);
+    frise.textContent = "";
+    Object.keys(r.mois).forEach(function (k) {
+      var li = el("li"), somme = 0, ul = el("ul");
+      var plusieurs = r.mois[k].length > 1;
+      r.mois[k].forEach(function (x) { somme += x[1]; ul.appendChild(el("li", null, noms[x[0]] + (plusieurs ? " · " + eur(x[1]) : ""))); });
+      li.appendChild(el("span", "f-mois", MOIS[+k.slice(5) - 1] + " " + k.slice(0, 4)));
+      li.appendChild(ul);
+      li.appendChild(el("span", "f-total", eur(Math.round(somme * 100) / 100)));
+      frise.appendChild(li);
+    });
+    var txt = r.total ? "Total estimé " + eur(Math.round(r.total)) + " · " + (r.economie > 0.5
+      ? "économie attendue " + eur(Math.round(r.economie)) + " par rapport à tout acheter aujourd'hui."
+      : "pas d'économie attendue : acheter maintenant revient au même.") : "";
+    if (r.hors.length) txt += (txt ? " " : "") + "Hors budget avant sa date limite : " + r.hors.map(function (i) { return noms[i]; }).join(", ") + ".";
+    bilan.textContent = txt;
+  }
+  try { champ.value = localStorage.getItem("prixjuste-budget-mois") || ""; } catch (e) { /* idem */ }
+  champ.addEventListener("input", afficher);
+  afficher();
+})();

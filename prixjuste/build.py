@@ -11,7 +11,7 @@ import os
 import shutil
 from pathlib import Path
 
-from . import VERSION, agenda, ajout, analyse
+from . import VERSION, agenda, ajout, analyse, plan
 from .collecte import cle, hors_ue
 from .donnees import Depot, maintenant
 
@@ -367,7 +367,20 @@ def ligne_comptoir(art, res, obs, auj):
             '</a></li>')
 
 
-def comptoir(lignes, quand, prochain=None):
+def bloc_plan(cands):
+    """Frise repliable : le budget mensuel reste dans le navigateur (site.js), rien n'est publié."""
+    if not cands or not cands["articles"]:
+        return ""
+    data = json.dumps(cands, ensure_ascii=False, separators=(",", ":"))
+    return (f'<details class="archives plan" data-plan="{e(data)}"><summary>Plan d\'achat sous budget</summary>'
+            '<label class="plan-budget">Budget par mois <i>€, reste sur cet appareil</i>'
+            '<input name="budget-mois" inputmode="decimal" placeholder="sans limite"></label>'
+            '<ol class="frise"></ol><p class="aide plan-bilan"></p>'
+            '<p class="aide">Chaque article va dans son mois historiquement le moins cher, avant sa date limite, '
+            'sans dépasser le budget ; les plus pressés passent d\'abord.</p></details>')
+
+
+def comptoir(lignes, quand, prochain=None, plan_html=""):
     corps = [entete("", quand, accueil=True),
              '<main>',
              '<form class="demande" action="ajouter.html" method="get">'
@@ -379,7 +392,7 @@ def comptoir(lignes, quand, prochain=None):
         corps.append(f'<p class="prochain"><span>Prochain moment</span> {e(txt)} — {date_fr(d)} · '
                      '<a href="agenda.ics">ajouter à mon agenda</a></p>')
     if lignes:
-        corps.append('<h2 class="rubrique">Au comptoir</h2><ol class="etiquettes">' + "".join(lignes) + "</ol>")
+        corps.append('<h2 class="rubrique">Au comptoir</h2><ol class="etiquettes">' + "".join(lignes) + "</ol>" + plan_html)
     else:
         corps.append('<p class="vide-txt">Rien au comptoir pour l\'instant.</p>')
     corps.append("</main>")
@@ -701,7 +714,8 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
     proprio, nom_depot = DEPOT_GITHUB.split("/")
     url_site = os.environ.get("PAGES_URL") or f"https://{proprio.lower()}.github.io/{nom_depot}"
     (sortie / "agenda.ics").write_text(agenda.ics(pour_agenda, auj, url_site), encoding="utf-8", newline="")
-    (sortie / "index.html").write_text(comptoir([l for _, l in lignes], quand, agenda.prochain(pour_agenda, auj)),
+    (sortie / "index.html").write_text(comptoir([l for _, l in lignes], quand, agenda.prochain(pour_agenda, auj),
+                                                bloc_plan(plan.candidats(pour_agenda, auj))),
                                        encoding="utf-8")
     profil = ajout.charger_profil(depot)
     (sortie / "ajouter.html").write_text(ajouter(quand, profil), encoding="utf-8")

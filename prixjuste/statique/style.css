@@ -448,3 +448,19 @@ main { padding-bottom: 36px; }
   .tampon-zone { align-self: center; padding: 0 24px 0 0; }
   .tampon.grand { font-size: 40px; }
 }
+
+/* plan d'achat sous budget : frise de mois, repliée par défaut */
+.plan { margin-top: 18px; border-top: 1px solid var(--filet); }
+.plan-budget { margin: 14px 0 6px; max-width: 280px; }
+.plan-budget i { font-style: normal; opacity: .8; }
+.frise { list-style: none; margin: 12px 0 0; padding: 0; }
+.frise > li {
+  display: grid; grid-template-columns: 6ch minmax(0, 1fr) auto; gap: 4px 14px; align-items: baseline;
+  padding: 9px 0; border-bottom: 1px solid var(--filet); font-size: 13px;
+}
+.f-mois { font-size: 11px; line-height: 1.35; letter-spacing: .1em; text-transform: uppercase; color: var(--encre-2); }
+.frise ul { list-style: none; margin: 0; padding: 0; min-width: 0; }
+.frise ul li { overflow-wrap: anywhere; }
+.f-total { font-weight: 700; white-space: nowrap; }
+.plan-bilan { margin-top: 12px; color: var(--encre); }
+.plan-bilan:empty { display: none; }
