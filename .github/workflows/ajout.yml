@@ -1,4 +1,4 @@
-name: Ajout (issue « ajout » ou « prix »)
+name: Ajout (issue « ajout », « prix » ou « achat »)
 
 # Déclenché quand l'étiquette « ajout » ou « prix » est posée sur une issue (le lien du site la pose
 # à la création). Sans IA : avec des liens marchands, l'article est créé et relevé tout de suite ;
@@ -19,7 +19,7 @@ jobs:
   traiter:
     # seulement les demandes écrites par le propriétaire du dépôt ou ses collaborateurs
     if: >-
-      (github.event.label.name == 'ajout' || github.event.label.name == 'prix') &&
+      contains(fromJSON('["ajout","prix","achat"]'), github.event.label.name) &&
       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
     runs-on: ubuntu-latest
     timeout-minutes: 40
@@ -55,7 +55,7 @@ jobs:
         run: python -m prixjuste premier-releve "$ARTICLE"
 
       - name: Publier les données
-        if: contains(fromJSON('["liens","a_identifier","prix"]'), steps.lire.outputs.mode)
+        if: contains(fromJSON('["liens","a_identifier","prix","achat"]'), steps.lire.outputs.mode)
         env:
           ARTICLE: ${{ steps.lire.outputs.id }}
         run: .github/scripts/publier-donnees.sh "Ajout #$NUMERO : $ARTICLE"
@@ -74,7 +74,7 @@ jobs:
                 echo "Fiche : $PAGES/a/$ARTICLE.html (mise en ligne dans une minute)"; } > reponse.md
               gh issue comment "$NUMERO" --body-file reponse.md
               gh issue close "$NUMERO" --reason completed ;;
-            prix)
+            prix|achat)
               { echo "$MESSAGE_LIRE"; echo; echo "Fiche : $PAGES/a/$ARTICLE.html"; } > reponse.md
               gh issue comment "$NUMERO" --body-file reponse.md
               gh issue close "$NUMERO" --reason completed ;;
@@ -92,17 +92,17 @@ jobs:
           esac
 
       - name: Construire le site
-        if: contains(fromJSON('["liens","a_identifier","prix"]'), steps.lire.outputs.mode)
+        if: contains(fromJSON('["liens","a_identifier","prix","achat"]'), steps.lire.outputs.mode)
         run: python -m prixjuste site --sortie site
 
       - uses: actions/upload-pages-artifact@v3
-        if: contains(fromJSON('["liens","a_identifier","prix"]'), steps.lire.outputs.mode)
+        if: contains(fromJSON('["liens","a_identifier","prix","achat"]'), steps.lire.outputs.mode)
         with:
           path: site
 
   deployer:
     needs: traiter
-    if: contains(fromJSON('["liens","a_identifier","prix"]'), needs.traiter.outputs.mode)
+    if: contains(fromJSON('["liens","a_identifier","prix","achat"]'), needs.traiter.outputs.mode)
     runs-on: ubuntu-latest
     permissions:
       pages: write

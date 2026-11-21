@@ -38,6 +38,7 @@ jobs:
           gh label create ajout --color 1F6B45 --description "Ajouter un objet à suivre" --force
           gh label create prix --color 9A5B12 --description "Prix vu à la main" --force
           gh label create "à-identifier" --color 7A766E --description "Texte libre : en attente d'identification" --force
+          gh label create achat --color 1A1917 --description "Article acheté : protection après achat" --force
           gh label create suivi --color 23479A --description "Notifications d'un article suivi" --force
 
       - name: Relevé direct (1 visite par page et par jour, robots.txt respecté)

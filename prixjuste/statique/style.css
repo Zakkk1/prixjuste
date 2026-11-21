@@ -368,6 +368,7 @@ h1 label { font: inherit; color: inherit; letter-spacing: inherit; }
 
 /* j'ai vu un prix */
 .vu { margin-top: 28px; border-top: 1.5px solid var(--encre); padding-top: 16px; }
+.vu.achat { margin-top: 0; border-top: 0; padding-top: 10px; }
 .vu summary {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
   font: 700 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
@@ -376,8 +377,8 @@ h1 label { font: inherit; color: inherit; letter-spacing: inherit; }
 .vu summary::-webkit-details-marker { display: none; }
 .vu summary::after { content: "+"; margin-left: 12px; }
 .vu[open] summary::after { content: "–"; }
-.form-prix { display: grid; gap: 16px; margin-top: 16px; }
-.form-prix button { justify-self: start; }
+.form-prix, .form-achat { display: grid; gap: 16px; margin-top: 16px; }
+.form-prix button, .form-achat button { justify-self: start; }
 .case { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--encre); min-height: 32px; }
 .case input { width: 18px; height: 18px; margin: 0; accent-color: var(--encre); }
 

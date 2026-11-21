@@ -13,6 +13,7 @@
                                                       la page est-elle lisible honnêtement ? (robots.txt, prix)
 """
 import argparse
+import datetime as dt
 import os
 import sys
 import time
@@ -66,6 +67,20 @@ def cmd_issue(depot, a):
                  + (f" (barré {ajout.euros(p['barre'])})" if p["barre"] else "") + ".\n\n"
                  + ajout.compte_rendu(art, depot.releves(art["id"]), depot.journal(art["id"])))
         _sortie_github(mode="prix", id=art["id"], message=texte)
+        return
+    if "achat" in labels:
+        try:
+            ach = ajout.lire_achat(titre, corps, depot.articles())
+        except ValueError as e:
+            _sortie_github(mode="erreur", message=str(e))
+            return
+        art = ajout.enregistrer_achat(depot, ach)
+        pr = analyse.protection(art, dt.date.fromisoformat(ach["date"]))
+        texte = (f"Achat noté : {ajout.euros(ach['prix'])} chez {ach['marchand']} le {pr['date']:%d/%m/%Y}.\n\n"
+                 f"- Le prix reste surveillé jusqu'au {pr['fin_retractation']:%d/%m/%Y} (rétractation de 14 jours) : "
+                 f"s'il baisse nettement, tu es prévenu ici et sur l'issue « Suivi ».\n"
+                 f"- Garantie légale de conformité jusqu'au {pr['fin_garantie']:%d/%m/%Y}.")
+        _sortie_github(mode="achat", id=art["id"], message=texte)
         return
     # ajout : une issue déjà traitée ne crée pas de doublon
     demande = ajout.lire_demande(titre, corps)
@@ -176,7 +191,11 @@ def main(argv=None):
     depot = Depot(a.data) if a.data else Depot()
 
     if a.cmd == "collecter":
+        auj = dt.date.today()
         for art in _articles(depot, a.article):
+            if not analyse.a_relever(art, auj):
+                print(f"# {art['nom']} : acheté, délai de rétractation passé, plus relevé")
+                continue
             print(f"# {art['nom']}")
             collecte.collecter_article(depot, art)
     elif a.cmd == "historique":

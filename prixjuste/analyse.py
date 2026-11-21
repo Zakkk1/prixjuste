@@ -31,6 +31,8 @@ REPERES = {
 }
 
 URGENCE_JOURS = {"urgent": 7, "bientot": 45, "pas_urgent": 365}
+RETRACTATION_JOURS = 14   # vente à distance : 14 jours pour se rétracter (UE)
+GARANTIE_ANS = 2          # garantie légale de conformité (France / UE)
 
 
 def _date(s):
@@ -94,6 +96,30 @@ def prochaine_fenetre(debut, fin, auj):
     an_debut = auj.year if debut > auj.month else auj.year + 1
     an_fin = an_debut + (1 if fin < debut else 0)
     return dt.date(an_debut, debut, 1), _fin_de_mois(an_fin, fin)
+
+
+def protection(article, auj):
+    """Après un achat : fin du délai de rétractation, fin de la garantie légale, encore protégé ?
+    Le délai de 14 jours court en réalité depuis la réception : on compte depuis l'achat, par prudence."""
+    achat = article.get("achat")
+    if not achat:
+        return None
+    d = _date(achat["date"])
+    try:
+        fin_garantie = d.replace(year=d.year + GARANTIE_ANS)
+    except ValueError:  # 29 février
+        fin_garantie = d.replace(year=d.year + GARANTIE_ANS, day=28)
+    fin_retract = d + dt.timedelta(days=RETRACTATION_JOURS)
+    return {"date": d, "prix": achat["prix"], "marchand": achat.get("marchand"),
+            "fin_retractation": fin_retract, "fin_garantie": fin_garantie, "en_retractation": auj <= fin_retract}
+
+
+def a_relever(article, auj):
+    """On relève un article suivi ; acheté, seulement pendant le délai de rétractation."""
+    if article.get("statut", "suivi") != "suivi":
+        return False
+    pr = protection(article, auj)
+    return pr is None or pr["en_retractation"]
 
 
 def filtrer_obs(article, obs):
@@ -197,6 +223,11 @@ def analyser(article, obs, aujourdhui=None):
     _verdict(res, article, c, actuel, prix_hist, meilleur_mois, tendance, limite, auj, repere_txt)
     _alerte(c, article.get("budget_max"))
     _bidon(res)
+    pr = protection(article, auj)
+    res["protection"] = pr
+    if pr and pr["en_retractation"] and actuel and actuel["prix"] <= pr["prix"] - max(5, pr["prix"] * 0.05):
+        res["baisse_apres_achat"] = {"ecart": pr["prix"] - actuel["prix"], "prix": actuel["prix"],
+                                     "marchand": actuel.get("marchand")}
     return res
 
 

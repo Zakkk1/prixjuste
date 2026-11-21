@@ -211,6 +211,20 @@ def lire_prix_vu(titre, corps, articles):
             "date": _date_iso(ch.get("date")), "rupture": rupture, "note": ch.get("note")}
 
 
+def lire_achat(titre, corps, articles):
+    """Issue « achat » -> {article, prix, marchand, date} (mêmes champs qu'un prix vu)."""
+    p = lire_prix_vu(titre, corps, articles)
+    return {"article": p["article"], "prix": p["prix"], "marchand": p["marchand"],
+            "date": p["date"] or aujourdhui().isoformat()}
+
+
+def enregistrer_achat(depot, achat):
+    art = depot.article(achat["article"])
+    art["achat"] = {"prix": achat["prix"], "marchand": achat["marchand"], "date": achat["date"]}
+    depot.ecrire_article(art)
+    return art
+
+
 # ---------------------------------------------------------------- comptes rendus (commentaires d'issue)
 
 LIBELLES = {"acheter": "ACHÈTE", "attendre": "ATTENDS", "surveiller": "SURVEILLE", "bidon": "BIDON",

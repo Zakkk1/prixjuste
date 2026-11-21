@@ -41,10 +41,6 @@
   // ------------------------------------------------------------ j'ai vu un prix
   var fp = document.querySelector(".form-prix");
   if (fp) {
-    if (fp.elements.date && !fp.elements.date.value) {
-      var d = new Date();
-      fp.elements.date.value = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-    }
     fp.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var prix = val(fp, "prix");
@@ -57,6 +53,27 @@
       location.href = issueUrl(fp.dataset.depot, "Prix vu : " + fp.dataset.nom + " à " + prix + " €", lignes.join("\n"), "prix");
     });
   }
+
+  // ------------------------------------------------------------ je l'ai acheté
+  var fa = document.querySelector(".form-achat");
+  if (fa) {
+    fa.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var prix = val(fa, "prix");
+      if (!prix) return;
+      var lignes = ["Article : " + fa.dataset.article, "Prix : " + prix, "Marchand : " + (val(fa, "marchand") || "?")];
+      if (val(fa, "date")) lignes.push("Date : " + val(fa, "date"));
+      lignes.push("", "<!-- prixjuste:achat -->");
+      location.href = issueUrl(fa.dataset.depot, "Achat : " + fa.dataset.nom + " à " + prix + " €", lignes.join("\n"), "achat");
+    });
+  }
+
+  // ------------------------------------------------------------ dates du jour par défaut
+  document.querySelectorAll(".form-prix input[type=date], .form-achat input[type=date]").forEach(function (el) {
+    if (el.value) return;
+    var d = new Date();
+    el.value = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  });
 
   // ------------------------------------------------------------ lecture de la courbe
   document.querySelectorAll(".courbe[data-points]").forEach(function (fig) {

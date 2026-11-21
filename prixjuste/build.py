@@ -29,8 +29,9 @@ TAMPONS = {  # code -> (classe, lignes du tampon)
     "bidon": ("bidon", ["BIDON"]),
     "donnees": ("donnees", ["PAS ASSEZ", "DE DONNÉES"]),
     "attente": ("donnees", ["EN ATTENTE"]),
+    "paye": ("donnees", ["PAYÉ"]),
 }
-ORDRE = {"acheter": 0, "bidon": 1, "surveiller": 2, "attendre": 3, "donnees": 4, "attente": 5}
+ORDRE = {"acheter": 0, "bidon": 1, "surveiller": 2, "attendre": 3, "donnees": 4, "attente": 5, "paye": 6}
 SOURCES = {"direct": "relevé en direct", "archive": "archive web", "manuel": "saisie manuelle"}
 LECTURE = {"ok": ("lu", "ok"), "bloqué": ("bloqué", "bloque"), "vide": ("pas de prix lisible", "vide"),
            "erreur": ("erreur de lecture", "vide")}
@@ -315,7 +316,29 @@ def pied(prefixe):
 def etat_article(art, res):
     if art.get("statut") == "a_identifier":
         return "attente"
+    if art.get("achat"):
+        return "paye"
     return res["verdict"][0]
+
+
+def phrase_achat(res):
+    pr = res["protection"]
+    txt = f"Payé {euros(pr['prix'])} chez {pr['marchand']} le {date_fr(pr['date'])}. "
+    b = res.get("baisse_apres_achat")
+    if b:
+        return txt + (f"Il a baissé de {euros(b['ecart'])} chez {b['marchand']} : retourne-le et rachète-le, ou demande "
+                      f"un geste commercial, avant le {date_fr(pr['fin_retractation'])}.")
+    if pr["en_retractation"]:
+        return txt + f"Prix surveillé jusqu'au {date_fr(pr['fin_retractation'])} (rétractation)."
+    return txt + f"Garantie légale de conformité jusqu'au {date_fr(pr['fin_garantie'])}."
+
+
+def sous_tampon_code(code, res):
+    if code == "attendre":
+        return sous_tampon(res)
+    if code == "paye":
+        return f"{res['protection']['date']:%d/%m/%Y}"
+    return None
 
 
 # ---------------------------------------------------------------- le comptoir
@@ -332,14 +355,14 @@ def ligne_comptoir(art, res, obs, auj):
         act = res.get("actuel")
         prix = (f'<span class="prix-ligne">{euros(act["prix"])}</span><span class="chez">chez {e(act.get("marchand"))}</span>'
                 if act else '<span class="prix-ligne nul">—</span><span class="chez">aucun prix lisible ces 3 jours</span>')
-        phrase = res["verdict"][2]
+        phrase = phrase_achat(res) if code == "paye" else res["verdict"][2]
         spark = sparkline(res, obs, auj)
     return (f'<li><a class="etiquette" href="{href}">'
             f'<span class="nom">{e(art["nom"])}</span>'
             f'<span class="var">{e(variante)}</span>'
             f'<span class="prix-bloc">{prix}</span>'
             f'<span class="spark-bloc">{spark}</span>'
-            f'<span class="tampon-bloc">{tampon(code, sous_tampon(res) if code == "attendre" else None, "petit")}</span>'
+            f'<span class="tampon-bloc">{tampon(code, sous_tampon_code(code, res), "petit")}</span>'
             f'<span class="phrase">{e(phrase)}</span>'
             '</a></li>')
 
@@ -399,6 +422,13 @@ def ticket(art, res):
                            "date choisie" if art.get("acheter_avant") else f"urgence : {e(art.get('urgence', 'pas_urgent').replace('_', ' '))}"))
     if art.get("budget_max"):
         L.append(_ligne_ticket("Budget", euros(art["budget_max"], False)))
+    pr = res.get("protection")
+    if pr:
+        L.append(_ligne_ticket("Payé", euros(pr["prix"]), f'{e(pr["marchand"])} · {date_fr(pr["date"])}'))
+        L.append(_ligne_ticket("Rétractation", f'jusqu\'au {date_fr(pr["fin_retractation"])}',
+                               "14 jours pour renvoyer un achat en ligne (depuis la réception)"))
+        L.append(_ligne_ticket("Garantie légale", f'jusqu\'au {date_fr(pr["fin_garantie"])}',
+                               "2 ans de garantie de conformité, à demander au vendeur"))
     n = c.get("n_releves", 0)
     L.append(_ligne_ticket("Fiabilité", e(c.get("fiabilite", "faible")),
                            f'{n} jour{"s" if n > 1 else ""} de prix sur 12 mois · {c.get("n_sources", 0)} source(s)'))
@@ -495,7 +525,7 @@ def form_prix(art):
 def fiche(art, res, obs, journal, quand, auj):
     code = etat_article(art, res)
     act = res.get("actuel")
-    sous = sous_tampon(res) if code == "attendre" else None
+    sous = sous_tampon_code(code, res)
     variante = " · ".join(x for x in (art.get("reference"), art.get("variante")) if x)
     corps = [entete("../", quand), '<main class="fiche">',
              '<a class="retour" href="../index.html">← Le comptoir</a>',
@@ -514,6 +544,8 @@ def fiche(art, res, obs, journal, quand, auj):
         return page(f"{art['nom']} — PrixJuste", "".join(corps), "../", classe="p-fiche")
 
     titre, expli = res["verdict"][1], res["verdict"][2]
+    if code == "paye":
+        titre, expli = "Acheté", phrase_achat(res)
     if act:
         barre = ""
         promo = next((p for p in res["promos"] if p["ts"] == act["ts"] and p["marchand"] == act.get("marchand")), None)
@@ -538,10 +570,22 @@ def fiche(art, res, obs, journal, quand, auj):
     corps.append('<h2 class="rubrique">Contrôle des promos</h2>' + bloc_promos(res))
     corps.append('<h2 class="rubrique">Où c\'est relevé</h2>' + bloc_marchands(art, obs, journal))
     corps.append(f'<p class="repere"><b>Repère de saison</b> (règle générale, pas une donnée sur cet article) : {e(res["repere"])}</p>')
-    corps.append(form_prix(art))
+    corps.append(form_prix(art) + ("" if art.get("achat") else form_achat(art, act)))
     corps += ["</main>", pied("../")]
     return page(f"{art['nom']} — PrixJuste", "".join(corps), "../",
                 description=f"{TAMPONS[code][1][0]} — {titre}", classe="p-fiche")
+
+
+def form_achat(art, act):
+    return (f'<details class="vu achat"><summary>Je l\'ai acheté</summary>'
+            f'<form class="form-achat" data-article="{e(art["id"])}" data-nom="{e(art["nom"])}" data-depot="{e(DEPOT_GITHUB)}">'
+            '<p class="aide">Le prix reste surveillé pendant les 14 jours de rétractation : s\'il baisse nettement, tu es '
+            'prévenu, pour renvoyer et racheter ou demander un geste. La fin de la garantie légale est notée.</p>'
+            f'<div class="grille2"><label>Prix payé<input name="prix" inputmode="decimal" required '
+            f'value="{e(f"{act["prix"]:.2f}".replace(".", ",")) if act else ""}"></label>'
+            f'<label>Où<input name="marchand" value="{e(act.get("marchand", "")) if act else ""}"></label></div>'
+            '<label>Le<input name="date" type="date"></label>'
+            '<button type="submit">Noter l\'achat →</button></form></details>')
 
 
 # ---------------------------------------------------------------- ajouter

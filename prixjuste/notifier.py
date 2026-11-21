@@ -4,6 +4,7 @@ L'app GitHub du téléphone affiche la notification. Un message seulement quand 
 change vraiment (passage à ACHÈTE, prix sous l'alerte, promo bidon), jamais un message par jour.
 L'état déjà signalé est gardé dans data/signaux.json.
 """
+import datetime as dt
 import json
 import os
 import urllib.request
@@ -24,8 +25,12 @@ def signal(art, res):
         motifs.add("acheter")
     if code == "bidon":
         motifs.add("bidon")
-    if act and c.get("alerte") and act["prix"] <= c["alerte"]:
+    if act and c.get("alerte") and act["prix"] <= c["alerte"] and not art.get("achat"):
         motifs.add("alerte")
+    if res.get("baisse_apres_achat"):
+        motifs.add("baisse_achat")
+    if art.get("achat"):
+        motifs -= {"acheter", "bidon"}
     return motifs
 
 
@@ -33,6 +38,11 @@ def message(art, res, nouveaux):
     code, titre, expli = res["verdict"]
     act = res.get("actuel")
     lignes = [f"**{LIBELLES[code]}** — {titre}", "", expli]
+    if "baisse_achat" in nouveaux:
+        b, pr = res["baisse_apres_achat"], res["protection"]
+        return (f"**Il a baissé depuis ton achat** : {euros(b['prix'])} chez {b['marchand']}, soit {euros(b['ecart'])} "
+                f"de moins que les {euros(pr['prix'])} payés. Tu peux le renvoyer et le racheter, ou demander un geste "
+                f"commercial, jusqu'au {pr['fin_retractation']:%d/%m/%Y} (rétractation de 14 jours).")
     if "alerte" in nouveaux and act:
         lignes += ["", f"Le prix est passé sous ton alerte : {euros(act['prix'])} chez {act.get('marchand')} "
                        f"(alerte {euros(res['chiffres']['alerte'])})."]
@@ -64,7 +74,7 @@ def notifier(depot, github, pages_url="", aujourdhui=None, log=print, mention=No
     etat = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
     envoyes = 0
     for art in depot.articles():
-        if art.get("statut", "suivi") != "suivi":
+        if art.get("statut", "suivi") != "suivi" or not analyse.a_relever(art, aujourdhui or dt.date.today()):
             continue
         res = analyse.analyser(art, depot.releves(art["id"]), aujourdhui)
         motifs = signal(art, res)
