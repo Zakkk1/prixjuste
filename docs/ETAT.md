@@ -35,6 +35,9 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
 ## Demandes en texte libre
 - Identifiées sans jeton par la routine Claude programmée (toutes les 3 h), procédure dans `CLAUDE.md`.
 - Demande n°3 (Patagonia Better Sweater noir, M) identifiée le 21/11 : 4 pages lisibles, issue fermée avec le détail.
+- Demande n°4 (équivalents moins chers des Timberland 6-Inch, pointure 39,5 → 40 chez CAT) identifiée le 21/11 par la
+  routine via le workflow « Vérifier des pages » : CAT Colorado 2.0 Hiker WP jaune miel (90,99 €, Sportano) et
+  CAT Colorado 2.0 WP Pyramid (151,16 €, Butyjana) ; premier relevé publié, issue fermée avec le détail.
 - Facultatif : le secret `CLAUDE_CODE_OAUTH_TOKEN` (LISEZMOI) rend l'identification immédiate via `claude.yml`.
 
 ## Ce que l'utilisateur doit faire
