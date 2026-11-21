@@ -1,311 +1,77 @@
 {
   "id": "casque-sony-wh-1000xm5",
-  "statut": "a_choisir",
+  "statut": "suivi",
   "cree_le": "2026-11-21",
   "issue": 5,
   "demande": "casque Sony WH-1000XM5",
-  "nom": "casque Sony WH-1000XM5",
+  "nom": "Sony WH-1000XM5 Noir",
   "categorie": "electronique",
   "urgence": "pas_urgent",
   "autres_coloris_ok": true,
-  "liens": [],
-  "liens_historiques": [],
-  "candidats": [
+  "liens": [
     {
-      "nom": "Sony WH-1000XM5 Noir",
-      "reference": "Sony WH-1000XM5 (WH1000XM5B)",
-      "variante": "Noir",
-      "categorie": "electronique",
-      "image": "https://boulanger.scene7.com/is/image/Boulanger/4548736132580_h_f_l_0",
-      "prix": 237.99,
       "marchand": "Boulanger",
-      "url": "https://www.boulanger.com/ref/1178789",
-      "liens": [
-        {
-          "marchand": "Boulanger",
-          "coloris": "Noir",
-          "exact": true,
-          "url": "https://www.boulanger.com/ref/1178789"
-        },
-        {
-          "marchand": "Son-Vidéo",
-          "coloris": "Noir",
-          "exact": true,
-          "url": "https://www.son-video.com/article/nomade-casques-et-ecouteurs-casques-bluetooth/sony/wh1000xm5-noir"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Noir",
-          "exact": true,
-          "url": "https://www.ldlc.com/fiche/PB00535836.html"
-        },
-        {
-          "marchand": "Coolblue (BE)",
-          "coloris": "Noir",
-          "exact": true,
-          "url": "https://www.coolblue.be/fr/produit/905648/sony-wh-1000xm5-noir.html"
-        },
-        {
-          "marchand": "Rue du Commerce",
-          "coloris": "Noir",
-          "exact": true,
-          "url": "https://www.rueducommerce.fr/p/r24060017714.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Argent",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1178790"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Argent",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00535840.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Bleu",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1189728"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Bleu",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00558417.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Rose",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1212628"
-        }
-      ],
-      "note": "Le coloris le plus courant : 5 marchands suivis, de 237,99 € (Boulanger) à 293,13 €. Tous les coloris sont suivis pour le prix.",
-      "autres_coloris_ok": true
+      "coloris": "Noir",
+      "exact": true,
+      "url": "https://www.boulanger.com/ref/1178789"
     },
     {
-      "nom": "Sony WH-1000XM5 Argent",
-      "reference": "Sony WH-1000XM5 (WH1000XM5S)",
-      "variante": "Argent",
-      "categorie": "electronique",
-      "image": "https://boulanger.scene7.com/is/image/Boulanger/4548736132597_h_f_l_0",
-      "prix": 244.99,
-      "marchand": "Boulanger",
-      "url": "https://www.boulanger.com/ref/1178790",
-      "liens": [
-        {
-          "marchand": "Boulanger",
-          "coloris": "Argent",
-          "exact": true,
-          "url": "https://www.boulanger.com/ref/1178790"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Argent",
-          "exact": true,
-          "url": "https://www.ldlc.com/fiche/PB00535840.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1178789"
-        },
-        {
-          "marchand": "Son-Vidéo",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.son-video.com/article/nomade-casques-et-ecouteurs-casques-bluetooth/sony/wh1000xm5-noir"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00535836.html"
-        },
-        {
-          "marchand": "Coolblue (BE)",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.coolblue.be/fr/produit/905648/sony-wh-1000xm5-noir.html"
-        },
-        {
-          "marchand": "Rue du Commerce",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.rueducommerce.fr/p/r24060017714.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Bleu",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1189728"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Bleu",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00558417.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Rose",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1212628"
-        }
-      ],
-      "note": "Gris argenté ; 244,99 € chez Boulanger, 259,95 € chez LDLC. Tous les coloris sont suivis pour le prix.",
-      "autres_coloris_ok": true
+      "marchand": "Son-Vidéo",
+      "coloris": "Noir",
+      "exact": true,
+      "url": "https://www.son-video.com/article/nomade-casques-et-ecouteurs-casques-bluetooth/sony/wh1000xm5-noir"
     },
     {
-      "nom": "Sony WH-1000XM5 Bleu",
-      "reference": "Sony WH-1000XM5 (WH1000XM5L)",
-      "variante": "Bleu",
-      "categorie": "electronique",
-      "image": "https://boulanger.scene7.com/is/image/Boulanger/4548736134294_h_f_l_0",
-      "prix": 244.99,
-      "marchand": "Boulanger",
-      "url": "https://www.boulanger.com/ref/1189728",
-      "liens": [
-        {
-          "marchand": "Boulanger",
-          "coloris": "Bleu",
-          "exact": true,
-          "url": "https://www.boulanger.com/ref/1189728"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Bleu",
-          "exact": true,
-          "url": "https://www.ldlc.com/fiche/PB00558417.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1178789"
-        },
-        {
-          "marchand": "Son-Vidéo",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.son-video.com/article/nomade-casques-et-ecouteurs-casques-bluetooth/sony/wh1000xm5-noir"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00535836.html"
-        },
-        {
-          "marchand": "Coolblue (BE)",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.coolblue.be/fr/produit/905648/sony-wh-1000xm5-noir.html"
-        },
-        {
-          "marchand": "Rue du Commerce",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.rueducommerce.fr/p/r24060017714.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Argent",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1178790"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Argent",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00535840.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Rose",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1212628"
-        }
-      ],
-      "note": "Bleu nuit, sorti en 2023 ; 244,99 € chez Boulanger, 259,95 € chez LDLC. Tous les coloris sont suivis pour le prix.",
-      "autres_coloris_ok": true
+      "marchand": "LDLC",
+      "coloris": "Noir",
+      "exact": true,
+      "url": "https://www.ldlc.com/fiche/PB00535836.html"
     },
     {
-      "nom": "Sony WH-1000XM5 Rose",
-      "reference": "Sony WH-1000XM5 (WH1000XM5P)",
-      "variante": "Rose",
-      "categorie": "electronique",
-      "image": "https://boulanger.scene7.com/is/image/Boulanger/4548736163591_h_f_l_0",
-      "prix": 249.99,
+      "marchand": "Coolblue (BE)",
+      "coloris": "Noir",
+      "exact": true,
+      "url": "https://www.coolblue.be/fr/produit/905648/sony-wh-1000xm5-noir.html"
+    },
+    {
+      "marchand": "Rue du Commerce",
+      "coloris": "Noir",
+      "exact": true,
+      "url": "https://www.rueducommerce.fr/p/r24060017714.html"
+    },
+    {
       "marchand": "Boulanger",
-      "url": "https://www.boulanger.com/ref/1212628",
-      "liens": [
-        {
-          "marchand": "Boulanger",
-          "coloris": "Rose",
-          "exact": true,
-          "url": "https://www.boulanger.com/ref/1212628"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1178789"
-        },
-        {
-          "marchand": "Son-Vidéo",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.son-video.com/article/nomade-casques-et-ecouteurs-casques-bluetooth/sony/wh1000xm5-noir"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00535836.html"
-        },
-        {
-          "marchand": "Coolblue (BE)",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.coolblue.be/fr/produit/905648/sony-wh-1000xm5-noir.html"
-        },
-        {
-          "marchand": "Rue du Commerce",
-          "coloris": "Noir",
-          "exact": false,
-          "url": "https://www.rueducommerce.fr/p/r24060017714.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Argent",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1178790"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Argent",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00535840.html"
-        },
-        {
-          "marchand": "Boulanger",
-          "coloris": "Bleu",
-          "exact": false,
-          "url": "https://www.boulanger.com/ref/1189728"
-        },
-        {
-          "marchand": "LDLC",
-          "coloris": "Bleu",
-          "exact": false,
-          "url": "https://www.ldlc.com/fiche/PB00558417.html"
-        }
-      ],
-      "note": "Rose poudré, le plus récent ; un seul marchand lisible (Boulanger, 249,99 €). Tous les coloris sont suivis pour le prix.",
-      "autres_coloris_ok": true
+      "coloris": "Argent",
+      "exact": false,
+      "url": "https://www.boulanger.com/ref/1178790"
+    },
+    {
+      "marchand": "LDLC",
+      "coloris": "Argent",
+      "exact": false,
+      "url": "https://www.ldlc.com/fiche/PB00535840.html"
+    },
+    {
+      "marchand": "Boulanger",
+      "coloris": "Bleu",
+      "exact": false,
+      "url": "https://www.boulanger.com/ref/1189728"
+    },
+    {
+      "marchand": "LDLC",
+      "coloris": "Bleu",
+      "exact": false,
+      "url": "https://www.ldlc.com/fiche/PB00558417.html"
+    },
+    {
+      "marchand": "Boulanger",
+      "coloris": "Rose",
+      "exact": false,
+      "url": "https://www.boulanger.com/ref/1212628"
     }
-  ]
+  ],
+  "liens_historiques": [],
+  "reference": "Sony WH-1000XM5 (WH1000XM5B)",
+  "variante": "Noir",
+  "image": "https://boulanger.scene7.com/is/image/Boulanger/4548736132580_h_f_l_0"
 }
