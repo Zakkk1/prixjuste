@@ -1,404 +1,303 @@
-/* PrixJuste — direction « Étiquette » : papier, encre, tampon.
-   Une seule famille (IBM Plex) : Sans pour lire, Condensed pour les titres, Mono pour les prix. */
+/* PrixJuste — direction « Météo des prix » : clair, grand public.
+   Le prix du jour se lit comme une météo : une jauge (bas → élevé) et une prévision mois par mois. */
 
 :root {
-  --papier: #F4F0E7;
-  --encre: #1B1A17;
-  --encre-2: #55514A;
-  --filet: rgba(27, 26, 23, .12);
-  --filet-2: rgba(27, 26, 23, .30);
-  --achete: #1F6B45;
-  --attends: #23479A;
-  --surveille: #9A5B12;
-  --bidon: #B3261E;
-  --donnees: #6E6A62;
-  --melange: multiply;
-  --texte: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --cond: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --gouttiere: 20px;
+  --fond: #F2F5F9;
+  --carte: #FFFFFF;
+  --encre: #121826;
+  --encre-2: #4E596B;
+  --filet: #E3E8EF;
+  --marine: #1E3A6E;
+  --marine-2: #B9CBEA;
+  --ciel: #DCE8FA;
+  --bas: #2F8F5B;
+  --moyen: #A87A12;
+  --haut: #C2410C;
+  --achete: #2F8F5B;
+  --attends: #1E3A6E;
+  --surveille: #A87A12;
+  --bidon: #C02B22;
+  --donnees: #5B6577;
+  --texte: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --rayon: 20px;
+  --gouttiere: 16px;
   color-scheme: light;
 }
 
-
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-
 body {
   margin: 0;
-  background: var(--papier);
+  background: var(--fond);
   color: var(--encre);
-  font: 400 16px/1.55 var(--texte);
+  font: 500 16px/1.5 var(--texte);
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
 }
-
-.page { max-width: 720px; margin: 0 auto; padding: 0 var(--gouttiere) 56px; overflow-x: clip; }
-
-a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
-:focus-visible { outline: 2px solid var(--encre); outline-offset: 3px; }
+.page { max-width: 680px; margin: 0 auto; padding: 0 var(--gouttiere) 48px; overflow-x: clip; }
+a { color: var(--marine); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--marine); outline-offset: 2px; border-radius: 6px; }
 p { margin: 0; }
 
 /* ------------------------------------------------------------- en-tête */
-
-.tete { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 0 14px; }
-.marque, .marque-lien { font: 700 22px/1 var(--cond); text-transform: uppercase; letter-spacing: .02em; text-decoration: none; }
-.marque b { color: var(--papier); background: var(--encre); padding: 1px 4px 0 5px; margin-left: 2px; }
+.tete { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 4px 10px; }
+.marque, .marque-lien { font: 800 19px/1 var(--texte); letter-spacing: -.02em; color: var(--encre); text-decoration: none; }
+.marque b { font-weight: 800; color: var(--marine); }
 .releve { font-size: 13px; color: var(--encre-2); text-align: right; }
 
-.perfore { height: 6px; background: radial-gradient(circle at 3px 3px, var(--filet-2) 1.3px, transparent 1.8px) 0 0 / 10px 6px repeat-x; }
-
-.rubrique {
-  margin: 44px 0 14px;
-  font: 600 13px/1 var(--texte);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--encre-2);
-}
-
-.vide-txt { color: var(--encre-2); }
+.carte { background: var(--carte); border-radius: var(--rayon); padding: 18px; margin-top: 14px; }
+.carte-lbl { font-size: 14px; font-weight: 700; color: var(--encre-2); }
+.rubrique { margin: 0 0 12px; font: 800 17px/1.2 var(--texte); letter-spacing: -.01em; color: var(--encre); }
+.vide-txt, .aide { font-size: 14px; color: var(--encre-2); }
 
 /* ------------------------------------------------------------- formulaires */
-
 input, textarea, button { font: inherit; color: inherit; }
-
 input[type="text"], input:not([type]), input[inputmode], input[type="date"], textarea {
-  width: 100%;
-  min-width: 0;
-  min-height: 48px;
-  padding: 10px 0 8px;
-  font-size: 17px;
-  background: transparent;
-  border: 0;
-  border-bottom: 1.5px solid var(--encre);
-  border-radius: 0;
-  -webkit-appearance: none;
-  appearance: none;
+  width: 100%; min-width: 0; min-height: 50px; padding: 12px 14px; font-size: 17px; font-weight: 500;
+  background: var(--carte); border: 1.5px solid var(--filet); border-radius: 14px;
+  -webkit-appearance: none; appearance: none;
 }
 textarea { resize: vertical; line-height: 1.5; }
-input::placeholder, textarea::placeholder { color: var(--encre-2); opacity: .8; }
-input:focus, textarea:focus { outline: none; border-bottom-width: 3px; padding-bottom: 6.5px; }
-
+input::placeholder, textarea::placeholder { color: #8A93A3; }
+input:focus, textarea:focus { outline: none; border-color: var(--marine); }
 button {
-  min-height: 48px;
-  padding: 0 20px;
-  font: 600 15px/1 var(--texte);
-  color: var(--papier);
-  background: var(--encre);
-  border: 0;
-  border-radius: 0;
-  cursor: pointer;
+  min-height: 50px; padding: 0 20px; font: 700 15px/1 var(--texte); color: #FFFFFF;
+  background: var(--marine); border: 0; border-radius: 14px; cursor: pointer;
 }
 button:active { transform: translateY(1px); }
+label { display: block; font-size: 14px; font-weight: 600; color: var(--encre-2); }
+label i { font-style: normal; font-weight: 500; }
+label input, label textarea { color: var(--encre); margin-top: 6px; }
+.grille2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-label { display: block; font-size: 14px; color: var(--encre-2); }
-label i { font-style: normal; opacity: .85; }
-label input, label textarea { color: var(--encre); margin-top: 2px; }
-
-.aide { font-size: 14px; color: var(--encre-2); }
-.grille2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-
-/* ------------------------------------------------------------- le comptoir */
-
-.demande { padding: 30px 0 6px; }
-h1 label { font: inherit; color: inherit; letter-spacing: inherit; }
-.demande h1, .form-ajout h1 {
-  margin: 0 0 12px;
-  font: 700 clamp(30px, 8.4vw, 44px)/1 var(--cond);
-  text-transform: uppercase;
-  letter-spacing: -.005em;
+/* ------------------------------------------------------------- ma liste */
+.demande {
+  margin-top: 6px; padding: 22px 18px 20px; border-radius: 24px;
+  background: linear-gradient(180deg, var(--ciel) 0%, #EAF1FC 100%);
 }
-.champ-ligne { display: flex; gap: 12px; align-items: flex-end; }
-.champ-ligne input { flex: 1; }
+h1 label { font: inherit; color: inherit; letter-spacing: inherit; }
+.demande h1, .form-ajout h1 { margin: 0 0 14px; font: 800 clamp(26px, 7vw, 34px)/1.12 var(--texte); letter-spacing: -.03em; }
+.champ-ligne { display: flex; gap: 10px; }
+.champ-ligne input { flex: 1; border-color: transparent; }
+.prochain { margin-top: 14px; font-size: 14px; color: var(--encre-2); }
+.prochain span { color: var(--encre); font-weight: 700; margin-right: 4px; }
 
-.prochain { margin-top: 26px; font-size: 15px; color: var(--encre-2); }
-.prochain span { color: var(--encre); font-weight: 600; margin-right: 4px; }
-
-.etiquettes { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--encre); }
-.etiquettes li { border-bottom: 1px solid var(--filet); }
-
+.p-comptoir .rubrique { margin: 30px 4px 10px; }
+.etiquettes { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .etiquette {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
   grid-template-areas:
-    "nom    tampon"
-    "var    tampon"
-    "prix   prix"
-    "phrase phrase";
-  column-gap: 16px;
-  padding: 22px 0 22px;
-  text-decoration: none;
+    "vign corps  tampon"
+    "phr  phr    phr";
+  column-gap: 14px; row-gap: 12px;
+  padding: 14px; background: var(--carte); border-radius: var(--rayon);
+  text-decoration: none; color: inherit;
+  transition: box-shadow .15s;
 }
-.etiquette .nom {
-  grid-area: nom;
-  font: 700 22px/1.08 var(--cond);
-  text-transform: uppercase;
-  text-wrap: balance;
+.etiquette:hover { box-shadow: 0 4px 18px rgba(18, 24, 38, .08); }
+.vignette, .photo {
+  grid-area: vign; display: flex; align-items: center; justify-content: center; overflow: hidden;
+  width: 72px; height: 72px; border-radius: 16px; background: #F1F4F8;
+  font: 800 26px/1 var(--texte); color: #8A93A3;
 }
-.etiquette:hover .nom { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
-.etiquette .var {
-  grid-area: var;
-  margin-top: 6px;
-  font-size: 14px;
-  color: var(--encre-2);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.prix-bloc { grid-area: prix; margin-top: 14px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 10px; }
-.prix-ligne { font: 600 28px/1.1 var(--mono); letter-spacing: -.03em; white-space: nowrap; }
+.vignette img, .photo img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.ligne-corps { grid-area: corps; display: flex; flex-direction: column; min-width: 0; gap: 2px; }
+.etiquette .nom { font: 800 17px/1.25 var(--texte); letter-spacing: -.01em; }
+.etiquette .var { font-size: 13px; color: var(--encre-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prix-bloc { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; margin-top: 6px; }
+.prix-ligne { font: 800 22px/1.1 var(--texte); letter-spacing: -.03em; white-space: nowrap; }
 .prix-ligne.nul, .prix-geant.nul { color: var(--encre-2); }
-.chez { font-size: 14px; color: var(--encre-2); }
-.tampon-bloc { grid-area: tampon; justify-self: end; align-self: start; padding: 4px 4px 0 0; }
+.chez { font-size: 13px; color: var(--encre-2); }
+.tampon-bloc { grid-area: tampon; align-self: start; }
 .phrase {
-  grid-area: phrase;
-  margin-top: 8px;
-  font-size: 15px;
-  color: var(--encre-2);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  grid-area: phr; font-size: 14px; color: var(--encre-2); padding-top: 12px; border-top: 1px solid var(--filet);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
-/* ------------------------------------------------------------- le tampon */
+/* mini-jauge dans la liste */
+.jauge-mini { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 13px; }
+.jauge-mini .jauge-barre { width: 84px; height: 6px; }
+.jauge-mini .jauge-barre i { top: -4px; height: 14px; width: 3px; }
+.jauge-mini b { font-weight: 700; white-space: nowrap; }
+.j-bas b { color: var(--bas); } .j-moyen b { color: var(--moyen); } .j-haut b { color: var(--haut); }
 
+/* ------------------------------------------------------------- le verdict (pastille) */
 .tampon {
   --c: var(--donnees);
-  --r: -5deg;
-  display: inline-block;
-  color: var(--c);
-  border: 3px double var(--c);
-  padding: 3px;
-  transform: rotate(var(--r));
-  opacity: .9;
-  mix-blend-mode: var(--melange);
-  filter: url(#encre);
-  font: 700 18px/1 var(--cond);
-  letter-spacing: .08em;
-  text-align: center;
-  white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  padding: 6px 11px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, #FFFFFF);
+  color: var(--c); font: 800 12px/1.15 var(--texte); letter-spacing: .04em; white-space: nowrap;
 }
-.tampon > span { display: block; border: 1px solid var(--c); padding: 6px 10px 5px; }
-.tampon small { display: block; margin-top: 4px; font: 600 11px/1 var(--texte); letter-spacing: .06em; }
-.t-achete { --c: var(--achete); }
-.t-attends { --c: var(--attends); --r: -6deg; }
-.t-surveille { --c: var(--surveille); --r: -4deg; }
-.t-bidon { --c: var(--bidon); --r: -7deg; }
-.t-donnees { --c: var(--donnees); --r: -4deg; font-size: 15px; }
-
-.tampon.grand { font-size: 32px; border-width: 5px; padding: 4px; }
-.tampon.grand > span { border-width: 1.5px; padding: 9px 16px 7px; }
-.tampon.grand small { font-size: 13px; margin-top: 6px; }
-.tampon.grand.t-donnees { font-size: 24px; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .p-fiche .tampon.grand { animation: poser 140ms cubic-bezier(.2, .9, .3, 1) both; }
-}
-@keyframes poser {
-  from { transform: rotate(var(--r)) scale(1.15); opacity: 0; }
-  to { transform: rotate(var(--r)) scale(1); opacity: .9; }
-}
+.tampon > span { display: block; }
+.tampon small { display: block; font: 700 10.5px/1.2 var(--texte); letter-spacing: .02em; opacity: .9; }
+.t-achete { --c: var(--achete); } .t-attends { --c: var(--attends); } .t-surveille { --c: var(--surveille); }
+.t-bidon { --c: var(--bidon); } .t-donnees { --c: var(--donnees); }
+.tampon.grand { background: rgba(255, 255, 255, .14); color: #FFFFFF; font-size: 12px; }
 
 /* ------------------------------------------------------------- la fiche */
+.retour { display: inline-block; margin: 4px 4px 0; padding: 8px 0; font-size: 15px; font-weight: 700; text-decoration: none; color: var(--marine); }
+.bandeau { margin-top: 6px; padding: 18px; border-radius: 24px; background: linear-gradient(180deg, var(--ciel) 0%, #EAF1FC 100%); }
+.produit { display: flex; gap: 14px; align-items: center; }
+.photo { flex: 0 0 auto; width: 84px; height: 84px; border-radius: 18px; background: #FFFFFF; }
+.produit-txt { min-width: 0; }
+.nom-fiche { margin: 0; font: 800 clamp(20px, 5.6vw, 26px)/1.18 var(--texte); letter-spacing: -.02em; text-wrap: balance; }
+.var-fiche { margin-top: 4px; font-size: 14px; color: var(--encre-2); }
+.cadre-fiche { margin-top: 2px; font-size: 13px; color: var(--encre-2); }
+.bandeau .lbl { margin-top: 20px; font-size: 14px; font-weight: 700; color: var(--encre-2); }
+.prix-geant { margin-top: 2px; font: 800 clamp(42px, 13vw, 58px)/1 var(--texte); letter-spacing: -.045em; white-space: nowrap; }
+.barre { font-size: 20px; font-weight: 600; color: var(--encre-2); letter-spacing: 0; }
+.remise { font-size: 16px; font-weight: 800; color: var(--bas); letter-spacing: 0; }
+.parente { margin: 12px 4px 0; font-size: 14px; color: var(--encre-2); }
 
-.retour { display: inline-block; margin-top: 18px; padding: 8px 0; font-size: 15px; text-decoration: none; color: var(--encre-2); }
-.retour:hover { color: var(--encre); text-decoration: underline; }
-
-.nom-fiche {
-  margin: 8px 0 0;
-  font: 700 clamp(30px, 9vw, 50px)/1 var(--cond);
-  text-transform: uppercase;
-  text-wrap: balance;
+/* jauge */
+.jauge-tete { display: flex; justify-content: space-between; align-items: baseline; }
+.niveau { margin-top: 2px; font: 800 26px/1.2 var(--texte); letter-spacing: -.02em; }
+.n-bas { color: var(--bas); } .n-moyen { color: var(--moyen); } .n-haut { color: var(--haut); } .n-vide { color: var(--encre-2); font-size: 20px; }
+.jauge-barre {
+  position: relative; display: block; height: 12px; border-radius: 6px; margin-top: 14px;
+  background: linear-gradient(90deg, #2F8F5B 0%, #E9C46A 50%, #E0703A 100%);
 }
-.var-fiche { margin-top: 10px; font-size: 15px; color: var(--encre-2); max-width: 60ch; }
-.cadre-fiche { margin-top: 4px; font-size: 15px; color: var(--encre-2); }
+.jauge-barre i { position: absolute; top: -6px; width: 4px; height: 24px; margin-left: -2px; border-radius: 2px; background: var(--encre); box-shadow: 0 0 0 2px #FFFFFF; }
+.jauge-bornes { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 13px; color: var(--encre-2); }
 
-.decision {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "tampon  tampon"
-    "lbl     lbl"
-    "prix    prix"
-    "ou      ou"
-    "verdict verdict";
-  column-gap: 12px;
-  margin-top: 26px;
-  padding: 22px 0 0;
-  border-top: 1.5px solid var(--encre);
-}
-.prix-zone { display: contents; }
-.decision .lbl { grid-area: lbl; align-self: end; }
-.decision .prix-geant { grid-area: prix; align-self: start; }
-.decision .ou { grid-area: ou; }
-.tampon-zone { grid-area: tampon; justify-self: start; align-self: center; padding: 4px 0 22px 6px; }
-.verdict-zone, .decision > .verdict-titre, .decision > .verdict-expli { grid-column: 1 / -1; }
-.lbl { font-size: 14px; color: var(--encre-2); }
-.prix-geant { margin-top: 2px; font: 600 clamp(40px, 12vw, 68px)/1 var(--mono); letter-spacing: -.04em; white-space: nowrap; }
-.ou { margin-top: 8px; font-size: 15px; color: var(--encre-2); }
-.barre, .promos s { color: var(--encre-2); text-decoration-thickness: 1.5px; }
-.remise { font-weight: 600; color: var(--encre); }
-.verdict-zone { margin-top: 22px; padding: 16px 18px; background: color-mix(in srgb, var(--encre) 5%, transparent); }
-.verdict-titre { font: 700 21px/1.15 var(--cond); text-transform: uppercase; }
-.verdict-expli { margin-top: 6px; font-size: 16px; max-width: 62ch; }
-.notes { margin: 10px 0 0; padding: 0; list-style: none; font-size: 15px; color: var(--encre-2); }
-.notes li { padding-left: 18px; position: relative; }
-.notes li::before { content: "—"; position: absolute; left: 0; }
+/* prévision */
+.prevision { background: var(--marine); color: #FFFFFF; }
+.prevision.v-acheter { background: #1F6B45; }
+.prevision.v-bidon { background: #8F1F19; }
+.prevision.v-surveiller { background: #6B4E10; }
+.prevision.v-donnees, .prevision.v-paye { background: #3B4658; }
+.prev-tete { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.prevision .carte-lbl { color: var(--marine-2); }
+.prev-titre { margin-top: 6px; font: 800 23px/1.2 var(--texte); letter-spacing: -.02em; }
+.prev-expli { margin-top: 6px; font-size: 15px; color: #E4ECF8; }
+.mois { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.mois li { padding: 10px 4px; border-radius: 12px; background: rgba(255, 255, 255, .09); text-align: center; }
+.mois span { display: block; font-size: 12px; color: var(--marine-2); }
+.mois b { display: block; margin-top: 4px; font-size: 16px; font-weight: 800; }
+.mois li.meilleur { background: #FFFFFF; color: var(--marine); }
+.mois li.meilleur span { color: var(--marine); font-weight: 700; }
+.prev-fiab { margin-top: 14px; font-size: 13px; color: var(--marine-2); }
+.prevision .notes { margin: 10px 0 0; padding: 0; list-style: none; font-size: 14px; color: #E4ECF8; }
+.prevision .notes li::before { content: "· "; }
 
-/* repères : libellé à gauche, valeur à droite, détail dessous */
-.ticket { margin: 0; border-top: 1px solid var(--filet); }
-.t-ligne {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--filet);
-}
-.t-ligne dt { font-size: 16px; }
+/* repères */
+.ticket { margin: 0; }
+.t-ligne { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; padding: 12px 0; border-top: 1px solid var(--filet); }
+.t-ligne:first-child { border-top: 0; padding-top: 2px; }
+.t-ligne dt { font-size: 15px; font-weight: 600; }
 .t-ligne dd { margin: 0; }
-.t-ligne .val { font: 600 16px/1.4 var(--mono); text-align: right; white-space: nowrap; }
-.t-ligne .detail { grid-column: 1 / -1; margin-top: 2px; font-size: 14px; color: var(--encre-2); }
+.t-ligne .val { font: 800 16px/1.4 var(--texte); text-align: right; white-space: nowrap; }
+.t-ligne .detail { grid-column: 1 / -1; margin-top: 2px; font-size: 13px; color: var(--encre-2); }
+.repere { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: var(--fond); font-size: 14px; color: var(--encre-2); }
 
-/* la courbe */
+/* courbe */
 .courbe { margin: 0; }
 .courbe-svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
 .courbe-large { display: none; }
-.courbe-svg text { font: 400 var(--fs, 12.5px) var(--texte); fill: var(--encre-2); font-variant-numeric: tabular-nums; }
-.courbe-svg .t-fort { font: 600 calc(var(--fs, 12.5px) + 2px) var(--mono); fill: var(--encre); }
-.courbe-svg .t-min { fill: var(--encre); font-weight: 500; }
-.courbe-svg .t-alerte { fill: var(--achete); font-weight: 600; }
-.grille { stroke: var(--filet); stroke-width: 1; }
-.axe { stroke: var(--filet-2); stroke-width: 1; }
-.alerte { stroke: var(--achete); stroke-width: 1.5; stroke-dasharray: 5 4; }
-.trait { fill: none; stroke: var(--encre); stroke-width: 2; stroke-linejoin: round; }
-.pt { fill: var(--encre); }
-.pt-fort { fill: var(--papier); stroke: var(--encre); stroke-width: 2.5; }
-.curseur { fill: none; stroke: var(--encre); stroke-width: 1.5; pointer-events: none; visibility: hidden; }
+.courbe-svg text { font: 500 var(--fs, 12.5px) var(--texte); fill: var(--encre-2); font-variant-numeric: tabular-nums; }
+.courbe-svg .t-fort { font: 800 calc(var(--fs, 12.5px) + 2px) var(--texte); fill: var(--encre); }
+.courbe-svg .t-min { fill: var(--bas); font-weight: 800; }
+.courbe-svg .t-alerte { fill: var(--bas); font-weight: 700; }
+.grille { stroke: #EEF1F5; stroke-width: 1; }
+.axe { stroke: #D5DBE4; stroke-width: 1; }
+.alerte { stroke: var(--bas); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.trait { fill: none; stroke: var(--marine); stroke-width: 2.5; stroke-linejoin: round; }
+.pt { fill: var(--marine); }
+.pt-fort { fill: #FFFFFF; stroke: var(--marine); stroke-width: 2.5; }
+.curseur { fill: none; stroke: var(--marine); stroke-width: 2; pointer-events: none; visibility: hidden; }
 .curseur.vu { visibility: visible; }
-.lecture { display: block; margin-top: 12px; min-height: 1.5em; font-size: 14px; color: var(--encre-2); }
-
-.repere { margin-top: 14px; font-size: 14px; color: var(--encre-2); max-width: 62ch; }
+.lecture { display: block; margin-top: 10px; min-height: 1.5em; font-size: 13px; color: var(--encre-2); }
 
 /* promos */
-.promos { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--filet); }
-.promo { padding: 12px 0; border-bottom: 1px solid var(--filet); }
-.promo-tete { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-weight: 600; }
-.promo-prix { font-family: var(--mono); }
-.promo-etat { margin-top: 4px; font-size: 15px; color: var(--encre-2); }
-.promo-etat b { color: var(--encre); font-weight: 600; }
+.promos { list-style: none; margin: 0; padding: 0; }
+.promo { padding: 12px 0; border-top: 1px solid var(--filet); }
+.promo:first-child { border-top: 0; padding-top: 2px; }
+.promo-tete { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-weight: 700; }
+.promo-etat { margin-top: 4px; font-size: 14px; color: var(--encre-2); }
+.promo-etat b { color: var(--encre); }
 .promo.douteuse .promo-etat b { color: var(--bidon); }
+.promos s { color: var(--encre-2); }
 
-/* où l'acheter */
-.marchands { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--filet); }
+/* marchands */
+.marchands { list-style: none; margin: 0; padding: 0; }
 .marchands li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: "nom prix" "det statut";
-  column-gap: 14px;
-  row-gap: 2px;
-  padding: 13px 0;
-  border-bottom: 1px solid var(--filet);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "nom prix" "det statut";
+  column-gap: 14px; row-gap: 2px; padding: 12px 0; border-top: 1px solid var(--filet);
 }
-.m-nom { grid-area: nom; font-weight: 600; overflow-wrap: anywhere; }
-.m-nom a { text-decoration-color: var(--filet-2); }
-.m-prix { grid-area: prix; text-align: right; font: 600 16px/1.4 var(--mono); white-space: nowrap; }
-.m-prix small { display: block; font: 400 13px/1.4 var(--texte); color: var(--encre-2); }
-.m-prix.nul { color: var(--encre-2); font-weight: 400; }
-.m-det { grid-area: det; font-size: 14px; color: var(--encre-2); }
-.m-statut { grid-area: statut; justify-self: end; text-align: right; font-size: 13px; color: var(--encre-2); max-width: 24ch; }
-.m-statut.s-bloque { color: var(--surveille); }
+.marchands li:first-child { border-top: 0; padding-top: 2px; }
+.m-nom { grid-area: nom; font-weight: 700; overflow-wrap: anywhere; }
+.m-nom a { color: var(--encre); text-decoration-color: var(--filet); }
+.m-prix { grid-area: prix; text-align: right; font: 800 16px/1.4 var(--texte); white-space: nowrap; }
+.m-prix small { display: block; font: 500 12px/1.4 var(--texte); color: var(--encre-2); }
+.m-prix.nul { color: var(--encre-2); }
+.m-det { grid-area: det; font-size: 13px; color: var(--encre-2); }
+.m-statut { grid-area: statut; justify-self: end; text-align: right; font-size: 12px; color: var(--encre-2); max-width: 24ch; }
+.m-statut.s-bloque { color: var(--haut); }
+.archives summary { padding: 12px 0 2px; font-size: 14px; font-weight: 600; color: var(--marine); cursor: pointer; }
+.archives summary i { font-style: normal; font-weight: 500; color: var(--encre-2); }
 
-.archives { margin-top: 4px; }
-.archives summary { padding: 14px 0; font-size: 14px; color: var(--encre-2); cursor: pointer; }
-.archives summary i { font-style: normal; }
-.archives[open] summary { border-bottom: 1px solid var(--filet); }
-
-/* actions : une rangée de boutons sobres */
-.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; padding-top: 22px; border-top: 1.5px solid var(--encre); }
+/* actions */
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 .vu { flex: 0 0 auto; }
-.vu[open] { flex-basis: 100%; }
+.vu[open] { flex-basis: 100%; background: var(--carte); border-radius: var(--rayon); padding: 14px; }
 .vu summary, .bouton-carte {
-  display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px;
-  font: 600 15px/1 var(--texte); color: var(--encre); background: transparent;
-  border: 1.5px solid var(--encre); cursor: pointer; list-style: none;
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: 14px;
+  font: 700 15px/1 var(--texte); color: var(--marine); background: #DCE4F0; border: 0; cursor: pointer; list-style: none;
 }
 .vu summary::-webkit-details-marker { display: none; }
-.vu[open] summary { background: var(--encre); color: var(--papier); }
-.form-prix, .form-achat { display: grid; gap: 18px; margin-top: 18px; }
+.vu[open] summary { background: var(--marine); color: #FFFFFF; }
+.form-prix, .form-achat { display: grid; gap: 14px; margin-top: 14px; }
 .form-prix button, .form-achat button { justify-self: start; }
 .case { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--encre); min-height: 36px; }
-.case input { width: 18px; height: 18px; margin: 0; accent-color: var(--encre); }
+.case input { width: 20px; height: 20px; margin: 0; accent-color: var(--marine); }
 .carte-zone { display: contents; }
 .carte-zone .aide { display: none; }
-
-.equivalent { margin-top: 18px; font-size: 15px; }
-.equivalent a { font-weight: 600; }
+.equivalent { margin: 16px 4px 0; font-size: 15px; }
+.equivalent a { font-weight: 700; }
 .equivalent span { color: var(--encre-2); }
 
 /* ------------------------------------------------------------- ajouter */
-
-.form-ajout { display: grid; gap: 20px; padding-top: 18px; }
-.form-ajout h1 { margin-bottom: 0; }
+.ajouter .form-ajout { display: grid; gap: 18px; margin-top: 6px; padding: 22px 18px; border-radius: 24px; background: var(--carte); }
 .form-ajout > input { font-size: 19px; }
 .form-ajout button { justify-self: start; }
-.urgence { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
-.urgence legend { grid-column: 1 / -1; padding: 0; margin-bottom: 8px; font-size: 14px; color: var(--encre-2); }
+.urgence { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.urgence legend { grid-column: 1 / -1; padding: 0; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--encre-2); }
 .urgence label { position: relative; color: var(--encre); font-size: 15px; }
 .urgence input { position: absolute; opacity: 0; inset: 0; margin: 0; }
-.urgence span { display: block; min-height: 56px; padding: 10px 8px 9px; border: 1.5px solid var(--encre); text-align: center; cursor: pointer; }
-.urgence label + label span { border-left-width: 0; }
-.urgence small { display: block; font-size: 13px; color: var(--encre-2); }
-.urgence input:checked + span { background: var(--encre); color: var(--papier); }
-.urgence input:checked + span small { color: var(--papier); opacity: .8; }
-.urgence input:focus-visible + span { outline: 2px solid var(--encre); outline-offset: 3px; }
+.urgence span { display: block; min-height: 58px; padding: 10px 6px; border-radius: 14px; background: var(--fond); text-align: center; cursor: pointer; font-weight: 700; }
+.urgence small { display: block; font-size: 12px; font-weight: 500; color: var(--encre-2); }
+.urgence input:checked + span { background: var(--marine); color: #FFFFFF; }
+.urgence input:checked + span small { color: var(--marine-2); }
+.urgence input:focus-visible + span { outline: 3px solid var(--marine); outline-offset: 2px; }
 
-/* ------------------------------------------------------------- plan sous budget, parentés */
-
-.plan { margin-top: 6px; }
-.plan-budget { margin: 14px 0 6px; max-width: 300px; }
+/* ------------------------------------------------------------- plan sous budget */
+.plan { margin-top: 12px; background: var(--carte); border-radius: var(--rayon); padding: 0 18px; }
+.plan > summary { padding: 16px 0; font-weight: 700; color: var(--marine); cursor: pointer; }
+.plan-budget { margin: 4px 0 6px; max-width: 300px; }
 .frise { list-style: none; margin: 12px 0 0; padding: 0; }
-.frise > li {
-  display: grid; grid-template-columns: 7ch minmax(0, 1fr) auto; gap: 4px 14px; align-items: baseline;
-  padding: 11px 0; border-bottom: 1px solid var(--filet); font-size: 15px;
-}
-.f-mois { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--encre-2); }
+.frise > li { display: grid; grid-template-columns: 7ch minmax(0, 1fr) auto; gap: 4px 14px; align-items: baseline; padding: 11px 0; border-top: 1px solid var(--filet); font-size: 15px; }
+.f-mois { font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--encre-2); }
 .frise ul { list-style: none; margin: 0; padding: 0; min-width: 0; }
-.frise ul li { overflow-wrap: anywhere; }
-.f-total { font: 600 15px var(--mono); white-space: nowrap; }
-.plan-bilan { margin-top: 12px; color: var(--encre); }
+.f-total { font-weight: 800; white-space: nowrap; }
+.plan-bilan { margin: 12px 0 16px; color: var(--encre); }
 .plan-bilan:empty { display: none; }
-
-.parente { margin: 8px 0 0; font-size: 15px; color: var(--encre-2); }
-.parente a { color: var(--encre); }
+.plan > .aide:last-child { padding-bottom: 16px; }
 
 /* ------------------------------------------------------------- pied */
-
-main { padding-bottom: 40px; }
-.pied { padding-top: 16px; font-size: 13px; color: var(--encre-2); display: grid; gap: 8px; max-width: 68ch; }
+main { padding-bottom: 32px; }
+.pied { padding: 8px 4px 0; font-size: 13px; color: var(--encre-2); display: grid; gap: 8px; max-width: 68ch; }
 
 /* ------------------------------------------------------------- écrans larges */
-
 @media (min-width: 640px) {
-  :root { --gouttiere: 32px; }
-  .tete { padding-top: 28px; }
-  .marque, .marque-lien { font-size: 26px; }
-  .demande { padding-top: 48px; }
-  .etiquette {
-    grid-template-columns: minmax(0, 1fr) auto 150px;
-    grid-template-areas:
-      "nom    prix   tampon"
-      "var    prix   tampon"
-      "phrase phrase tampon";
-    column-gap: 24px;
-    padding: 26px 0;
-  }
-  .etiquette .nom { font-size: 26px; }
-  .prix-bloc { margin-top: 0; flex-direction: column; align-items: flex-end; text-align: right; }
-  .tampon-bloc { align-self: center; justify-self: center; padding: 0; }
-  .phrase { margin-top: 10px; }
+  :root { --gouttiere: 28px; }
+  .tete { padding-top: 26px; }
+  .demande { padding: 30px 28px 26px; }
+  .bandeau { padding: 26px 28px; }
+  .carte { padding: 22px 24px; }
+  .etiquette { grid-template-columns: 88px minmax(0, 1fr) auto; padding: 16px 18px; }
+  .vignette { width: 88px; height: 88px; }
+  .photo { width: 108px; height: 108px; }
   .courbe-etroite { display: none; }
   .courbe-large { display: block; }
-  .decision { grid-template-areas: "lbl tampon" "prix tampon" "ou tampon" "verdict verdict"; padding-top: 30px; }
-  .tampon-zone { justify-self: end; padding: 0 24px 0 0; }
-  .tampon.grand { font-size: 38px; }
 }

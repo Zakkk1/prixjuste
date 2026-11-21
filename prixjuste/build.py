@@ -78,6 +78,95 @@ def sous_tampon(res):
     return None
 
 
+# ---------------------------------------------------------------- météo des prix
+
+def jauge(res, auj):
+    """Où se situe le prix du jour entre le plus bas et le plus haut des 12 derniers mois."""
+    act = res.get("actuel")
+    prix = [v["prix"] for d, v in res["serie"].items() if 0 <= (auj - d).days <= 365]
+    if not act or len(prix) < 2 or max(prix) - min(prix) < 1:
+        return None
+    lo, hi = min(prix), max(prix)
+    pos = min(max((act["prix"] - lo) / (hi - lo), 0), 1)
+    if pos <= .25:
+        niveau, classe = "bas", "bas"
+    elif pos <= .6:
+        niveau, classe = "dans la moyenne", "moyen"
+    else:
+        niveau, classe = "plutôt élevé", "haut"
+    return {"pos": pos, "lo": lo, "hi": hi, "niveau": niveau, "classe": classe}
+
+
+def bloc_jauge(j, compact=False):
+    if not j:
+        if compact:
+            return ""
+        return ('<section class="carte jauge"><p class="carte-lbl">Ce prix est</p>'
+                '<p class="niveau n-vide">pas encore situable</p>'
+                '<p class="aide">Il faut au moins deux jours de prix différents sur 12 mois.</p></section>')
+    barre = (f'<span class="jauge-barre" aria-hidden="true"><i style="left:{j["pos"] * 100:.1f}%"></i></span>')
+    if compact:
+        return f'<span class="jauge-mini j-{j["classe"]}">{barre}<b>{e(j["niveau"])}</b></span>'
+    return (f'<section class="carte jauge"><div class="jauge-tete"><p class="carte-lbl">Ce prix est</p>'
+            f'<p class="aide">sur 12 mois</p></div>'
+            f'<p class="niveau n-{j["classe"]}">{e(j["niveau"])}</p>{barre}'
+            f'<p class="jauge-bornes"><span>{euros(j["lo"], False)} · plus bas</span>'
+            f'<span>{euros(j["hi"], False)} · plus haut</span></p></section>')
+
+
+def prevision_mois(res, auj, n=4):
+    """Les n prochains mois, avec le prix médian relevé ces mois-là les années passées."""
+    par_mois = {}
+    for d, v in res["serie"].items():
+        if (auj - d).days > 30:
+            par_mois.setdefault(d.month, []).append(v["prix"])
+    tuiles = []
+    for i in range(1, n + 1):
+        m = (auj.month - 1 + i) % 12 + 1
+        vals = sorted(par_mois.get(m, []))
+        med = vals[len(vals) // 2] if vals else None
+        tuiles.append({"mois": MOIS_COURT[m - 1], "prix": med})
+    connus = [t for t in tuiles if t["prix"] is not None]
+    if connus:
+        min(connus, key=lambda t: t["prix"])["meilleur"] = True
+    return tuiles
+
+
+TITRES_PREVISION = {"acheter": "Bon moment pour acheter", "surveiller": "Prix à surveiller",
+                    "bidon": "Promo trompeuse", "donnees": "Pas encore de prévision", "paye": "Acheté"}
+
+
+def bloc_prevision(art, res, code, auj):
+    titre = TITRES_PREVISION.get(code, res["verdict"][1])
+    if code == "attendre":
+        titre = res["verdict"][1].replace("Attends", "Baisse probable en")
+    expli = phrase_achat(res) if code == "paye" else res["verdict"][2]
+    tuiles = prevision_mois(res, auj)
+    tu = ""
+    if any(t["prix"] is not None for t in tuiles) and code != "paye":
+        tu = '<ol class="mois">' + "".join(
+            f'<li class="{"meilleur" if t.get("meilleur") else ""}"><span>{e(t["mois"])}</span>'
+            f'<b>{"~" + str(round(t["prix"])) if t["prix"] is not None else "—"}</b></li>' for t in tuiles) + "</ol>"
+    c = res["chiffres"]
+    n = c.get("n_releves", 0)
+    notes = "".join(f"<li>{e(x)}</li>" for x in res["notes"])
+    return (f'<section class="carte prevision v-{e(code)}"><div class="prev-tete"><p class="carte-lbl">Prévision</p>'
+            f'{tampon(code, sous_tampon_code(code, res), "grand")}</div>'
+            f'<p class="prev-titre">{e(titre)}</p><p class="prev-expli">{e(expli)}</p>{tu}'
+            + (f'<ul class="notes">{notes}</ul>' if notes else "")
+            + f'<p class="prev-fiab">Prix médians relevés les années passées · fiabilité {e(c.get("fiabilite", "faible"))} '
+            f'({n} jour{"s" if n > 1 else ""} de prix)</p></section>')
+
+
+def vignette(art, classe="vignette"):
+    img = art.get("image")
+    if img:
+        return (f'<span class="{classe}"><img src="{e(img)}" alt="" referrerpolicy="no-referrer" '
+                'onerror="this.remove()"></span>')
+    initiale = (art.get("nom") or "?").strip()[:1].upper()
+    return f'<span class="{classe} sans-photo" aria-hidden="true">{e(initiale)}</span>'
+
+
 # ---------------------------------------------------------------- courbes
 
 def _points(obs, auj, jours=430):
@@ -258,8 +347,8 @@ def figure_courbe(art, res, obs, auj):
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600'
-         '&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">')
+         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800'
+         '&display=swap">')
 
 FILTRE_ENCRE = ('<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">'
                 '<filter id="encre" x="-5%" y="-10%" width="110%" height="120%">'
@@ -299,12 +388,11 @@ def page(titre, corps, prefixe="", description="", classe=""):
 def entete(prefixe, quand, accueil=False):
     marque = '<span class="marque">Prix<b>Juste</b></span>'
     lien = marque if accueil else f'<a class="marque-lien" href="{prefixe}index.html">{marque}</a>'
-    return (f'<header class="tete">{lien}<p class="releve">relevé du {e(quand)}</p></header>'
-            '<div class="perfore" aria-hidden="true"></div>')
+    return f'<header class="tete">{lien}<p class="releve">prix du {e(quand)}</p></header>'
 
 
 def pied(prefixe):
-    return ('<div class="perfore" aria-hidden="true"></div><footer class="pied">'
+    return ('<footer class="pied">'
             f'<p>Verdicts calculés uniquement à partir de prix réellement relevés : en direct, dans les archives '
             f'publiques du web, ou saisis à la main. L\'outil s\'annonce comme robot (PrixJuste/{VERSION}), '
             'respecte robots.txt, lit chaque page une fois par jour au plus, et ne contourne jamais un site qui refuse.</p>'
@@ -345,19 +433,21 @@ def ligne_comptoir(art, res, obs, auj):
     code = etat_article(art, res)
     href = f'a/{e(art["id"])}.html'
     variante = art.get("variante") or art.get("reference") or ""
+    jg = ""
     if code == "attente":
-        prix = '<span class="prix-ligne nul">—</span><span class="chez">pas encore de prix</span>'
-        phrase = "En attente d'identification : ajoute un lien marchand à la demande pour le suivre tout de suite."
-        spark = '<span class="spark vide" aria-hidden="true"></span>'
+        prix = '<span class="prix-ligne nul">—</span><span class="chez">identification en cours</span>'
+        phrase = "Claude cherche la référence exacte et les marchands : le suivi démarre juste après."
     else:
         act = res.get("actuel")
         prix = (f'<span class="prix-ligne">{euros(act["prix"])}</span><span class="chez">chez {e(act.get("marchand"))}</span>'
                 if act else '<span class="prix-ligne nul">—</span><span class="chez">aucun prix lisible ces 3 jours</span>')
         phrase = phrase_achat(res) if code == "paye" else res["verdict"][2]
+        jg = bloc_jauge(jauge(res, auj), compact=True)
     return (f'<li><a class="etiquette" href="{href}">'
-            f'<span class="nom">{e(art["nom"])}</span>'
+            f'{vignette(art)}'
+            f'<span class="ligne-corps"><span class="nom">{e(art["nom"])}</span>'
             f'<span class="var">{e(variante)}</span>'
-            f'<span class="prix-bloc">{prix}</span>'
+            f'<span class="prix-bloc">{prix}</span>{jg}</span>'
             f'<span class="tampon-bloc">{tampon(code, sous_tampon_code(code, res), "petit")}</span>'
             f'<span class="phrase">{e(phrase)}</span>'
             '</a></li>')
@@ -388,12 +478,12 @@ def comptoir(lignes, quand, prochain=None, plan_html=""):
         corps.append(f'<p class="prochain"><span>Prochain moment</span> {e(txt)} — {date_fr(d)} · '
                      '<a href="agenda.ics">ajouter à mon agenda</a></p>')
     if lignes:
-        corps.append('<h2 class="rubrique">Au comptoir</h2><ol class="etiquettes">' + "".join(lignes) + "</ol>" + plan_html)
+        corps.append('<h2 class="rubrique">Ma liste</h2><ol class="etiquettes">' + "".join(lignes) + "</ol>" + plan_html)
     else:
         corps.append('<p class="vide-txt">Rien au comptoir pour l\'instant.</p>')
     corps.append("</main>")
     corps.append(pied(""))
-    return page("PrixJuste — le comptoir", "".join(corps), classe="p-comptoir")
+    return page("PrixJuste — ma liste", "".join(corps), classe="p-comptoir")
 
 
 # ---------------------------------------------------------------- la fiche
@@ -527,58 +617,57 @@ def form_prix(art):
 def fiche(art, res, obs, journal, quand, auj, voisins=None):
     code = etat_article(art, res)
     act = res.get("actuel")
-    sous = sous_tampon_code(code, res)
     variante = art.get("variante") or art.get("reference") or ""
     cadre = [f'à acheter avant le {date_fr(res["limite"])}']
     if art.get("budget_max"):
         cadre.append(f'budget {euros(art["budget_max"], False)}')
-    corps = [entete("../", quand), '<main class="fiche">',
-             '<a class="retour" href="../index.html">← Le comptoir</a>',
-             f'<h1 class="nom-fiche">{e(art["nom"])}</h1>',
-             f'<p class="var-fiche">{e(variante)}</p>' if variante else "",
-             f'<p class="cadre-fiche">{e(" · ".join(cadre))}</p>',
-             liens_parentes(art, voisins or {})]
 
-    if code == "attente":
-        num = art.get("issue")
-        lien_issue = (f'<a href="https://github.com/{DEPOT_GITHUB}/issues/{num}">la demande n°{num}</a>' if num else "la demande")
-        corps.append(f'<section class="decision"><div class="tampon-zone">{tampon("attente", None, "grand")}</div>'
-                     f'<p class="verdict-titre">En attente d\'identification</p>'
-                     f'<p class="verdict-expli">Demande : « {e(art.get("demande", art["nom"]))} ». Claude doit d\'abord '
-                     f'trouver la référence exacte et des pages marchands lisibles. Pour aller plus vite, ajoute un lien '
-                     f'produit dans {lien_issue} : le suivi démarre au relevé suivant.</p></section>')
-        corps += ["</main>", pied("../")]
-        return page(f"{art['nom']} — PrixJuste", "".join(corps), "../", classe="p-fiche")
-
-    titre, expli = res["verdict"][1], res["verdict"][2]
-    if code == "paye":
-        titre, expli = "Acheté", phrase_achat(res)
     if act:
         barre = ""
         promo = next((p for p in res["promos"] if p["ts"] == act["ts"] and p["marchand"] == act.get("marchand")), None)
         if promo and not promo["douteuse"]:  # ancien prix barré affiché seulement s'il est réel
-            barre = f'<s class="barre">{euros(promo["barre"])}</s> <span class="remise">{pct(promo["remise_affichee"])}</span>'
-        prix_html = (f'<p class="lbl">Meilleur prix aujourd\'hui</p>'
-                     f'<p class="prix-geant">{euros(act["prix"])}</p>'
-                     f'<p class="ou">{barre}{" · " if barre else ""}chez {e(act.get("marchand"))}</p>')
+            barre = f' <s class="barre">{euros(promo["barre"])}</s> <span class="remise">{pct(promo["remise_affichee"])}</span>'
+        prix_html = (f'<p class="lbl">Aujourd’hui · {e(act.get("marchand"))}</p>'
+                     f'<p class="prix-geant">{euros(act["prix"])}{barre}</p>')
+    elif code == "attente":
+        prix_html = '<p class="lbl">Identification en cours</p>'
     else:
-        prix_html = ('<p class="lbl">Meilleur prix actuel</p><p class="prix-geant nul">—</p>'
-                     '<p class="ou">aucun site lisible ces 3 derniers jours</p>')
-    notes = "".join(f"<li>{e(n)}</li>" for n in res["notes"])
-    corps.append(f'<section class="decision">'
-                 f'<div class="prix-zone">{prix_html}</div>'
-                 f'<div class="tampon-zone">{tampon(code, sous, "grand")}</div>'
-                 f'<div class="verdict-zone"><p class="verdict-titre">{e(titre)}</p>'
-                 f'<p class="verdict-expli">{e(expli)}</p>'
-                 + (f'<ul class="notes">{notes}</ul>' if notes else "") + '</div></section>')
-    corps.append('<h2 class="rubrique">Les 12 derniers mois</h2>' + figure_courbe(art, res, obs, auj))
-    corps.append('<h2 class="rubrique">Repères</h2>' + ticket(art, res))
-    if res["chiffres"].get("fiabilite", "faible") == "faible":
-        corps.append(f'<p class="repere">Encore peu de prix connus. En général : {e(res["repere"])}</p>')
+        prix_html = ('<p class="lbl">Aucun site lisible ces 3 derniers jours</p><p class="prix-geant nul">—</p>')
+
+    corps = [entete("../", quand), '<main class="fiche">',
+             '<a class="retour" href="../index.html">← Ma liste</a>',
+             '<section class="bandeau">',
+             f'<div class="produit">{vignette(art, "photo")}<div class="produit-txt">'
+             f'<h1 class="nom-fiche">{e(art["nom"])}</h1>'
+             + (f'<p class="var-fiche">{e(variante)}</p>' if variante else "")
+             + f'<p class="cadre-fiche">{e(" · ".join(cadre))}</p></div></div>',
+             prix_html, '</section>', liens_parentes(art, voisins or {})]
+
+    if code == "attente":
+        num = art.get("issue")
+        lien_issue = (f'<a href="https://github.com/{DEPOT_GITHUB}/issues/{num}">la demande n°{num}</a>' if num else "la demande")
+        corps.append(f'<section class="carte prevision v-donnees"><div class="prev-tete"><p class="carte-lbl">Prévision</p>'
+                     f'{tampon("attente", None, "grand")}</div>'
+                     f'<p class="prev-titre">Identification en cours</p>'
+                     f'<p class="prev-expli">Demande : « {e(art.get("demande", art["nom"]))} ». Claude cherche la référence '
+                     f'exacte et des pages marchands lisibles, puis le suivi démarre. Pour aller plus vite, colle un lien '
+                     f'produit dans {lien_issue}.</p></section>')
+        corps += ["</main>", pied("../")]
+        return page(f"{art['nom']} — PrixJuste", "".join(corps), "../", classe="p-fiche")
+
+    titre = res["verdict"][1] if code != "paye" else "Acheté"
+    corps.append(bloc_jauge(jauge(res, auj)))
+    corps.append(bloc_prevision(art, res, code, auj))
+    corps.append('<section class="carte"><h2 class="rubrique">Les 12 derniers mois</h2>'
+                 + figure_courbe(art, res, obs, auj) + '</section>')
+    corps.append('<section class="carte"><h2 class="rubrique">Repères</h2>' + ticket(art, res)
+                 + (f'<p class="repere">Encore peu de prix connus. En général : {e(res["repere"])}</p>'
+                    if res["chiffres"].get("fiabilite", "faible") == "faible" else "") + '</section>')
     promos = bloc_promos(res)
     if promos:
-        corps.append('<h2 class="rubrique">Contrôle des promos</h2>' + promos)
-    corps.append('<h2 class="rubrique">Où l\'acheter</h2>' + bloc_marchands(art, obs, journal))
+        corps.append('<section class="carte"><h2 class="rubrique">Contrôle des promos</h2>' + promos + '</section>')
+    corps.append('<section class="carte"><h2 class="rubrique">Où l’acheter</h2>'
+                 + bloc_marchands(art, obs, journal) + '</section>')
     corps.append('<div class="actions">' + form_prix(art) + ("" if art.get("achat") else form_achat(art, act))
                  + carte(art, res, code, auj) + '</div>' + lien_equivalent(art))
     corps += ["</main>", pied("../")]

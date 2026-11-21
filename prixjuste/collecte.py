@@ -153,7 +153,10 @@ def lire_page(html, filtre=None, taille=None):
         if CAPTCHA_RE.search(html):
             raise Bloque("page anti-robot (captcha)")
         return None
-    return resumer(offres, filtre, taille)
+    r = resumer(offres, filtre, taille)
+    if r:
+        r["image"] = jsonld.image_produit(html)
+    return r
 
 
 def releve_direct(url, filtre=None, taille=None):
@@ -206,6 +209,9 @@ def collecter_article(depot, art, log=print, pause=PAUSE):
         finally:
             time.sleep(pause)
         if r:
+            if r.get("image") and not art.get("image"):  # la photo vient de la page déjà lue : aucune visite en plus
+                art["image"] = r["image"]
+                depot.ecrire_article(art)
             depot.ajouter_releve(art["id"], _ligne(art, lien, "direct", maintenant(), r))
             depot.noter(art["id"], k, "direct", "ok", f"{r['prix']:.2f} €")
             log(f"  [ok] {lien.get('marchand')} : {r['prix']:.2f} € ({r.get('n_dispo')} dispo)")

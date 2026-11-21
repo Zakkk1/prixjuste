@@ -132,6 +132,31 @@ def extraire_offres(html):
     return nom_produit, _dedoublonner(offres)
 
 
+OG_IMAGE_RE = re.compile(r'<meta[^>]+property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']', re.I)
+
+
+def image_produit(html):
+    """Photo du produit telle que la page la publie (JSON-LD `image`, sinon og:image). None si absente."""
+    def url_de(v):
+        for x in _liste(v):
+            if isinstance(x, dict):
+                x = x.get("url") or x.get("contentUrl")
+            if isinstance(x, str) and x.startswith(("https://", "//")):
+                return "https:" + x if x.startswith("//") else x
+        return None
+    for bloc in LD_RE.findall(html):
+        data = _charger(bloc)
+        if data is None:
+            continue
+        for node in _parcourir(data):
+            if _est_type(node, "Product") or _est_type(node, "ProductGroup"):
+                u = url_de(node.get("image"))
+                if u:
+                    return u
+    m = OG_IMAGE_RE.search(html)
+    return url_de(m.group(1)) if m else None
+
+
 def _dedoublonner(offres):
     """Un même Product est souvent décrit deux fois (bloc principal + variantes) : on garde chaque offre une fois."""
     vues, res = set(), []
