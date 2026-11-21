@@ -47,6 +47,11 @@ def test_fichiers_articles_valides():
     for p in (DATA / "articles").glob("*.json"):
         art = json.loads(p.read_text(encoding="utf-8"))
         assert art["id"] == p.stem
-        assert art.get("statut", "suivi") in ("suivi", "a_identifier")
+        assert art.get("statut", "suivi") in ("suivi", "a_identifier", "a_choisir")
+        if art.get("statut") == "a_choisir":
+            assert art.get("candidats")
+            for c in art["candidats"]:
+                assert c["nom"] and c["url"].startswith("https://") and c["liens"]
+                assert all(l["url"].startswith("https://") for l in c["liens"])
         for lien in art.get("liens", []):
             assert lien["url"].startswith("http")
