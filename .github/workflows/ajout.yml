@@ -35,8 +35,8 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       NUMERO: ${{ github.event.issue.number }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install truststore
@@ -60,7 +60,8 @@ jobs:
         if: contains(fromJSON('["liens","a_identifier","prix","achat"]'), steps.lire.outputs.mode)
         env:
           ARTICLE: ${{ steps.lire.outputs.id }}
-        run: .github/scripts/publier-donnees.sh "Ajout #$NUMERO : $ARTICLE"
+        run: |
+          .github/scripts/publier-donnees.sh "Ajout n°$NUMERO : $ARTICLE"
 
       - name: Répondre sur l'issue
         env:

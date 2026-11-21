@@ -68,8 +68,8 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       NUMERO: ${{ needs.verifier.outputs.issue }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install truststore
@@ -147,7 +147,8 @@ jobs:
       - name: Publier
         env:
           ARTICLE: ${{ steps.article.outputs.id }}
-        run: .github/scripts/publier-donnees.sh "Identification #$NUMERO : $ARTICLE"
+        run: |
+          .github/scripts/publier-donnees.sh "Identification n°$NUMERO : $ARTICLE"
 
       - name: Répondre sur l'issue
         env:

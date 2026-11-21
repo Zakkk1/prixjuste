@@ -11,7 +11,7 @@ import os
 import shutil
 from pathlib import Path
 
-from . import VERSION, analyse
+from . import VERSION, agenda, analyse
 from .collecte import cle, hors_ue
 from .donnees import Depot, maintenant
 
@@ -367,13 +367,17 @@ def ligne_comptoir(art, res, obs, auj):
             '</a></li>')
 
 
-def comptoir(lignes, quand):
+def comptoir(lignes, quand, prochain=None):
     corps = [entete("", quand, accueil=True),
              '<main>',
              '<form class="demande" action="ajouter.html" method="get">'
              '<h1><label for="objet">Qu\'est-ce que tu veux acheter&nbsp;?</label></h1>'
              '<div class="champ-ligne"><input id="objet" name="objet" type="text" autocomplete="off" required '
              'placeholder="ex. parka McMurdo, taille L"><button type="submit">Suivre</button></div></form>']
+    if prochain:
+        d, txt = prochain
+        corps.append(f'<p class="prochain"><span>Prochain moment</span> {e(txt)} — {date_fr(d)} · '
+                     '<a href="agenda.ics">ajouter à mon agenda</a></p>')
     if lignes:
         corps.append('<h2 class="rubrique">Au comptoir</h2><ol class="etiquettes">' + "".join(lignes) + "</ol>")
     else:
@@ -654,10 +658,11 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
         shutil.copy(STATIQUE / f, sortie / f)
     (sortie / ".nojekyll").write_text("")
 
-    lignes, exports = [], []
+    lignes, exports, pour_agenda = [], [], []
     for art in depot.articles():
         obs = analyse.filtrer_obs(art, depot.releves(art["id"]))
         res = analyse.analyser(art, obs, auj)
+        pour_agenda.append((art, res))
         code = etat_article(art, res)
         jusqu = res.get("jusqu_a") or dt.date.max
         lignes.append(((ORDRE[code], jusqu, art["nom"].lower()), ligne_comptoir(art, res, obs, auj)))
@@ -665,7 +670,11 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
             fiche(art, res, obs, depot.journal(art["id"]), quand, auj), encoding="utf-8")
         exports.append(export(art, res, code))
     lignes.sort(key=lambda x: x[0])
-    (sortie / "index.html").write_text(comptoir([l for _, l in lignes], quand), encoding="utf-8")
+    proprio, nom_depot = DEPOT_GITHUB.split("/")
+    url_site = os.environ.get("PAGES_URL") or f"https://{proprio.lower()}.github.io/{nom_depot}"
+    (sortie / "agenda.ics").write_text(agenda.ics(pour_agenda, auj, url_site), encoding="utf-8", newline="")
+    (sortie / "index.html").write_text(comptoir([l for _, l in lignes], quand, agenda.prochain(pour_agenda, auj)),
+                                       encoding="utf-8")
     (sortie / "ajouter.html").write_text(ajouter(quand), encoding="utf-8")
     (sortie / "data.json").write_text(json.dumps({"genere": maintenant(), "articles": exports}, default=_json,
                                                  ensure_ascii=False, indent=1), encoding="utf-8")
