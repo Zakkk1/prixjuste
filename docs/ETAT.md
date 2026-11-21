@@ -38,6 +38,11 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
   prix médians des 4 prochains mois relevés les années passées), courbe, repères, marchands.
 - Vérifié en ligne (mobile et ordinateur). Maquettes des 3 pistes : canevas de design privé de l'utilisateur.
 
+## Ajout « comme en boutique » (21/11)
+- Sans lien : la routine propose 3 à 5 produits avec photo (statut `a_choisir`) ; « C'est celui-là » ouvre une issue
+  `choix` traitée par `ajout.yml` sans IA (premier relevé, réponse, fermeture, site).
+- Testé de bout en bout le 21/11 (demandes n°5 et n°6, casque de test retiré ensuite).
+
 ## Demandes en texte libre
 - Identifiées sans jeton par la routine Claude programmée (toutes les 3 h), procédure dans `CLAUDE.md`.
 - Demande n°3 (Patagonia Better Sweater noir, M) identifiée le 21/11 : 4 pages lisibles, issue fermée avec le détail.

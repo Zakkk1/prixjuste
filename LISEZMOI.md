@@ -12,9 +12,9 @@ Site : https://zakkk1.github.io/prixjuste/
 3. Le bouton ouvre GitHub avec la demande déjà écrite : appuie sur **Create**.
 
 - **Avec des liens** : l'article est créé, relevé, et la demande reçoit le premier verdict puis se ferme (2 à 15 min).
-- **Sans lien** : Claude trouve la référence exacte et des pages lisibles, au plus tard dans les 3 heures (une
-  routine passe régulièrement, rien à configurer), puis commente et ferme la demande. Pour aller plus vite :
-  colle un lien dans la demande, puis retire et remets l'étiquette `ajout`.
+- **Sans lien** : comme une recherche en boutique. Claude trouve 3 à 5 produits qui correspondent, avec photo, prix
+  et marchand (au plus tard dans les 3 heures, rien à configurer). Sur la fiche, touche **C'est celui-là** sur le bon :
+  une demande « choix » s'ouvre sur GitHub, appuie sur **Create**, et le suivi démarre aussitôt (sans IA).
 
 Sur chaque fiche, même principe (une demande pré-remplie sur GitHub) :
 - **J'ai vu un prix** : un prix vu en magasin ou sur un site bloqué.
