@@ -11,7 +11,7 @@ import os
 import shutil
 from pathlib import Path
 
-from . import VERSION, agenda, analyse
+from . import VERSION, agenda, ajout, analyse
 from .collecte import cle, hors_ue
 from .donnees import Depot, maintenant
 
@@ -594,15 +594,17 @@ def form_achat(art, act):
 
 # ---------------------------------------------------------------- ajouter
 
-def ajouter(quand):
+def ajouter(quand, profil=None):
+    prof = json.dumps(profil or {}, ensure_ascii=False, separators=(",", ":"))
     corps = [entete("", quand), '<main class="ajouter">',
              '<a class="retour" href="index.html">← Le comptoir</a>',
-             f'<form class="form-ajout" data-depot="{e(DEPOT_GITHUB)}">',
+             f'<form class="form-ajout" data-depot="{e(DEPOT_GITHUB)}" data-profil="{e(prof)}">',
              '<h1><label for="a-objet">Qu\'est-ce que tu veux acheter&nbsp;?</label></h1>',
              '<input id="a-objet" name="objet" type="text" required autocomplete="off" '
              'placeholder="ex. Timberland 6-Inch Premium jaune">',
              '<div class="grille2"><label>Taille, pointure<input name="taille" placeholder="40, L, 32/34…"></label>'
              '<label>Coloris<input name="coloris" placeholder="jaune, noir…"></label></div>',
+             '<p class="aide conseil-taille" hidden></p>',
              '<fieldset class="urgence"><legend>C\'est pour quand ?</legend>'
              '<label><input type="radio" name="urgence" value="urgent"><span>urgent<small>7 jours</small></span></label>'
              '<label><input type="radio" name="urgence" value="bientot"><span>bientôt<small>45 jours</small></span></label>'
@@ -675,7 +677,8 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
     (sortie / "agenda.ics").write_text(agenda.ics(pour_agenda, auj, url_site), encoding="utf-8", newline="")
     (sortie / "index.html").write_text(comptoir([l for _, l in lignes], quand, agenda.prochain(pour_agenda, auj)),
                                        encoding="utf-8")
-    (sortie / "ajouter.html").write_text(ajouter(quand), encoding="utf-8")
+    profil = ajout.charger_profil(depot)
+    (sortie / "ajouter.html").write_text(ajouter(quand, profil), encoding="utf-8")
     (sortie / "data.json").write_text(json.dumps({"genere": maintenant(), "articles": exports}, default=_json,
                                                  ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Site : {sortie}/ ({len(exports)} article(s))")

@@ -23,6 +23,7 @@ Issue « prix » (prix vu en magasin ou sur un site bloqué) :
     Rupture : non
 """
 import datetime as dt
+import json
 import re
 import unicodedata
 import urllib.parse
@@ -129,6 +130,29 @@ def objet_depuis_titre(titre):
     return re.sub(r"^\s*\[?(ajout|ajouter|prix)\]?\s*[:：-]?\s*", "", titre or "", flags=re.I).strip()
 
 
+def charger_profil(depot):
+    f = depot.racine / "profil.json"
+    return json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
+
+
+def taille_conseillee(profil, objet, categorie):
+    """(taille, explication) d'après le profil : pointure habituelle ajustée selon la marque."""
+    if not profil:
+        return None, None
+    t = objet.lower()
+    marque = next((m for m in profil.get("marques", {}) if m in t), None)
+    if categorie == "chaussures" and profil.get("pointure"):
+        base = float(str(profil["pointure"]).replace(",", "."))
+        if marque and profil["marques"][marque].get("pointure"):
+            p = base + profil["marques"][marque]["pointure"]
+            txt = f"{p:g}".replace(".", ",")
+            return txt, f"pointure {txt} — {profil['marques'][marque]['pourquoi']}"
+        return f"{base:g}".replace(".", ","), "ta pointure habituelle"
+    if categorie in ("vetement_hiver", "vetement_ete") and profil.get("taille"):
+        return profil["taille"], "ta taille habituelle"
+    return None, None
+
+
 def lire_demande(titre, corps):
     """Demande d'ajout -> dict normalisé."""
     ch = lire_champs(corps)
@@ -148,6 +172,10 @@ def lire_demande(titre, corps):
 def creer_article(depot, demande, issue=None):
     """Crée data/articles/<id>.json. Renvoie l'article."""
     objet = demande["objet"] or "Objet sans nom"
+    note_taille = None
+    if not demande.get("taille"):  # taille absente : celle du profil, expliquée
+        demande = dict(demande)
+        demande["taille"], note_taille = taille_conseillee(charger_profil(depot), objet, deviner_categorie(objet))
     variante = " · ".join(x for x in (demande.get("coloris"), demande.get("taille") and f"taille {demande['taille']}") if x)
     art = {
         "id": depot.nouvel_id(objet),
@@ -162,6 +190,7 @@ def creer_article(depot, demande, issue=None):
         "acheter_avant": demande.get("acheter_avant"),
         "budget_max": demande.get("budget_max"),
         "taille": demande.get("taille"),
+        "note_taille": note_taille,
         "coloris": demande.get("coloris"),
         "autres_coloris_ok": not demande.get("coloris"),
         "liens": [],

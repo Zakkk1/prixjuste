@@ -1,0 +1,7 @@
+{
+ "pointure": "40",
+ "taille": null,
+ "marques": {
+  "timberland": {"pointure": -0.5, "pourquoi": "Timberland conseille une demi-pointure en dessous pour la 6-Inch Premium"}
+ }
+}

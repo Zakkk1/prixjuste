@@ -94,3 +94,15 @@ def test_demande_completee_par_des_liens(depot):
     ajout.completer_liens(depot, art, ajout.lire_demande("", "Objet : doudoune\nhttps://a.fr/doudoune"))
     art = depot.article(art["id"])
     assert art["statut"] == "suivi" and art["liens"][0]["url"] == "https://a.fr/doudoune"
+
+
+def test_taille_du_profil(depot):
+    (depot.racine).mkdir(parents=True, exist_ok=True)
+    (depot.racine / "profil.json").write_text('{"pointure": "40", "marques": {"timberland": {"pointure": -0.5, '
+                                             '"pourquoi": "Timberland conseille une demi-pointure en dessous"}}}')
+    art = ajout.creer_article(depot, ajout.lire_demande("Ajout : Timberland 6-Inch noir", ""))
+    assert art["taille"] == "39,5" and "demi-pointure" in art["note_taille"]
+    art = ajout.creer_article(depot, ajout.lire_demande("Ajout : baskets de running", ""))
+    assert art["taille"] == "40"
+    art = ajout.creer_article(depot, ajout.lire_demande("Ajout : casque audio", ""))
+    assert "taille" not in art

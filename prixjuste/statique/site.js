@@ -19,6 +19,28 @@
   if (ajout) {
     var params = new URLSearchParams(location.search);
     if (params.get("objet")) ajout.elements.objet.value = params.get("objet");
+    // conseil de taille d'après le profil (pointure habituelle, ajustements connus par marque)
+    var profil = JSON.parse(ajout.dataset.profil || "{}");
+    var conseil = ajout.querySelector(".conseil-taille");
+    var chaussure = /chaussure|basket|sneaker|boot|botte|bottine|mocassin|derby|sandale|running|timberland/i;
+    function conseiller() {
+      var t = val(ajout, "objet").toLowerCase(), txt = "";
+      var marques = profil.marques || {};
+      var m = Object.keys(marques).filter(function (k) { return t.indexOf(k) >= 0; })[0];
+      if (profil.pointure && (chaussure.test(t) || (m && marques[m].pointure))) {
+        var p = parseFloat(String(profil.pointure).replace(",", "."));
+        if (m && marques[m].pointure) {
+          txt = "Pointure conseillée : " + String(p + marques[m].pointure).replace(".", ",") + " — " + marques[m].pourquoi + ".";
+        } else {
+          txt = "Ta pointure habituelle : " + String(p).replace(".", ",") + ".";
+        }
+      }
+      conseil.textContent = txt;
+      conseil.hidden = !txt;
+    }
+    ajout.elements.objet.addEventListener("input", conseiller);
+    conseiller();
+
     ajout.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var objet = val(ajout, "objet");
