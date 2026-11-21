@@ -154,7 +154,8 @@ def analyser(article, obs, aujourdhui=None):
     for d, v in serie.items():
         par_mois.setdefault(d.month, []).append(v)
     meilleur_mois = None
-    if len(par_mois) >= 3:
+    # au moins 3 mois différents et 5 jours de prix : pas de « meilleur mois » inventé sur 4 points
+    if len(par_mois) >= 3 and len(serie) >= 5:
         med = {m: statistics.median(x["prix"] for x in vs) for m, vs in par_mois.items()}
         meilleur_mois = min(med, key=med.get)
         c["meilleur_mois"] = meilleur_mois

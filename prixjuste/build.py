@@ -174,7 +174,7 @@ def courbe(ident, res, obs, auj, W, H, suffixe):
             if x0 < x1:
                 s.append(f'<rect x="{X(x0):.1f}" y="{mt}" width="{X(x1) - X(x0):.1f}" height="{H - mt - mb}" '
                          f'fill="url(#{hid})" class="fenetre"/>')
-                if a > auj or (a <= auj <= b):
+                if (a > auj or (a <= auj <= b)) and abs(X(x0) - X(auj)) > 64 and abs(X(x1) - X(auj)) > 64:
                     if X(x0) + 60 > W:
                         s.append(f'<text x="{X(x1):.1f}" y="{mt - 8}" text-anchor="end" class="t-fen">fenêtre</text>')
                     else:
@@ -447,8 +447,10 @@ def bloc_marchands(art, obs, journal):
                 statut = "bloqué — " + j["detail"].replace(" (ou le site bloque les robots)", "")
         else:
             statut, classe = "pas encore lu", "vide"
-        detail = " · ".join(x for x in (lien.get("coloris"), lien.get("taille") and f"taille {lien['taille']}")
-                            if x and x.strip() != "?")
+        taille = lien.get("taille")
+        if taille and taille.replace(".", ",") in (lien.get("coloris") or "").replace(".", ","):
+            taille = None  # déjà dit dans le coloris (« Jaune · 39,5 »)
+        detail = " · ".join(x for x in (lien.get("coloris"), taille and f"taille {taille}") if x and x.strip() != "?")
         L.append(ligne(lien.get("marchand", "?"), lien["url"], detail, statut, classe, dernier_prix.get(k)))
     manuels = {}
     for o in obs:
@@ -547,7 +549,7 @@ def ajouter(quand):
              '<label><input type="radio" name="urgence" value="bientot"><span>bientôt<small>45 jours</small></span></label>'
              '<label><input type="radio" name="urgence" value="pas_urgent" checked><span>pas urgent<small>1 an</small></span></label>'
              '</fieldset>',
-             '<div class="grille2"><label>Avant le <i>si date précise</i><input name="avant" type="date"></label>'
+             '<div class="grille2"><label>Avant le<input name="avant" type="date"></label>'
              '<label>Budget max <i>€</i><input name="budget" inputmode="decimal" placeholder="250"></label></div>',
              '<label>Liens produit <i>si tu en as, un par ligne</i>'
              '<textarea name="liens" rows="3" placeholder="https://…"></textarea></label>',

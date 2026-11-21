@@ -402,6 +402,7 @@ h1 label { font: inherit; color: inherit; letter-spacing: inherit; }
 
 /* ------------------------------------------------------------- pied */
 
+main { padding-bottom: 36px; }
 .pied { padding-top: 14px; font-size: 11px; color: var(--encre-2); display: grid; gap: 8px; max-width: 70ch; }
 
 /* ------------------------------------------------------------- écrans larges */

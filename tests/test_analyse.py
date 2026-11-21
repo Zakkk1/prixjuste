@@ -165,3 +165,9 @@ def test_prochaine_fenetre():
     assert analyse.prochaine_fenetre(1, 2, AUJ) == (dt.date(2027, 1, 1), dt.date(2027, 2, 28))
     assert analyse.prochaine_fenetre(11, 1, AUJ) == (AUJ, dt.date(2027, 1, 31))
     assert analyse.prochaine_fenetre(12, 12, AUJ) == (dt.date(2026, 12, 1), dt.date(2026, 12, 31))
+
+
+def test_pas_de_fenetre_sur_4_jours():
+    obs = [o("2026-01-10", 150), o("2026-03-10", 200), o("2026-06-10", 210), o("2026-11-20", 220)]
+    res = analyse.analyser(ART, obs, AUJ)
+    assert "fenetre" not in res["chiffres"] and res["verdict"][0] == "donnees"
