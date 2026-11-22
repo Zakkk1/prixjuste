@@ -378,6 +378,12 @@ def origine_historique(obs, auj):
                 and 0 <= (auj - dt.date.fromisoformat(o["ts"][:10])).days <= 365
                 and (debut is None or o["ts"][:10] < debut)}
     txt = f"Relevé chaque matin depuis le {date_fr(debut)}" if debut else "Pas encore de relevé direct"
+    hist = [o for o in obs if o.get("source") == "historique"]
+    if hist:
+        sources = sorted({o.get("marchand", "").replace(" (historique)", "") for o in hist})
+        derniere = max(o["ts"][:10] for o in obs if o.get("source") in ("historique", "navigateur"))
+        txt += (f" ; {len(hist)} prix d'historique lus sur {', '.join(sources)} lors de l'enquête du "
+                f"{date_fr(derniere)}")
     if archives:
         txt += (f" ; avant, {len(archives)} prix retrouvé{'s' if len(archives) > 1 else ''} dans les archives du web"
                 " (elles gardent peu de copies des pages produit)")

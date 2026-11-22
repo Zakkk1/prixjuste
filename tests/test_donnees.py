@@ -35,7 +35,8 @@ def test_donnees_migrees_de_la_v1():
     d = Depot(DATA)
     ids = {a["id"] for a in d.articles()}
     assert {"mcmurdo", "timberland"} <= ids
-    v1 = [r for i in ("mcmurdo", "timberland") for r in d.releves(i) if r["ts"] < "2026-11-20"]
+    v1 = [r for i in ("mcmurdo", "timberland") for r in d.releves(i)
+          if r["ts"] < "2026-11-20" and r["source"] in ("direct", "archive", "manuel")]
     assert len(v1) == 35
     assert len([j for i in ("mcmurdo", "timberland") for j in d.journal(i) if j["ts"] < "2026-11-20"]) == 70
     assert sum(len(d.captures_vues(i)) for i in ("mcmurdo", "timberland")) >= 24

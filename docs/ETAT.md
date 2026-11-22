@@ -100,7 +100,10 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
 - Fiche : bloc « Enquête complète (Claude dans Chrome) » = consigne prête à copier (`prixjuste/enquete.py`) :
   courbe idealo / Le Dénicheur / Keepa, prix dans la taille, prix au Canada, puis issue `enquete` pré-remplie.
 - `ajout.yml` intègre l'issue `enquete` sans IA : points « historique » sur la courbe, prix « navigateur »,
-  prix canadiens dans « Au Québec ». Pas encore testé de bout en bout avec une vraie enquête de l'utilisateur.
+  prix canadiens dans « Au Québec ». TESTÉ de bout en bout le 23/11 (issue n°8, Timberland : 12 points d'historique
+  idealo/Keepa, 5 prix FR, 2 prix CA). Correctifs issus de ce test : un point d'historique n'est jamais le prix
+  actuel ; point aberrant (< 60 % de la médiane de l'historique) écarté avec une note ; verdict « Plus cher que
+  d'habitude ». L'étiquette `enquete` n'existait pas encore (posée à la main sur l'issue n°8) : elle existe désormais.
 
 ## Ce que l'utilisateur doit faire
 - Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
