@@ -1,10 +1,10 @@
 {
   "id": "north-face-glacial-polaire",
-  "statut": "a_identifier",
+  "statut": "a_choisir",
   "cree_le": "2026-11-22",
   "issue": 7,
   "demande": "north face glacial polaire",
-  "nom": "north face glacial polaire",
+  "nom": "The North Face Glacier, polaire homme",
   "variante": "noir · taille M",
   "categorie": "vetement_hiver",
   "urgence": "pas_urgent",
@@ -12,5 +12,97 @@
   "coloris": "noir",
   "autres_coloris_ok": false,
   "liens": [],
-  "liens_historiques": []
+  "liens_historiques": [],
+  "candidats": [
+    {
+      "nom": "The North Face Glacier, polaire zippée homme",
+      "reference": "NF0A8D0R (TNF Black, JK3)",
+      "variante": "Noir · taille M",
+      "categorie": "vetement_hiver",
+      "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1770145691/NF0A8D0RJK3-HERO/Mens-Glacier-Fleece-TNF-TNF-Black-HERO.jpg",
+      "prix": 90.0,
+      "marchand": "The North Face (officiel)",
+      "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-glacier-pour-homme-NF0A8D0R?color=JK3",
+      "liens": [
+        {
+          "marchand": "The North Face (officiel)",
+          "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-glacier-pour-homme-NF0A8D0R?color=JK3",
+          "coloris": "Noir",
+          "taille": "M",
+          "exact": true
+        },
+        {
+          "marchand": "The North Face (Belgique)",
+          "url": "https://www.thenorthface.com/fr-be/p/homme-211701/polaire-glacier-pour-homme-NF0A8D0R?color=JK3",
+          "coloris": "Noir",
+          "taille": "M",
+          "exact": true
+        }
+      ],
+      "note": "La polaire Glacier classique, zip intégral. 90 € en France et en Belgique, taille M noire en stock.",
+      "autres_coloris_ok": false
+    },
+    {
+      "nom": "The North Face Glacier, polaire col zippé homme",
+      "reference": "NF0A8D0Q (TNF Black, JK3)",
+      "variante": "Noir · taille M",
+      "categorie": "vetement_hiver",
+      "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1770145676/NF0A8D0QJK3-HERO/Mens-Glacier-14-Zip-Fleece-TNF-TNF-Black-HERO.jpg",
+      "prix": 70.0,
+      "marchand": "The North Face (officiel)",
+      "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-a-col-zippe-glacier-pour-homme-NF0A8D0Q?color=JK3",
+      "liens": [
+        {
+          "marchand": "The North Face (officiel)",
+          "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-a-col-zippe-glacier-pour-homme-NF0A8D0Q?color=JK3",
+          "coloris": "Noir",
+          "taille": "M",
+          "exact": true
+        }
+      ],
+      "note": "Même polaire avec un col zippé (à enfiler) : 20 € de moins que la version zippée.",
+      "autres_coloris_ok": false
+    },
+    {
+      "nom": "The North Face Glacier épaisse, polaire zippée homme",
+      "reference": "NF0A89JG (Asphalt Grey / TNF Black, U8M)",
+      "variante": "Gris asphalte et noir · taille M",
+      "categorie": "vetement_hiver",
+      "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1770145101/NF0A89JGU8M-HERO/Mens-Glacier-Heavyweight-Fleece-TNF-Asphalt-GreyAsphalt-GreyTNF-Black-HERO.jpg",
+      "prix": 110.0,
+      "marchand": "The North Face (officiel)",
+      "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-epaisse-zippee-glacier-pour-homme-NF0A89JG",
+      "liens": [
+        {
+          "marchand": "The North Face (officiel)",
+          "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-epaisse-zippee-glacier-pour-homme-NF0A89JG",
+          "coloris": "Gris asphalte et noir",
+          "taille": "M",
+          "exact": true
+        }
+      ],
+      "note": "Version plus chaude et plus épaisse. Pas de version tout noir : gris foncé avec empiècements noirs.",
+      "autres_coloris_ok": false
+    },
+    {
+      "nom": "The North Face 100 Glacier Full Zip (ancien modèle)",
+      "reference": "NF0A5IHQ",
+      "variante": "Taille et coloris non détaillés sur la page",
+      "categorie": "vetement_hiver",
+      "image": "https://photo.i-run.fr/the-north-face-100-glacier-full-zip-m-vetements-homme-517941-1-ftp.jpg",
+      "prix": 45.0,
+      "marchand": "i-run",
+      "url": "https://www.i-run.fr/vetement_sport_homme/Vestes-coupe-Vent_c38/The-North-Face_m125/The-North-Face-100-Glacier-Full-Zip-M_The-North-Face_fiche_111705.html",
+      "liens": [
+        {
+          "marchand": "i-run",
+          "url": "https://www.i-run.fr/vetement_sport_homme/Vestes-coupe-Vent_c38/The-North-Face_m125/The-North-Face-100-Glacier-Full-Zip-M_The-North-Face_fiche_111705.html",
+          "exact": false
+        }
+      ],
+      "note": "La moins chère (45 €), mais c'est l'ancienne génération, plus fine, et la page ne dit ni la taille ni la couleur en stock.",
+      "autres_coloris_ok": true
+    }
+  ],
+  "note_identification": "Pages vérifiées le 22/11 (robots.txt respecté) : The North Face FR/BE et i-run lisibles ; Alltricks interdit les robots ; Hardloop ne publie pas de prix lisible. Prix canadien vu pour la zippée noire : 97,50 $ CA (thenorthface.com/en-ca), non suivi pour l'instant."
 }
