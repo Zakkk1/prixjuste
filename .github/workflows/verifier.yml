@@ -12,6 +12,10 @@ on:
         description: "Une page par ligne : URL [--taille T] [--filtre F]"
         required: false
         default: ""
+      archives:
+        description: "Une page (ou un préfixe terminé par *) par ligne : URL [--contient MOT] [--taille T] [--filtre F]"
+        required: false
+        default: ""
       articles:
         description: "Ids d'articles à relever pour la première fois (séparés par des espaces)"
         required: false
@@ -58,6 +62,23 @@ jobs:
               resume.append(f"| {l.replace('|', '/')} | {fin.replace('|', '/')} |")
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
               f.write("\n".join(resume) + "\n")
+          PY
+
+      - name: Archives web (Wayback) de pages ou de préfixes
+        if: inputs.archives != ''
+        env:
+          ARCHIVES: ${{ inputs.archives }}
+        run: |
+          python - <<'PY'
+          import os, shlex, subprocess, sys
+          for l in [l.strip() for l in os.environ["ARCHIVES"].replace("\\n", "\n").splitlines() if l.strip()]:
+              args = shlex.split(l)
+              if not args or not args[0].startswith(("https://", "http://", "www.")):
+                  continue
+              print(f"\n=== {l}", flush=True)
+              r = subprocess.run([sys.executable, "-m", "prixjuste", "archives", *args],
+                                 capture_output=True, text=True, timeout=300)
+              print(r.stdout + r.stderr, flush=True)
           PY
 
       - name: Premier relevé

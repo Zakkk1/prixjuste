@@ -161,6 +161,29 @@ def cmd_verifier(a):
     return 0
 
 
+def cmd_archives(a):
+    """Ce que la Wayback Machine a gardé d'une page (ou d'un préfixe) : combien de copies, de quand, et le prix
+    lisible sur la plus récente. On lit l'archive publique, pas le site."""
+    from .sources import wayback
+    if a.url.endswith("*"):
+        for orig, ts in wayback.pages_archivees(collecte.telecharger, a.url, a.contient):
+            print(f"{ts[:8]}  {orig}")
+        return
+    n, d0, d1, ts = wayback.resume_captures(collecte.telecharger, a.url)
+    print(f"Copies archivées sur 2 ans : {n} (de {d0} à {d1})")
+    for t in reversed(ts[-6:]):
+        try:
+            r = collecte.lire_page(collecte.telecharger(wayback.url_capture(t, a.url)), a.filtre, a.taille)
+        except Exception as e:
+            print(f"  {t[:8]} illisible ({e!r:.80})")
+            continue
+        if r:
+            print(f"ARCHIVE LISIBLE : {t[:8]} {r['prix']:.2f} {r['devise']} (stock {r['en_stock']})")
+            return
+        print(f"  {t[:8]} sans prix lisible")
+    print("ARCHIVE SANS PRIX LISIBLE")
+
+
 def cmd_verdicts(depot):
     for art in _articles(depot):
         res = analyse.analyser(art, depot.releves(art["id"]))
@@ -198,6 +221,11 @@ def main(argv=None):
     prr.add_argument("--minutes", type=float, default=15)
     sp.add_parser("notifier")
     sp.add_parser("change")
+    ar = sp.add_parser("archives")
+    ar.add_argument("url", help="page exacte, ou préfixe terminé par * pour lister les pages archivées")
+    ar.add_argument("--contient", help="mot présent dans l'URL (avec un préfixe)")
+    ar.add_argument("--taille")
+    ar.add_argument("--filtre")
     ve = sp.add_parser("verifier")
     ve.add_argument("url")
     ve.add_argument("--taille")
@@ -245,6 +273,8 @@ def main(argv=None):
         pages = os.environ.get("PAGES_URL", "")
         n = notifier.notifier(depot, gh, pages, mention=os.environ.get("GITHUB_REPOSITORY_OWNER"))
         print(f"{n} notification(s).")
+    elif a.cmd == "archives":
+        cmd_archives(a)
     elif a.cmd == "verifier":
         sys.exit(cmd_verifier(a))
 
