@@ -71,6 +71,15 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
 - Mise à jour 22/11 ~13 h UTC : le cron **a bien été déclenché**, avec retard (run n°9, `schedule`, 12:53 UTC) et
   il est **vert** ; comme le relevé du jour était déjà fait, il n'a revisité aucune page (une visite par jour).
 
+## 22/11 soir (retours de l'utilisateur)
+- Champ « Qu'est-ce que tu veux acheter ? » : pistes immédiates (déjà dans la liste + idealo / Le Dénicheur /
+  Google Shopping) et délai affiché (2 min avec un lien, 3 h au plus sans lien).
+- Courbe : trous marqués « aucun prix connu » + origine de l'historique. Prévision : un mois exige 2 jours de prix
+  (le « ~176 € en janvier » des Timberland reposait sur 1 prix suédois ; McMurdo passe de ATTENDS à SURVEILLE).
+- Demande n°7 (polaire TNF Glacier, M, noir) : 4 propositions publiées, issue fermée ; l'utilisateur choisit.
+- En attente de l'utilisateur : ce qu'il veut dire par « comparatif avec le Canada » (prix TNF Canada vu :
+  97,50 $ CA pour la Glacier zippée noire). Ne rien construire avant sa réponse.
+
 ## Ce que l'utilisateur doit faire
 - Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
 
