@@ -89,7 +89,8 @@ def cmd_issue(depot, a):
         art = depot.article(enq["article"])
         nh, np_, nc = enquete.enregistrer(depot, art, enq)
         texte = (f"Enquête enregistrée : {nh} point(s) d'historique, {np_} prix du jour, {nc} prix au Canada."
-                 + (f"\n\n> {enq['note']}" if enq.get("note") else "") + "\n\n"
+                 + (f"\n\n> {enq['note']}" if enq.get("note") else "")
+                 + (f"\n\nSites consultés : {enq['sources']}" if enq.get("sources") else "") + "\n\n"
                  + ajout.compte_rendu(art, depot.releves(art["id"]), depot.journal(art["id"])))
         _sortie_github(mode="enquete", id=art["id"], message=texte)
         return

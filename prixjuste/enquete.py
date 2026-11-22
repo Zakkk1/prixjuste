@@ -29,7 +29,8 @@ def _oui(v):
 
 def lire(corps, articles):
     """Corps d'issue -> {article, historique:[(date, prix, source)], prix:[...], canada:[...], note} ou ValueError."""
-    res = {"article": None, "historique": [], "prix": [], "canada": [], "note": None}
+    res = {"article": None, "historique": [], "historique_ca": [], "prix": [], "canada": [], "note": None,
+           "sources": None}
     for ligne in (corps or "").replace("\r", "").split("\n"):
         m = re.match(r"^\s*(?:[-*]\s*)?([A-Za-zÀ-ÿ ]{4,20}?)\s*[:：]\s*(.+)$", ligne)
         if not m:
@@ -38,10 +39,11 @@ def lire(corps, articles):
         champs = [c.strip() for c in val.split("|")]
         if cle == "article":
             res["article"] = val
-        elif cle == "historique" and len(champs) >= 2:
+        elif cle in ("historique", "historique canada") and len(champs) >= 2:
             d, p = _date_iso(champs[0]), _nombre(champs[1])
             if d and p:
-                res["historique"].append({"date": d, "prix": p, "source": champs[2] if len(champs) > 2 else "comparateur"})
+                h = {"date": d, "prix": p, "source": champs[2] if len(champs) > 2 else "comparateur"}
+                res["historique" if cle == "historique" else "historique_ca"].append(h)
         elif cle in ("prix", "canada") and len(champs) >= 2:
             p = _nombre(champs[0])
             if not p:
@@ -53,10 +55,12 @@ def lire(corps, articles):
                              "barre": _nombre(autres[1]) if len(autres) > 1 else None})
         elif cle == "note":
             res["note"] = val[:300]
+        elif cle == "sources":
+            res["sources"] = val[:400]
     ids = {a["id"] for a in articles}
     if res["article"] not in ids:
         raise ValueError(f"Article inconnu : « {res['article']} ». Articles : {', '.join(sorted(ids))}.")
-    if not (res["historique"] or res["prix"] or res["canada"]):
+    if not (res["historique"] or res["historique_ca"] or res["prix"] or res["canada"]):
         raise ValueError("Aucune ligne « Historique », « Prix » ou « Canada » lisible dans l'enquête.")
     return res
 
@@ -65,12 +69,13 @@ def enregistrer(depot, art, enq, ts=None):
     """Ajoute les relevés de l'enquête. Renvoie (n_historique, n_prix, n_canada) réellement ajoutés."""
     ts = ts or maintenant()
     n = [0, 0, 0]
-    for h in enq["historique"]:
-        src = h["source"]
-        ligne = {"ts": h["date"] + "T12:00:00", "lien": f"historique:{_cle(src)}", "marchand": f"{src} (historique)",
-                 "exact": True, "source": "historique", "prix": h["prix"], "devise": "EUR", "en_stock": None,
-                 "note": "plus bas tous vendeurs lu sur la courbe du comparateur"}
-        n[0] += depot.ajouter_releve(art["id"], ligne)
+    for cle_h, extra in (("historique", {}), ("historique_ca", {"pays": "CA", "devise": "CAD"})):
+        for h in enq.get(cle_h, []):
+            src = h["source"]
+            ligne = {"ts": h["date"] + "T12:00:00", "lien": f"historique:{_cle(src)}", "marchand": f"{src} (historique)",
+                     "exact": True, "source": "historique", "prix": h["prix"], "devise": "EUR", "en_stock": None,
+                     "note": "prix lu dans l'historique d'un comparateur ou d'un site de bons plans", **extra}
+            n[0] += depot.ajouter_releve(art["id"], ligne)
     for cle, i, extra in (("prix", 1, {}), ("canada", 2, {"pays": "CA", "devise": "CAD"})):
         for p in enq[cle]:
             ligne = {"ts": ts, "lien": p["url"] or f"navigateur:{_cle(p['marchand'])}", "marchand": p["marchand"],
@@ -113,8 +118,11 @@ def consigne(art, depot_github):
             connus.append(l)
     fr = "\n".join(f"   - {l.get('marchand')} : {l['url']}" for l in connus if not l.get("pays"))
     ca = "\n".join(f"   - {l.get('marchand')} : {l['url']}" for l in connus if l.get("pays") == "CA")
-    modele = ("Article : {id}\nHistorique : AAAA-MM-JJ | prix | idealo\nPrix : prix | boutique | adresse | oui ou non "
-              "| prix barré si affiché\nCanada : prix en $ CA | boutique | adresse | oui ou non\nNote : une phrase"
+    modele = ("Article : {id}\nHistorique : AAAA-MM-JJ | prix en € | source (idealo, Dealabs…)\n"
+              "Prix : prix | boutique | adresse | oui ou non | prix barré si affiché\n"
+              "Historique Canada : AAAA-MM-JJ | prix en $ CA | source (RedFlagDeals…)\n"
+              "Canada : prix en $ CA | boutique | adresse | oui ou non\n"
+              "Sources : tous les sites consultés, séparés par des virgules\nNote : une phrase"
               ).format(id=art["id"])
     issue = (f"https://github.com/{depot_github}/issues/new?labels=enquete&title="
              + urllib.parse.quote(f"Enquête : {nom}") + "&body=" + urllib.parse.quote(modele))
@@ -126,12 +134,12 @@ def consigne(art, depot_github):
     ca_txt = ca or "   (aucune)"
     return f"""Enquête de prix PrixJuste — {nom}{ref_txt}, {t_txt}, coloris {col_txt}.
 
-Tu navigues dans mon Chrome, pour moi, une seule fois. Règles : une visite par site ; si un site affiche un captcha ou refuse l'accès, passe au suivant sans contourner ; n'achète rien, ne te connecte à rien.
+Tu navigues dans mon Chrome, pour moi, une seule fois. Les sites cités ne sont que des EXEMPLES : cherche toi-même (Google, Google Shopping) tous ceux qui ont ce produit. Règles : une visite par page ; si un site affiche un captcha ou refuse l'accès, passe au suivant sans contourner ; n'achète rien, ne te connecte à rien.
 
-1. HISTORIQUE (le plus important) : sur idealo.fr, cherche ce modèle exact, ouvre sa fiche, puis sa courbe « historique des prix » sur 1 an. Relève 6 à 12 points datés : le plus bas, le plus haut, le Black Friday, les soldes de janvier et d'été, et aujourd'hui. Si idealo ne l'a pas, fais-le sur ledenicheur.fr. Si le produit est vendu sur Amazon, regarde aussi sa courbe sur keepa.com.
-2. PRIX DU JOUR dans ma taille : 4 à 6 boutiques françaises ou européennes (prix, en stock ou non dans ma taille, prix barré s'il y en a un). Celles que je suis déjà :
+1. HISTORIQUE EN FRANCE (le plus important) : trouve les comparateurs et sites qui gardent l'historique de ce modèle exact — par exemple idealo, Le Dénicheur, Google Shopping, Kelkoo, et les bons plans datés de Dealabs ; pour Amazon.fr, Keepa ou camelcamelcamel ; cherche aussi « {nom} historique prix ». Relève 6 à 15 points datés sur 1 à 2 ans : le plus bas, le plus haut, Black Friday, soldes de janvier et d'été, aujourd'hui (en notant la source de chaque point).
+2. PRIX DU JOUR dans ma taille, en France et en Europe : pars des comparateurs pour lister TOUTES les boutiques qui l'ont, puis garde les 6 moins chères en stock dans ma taille (prix, en stock ou non, prix barré s'il y en a un). Déjà suivies (à revérifier) :
 {fr_txt}
-3. CANADA (je vais à Québec) : 1 à 3 boutiques canadiennes (site officiel .ca, Sporting Life, Sports Experts, JD Sports Canada…) : prix en $ CA tel qu'affiché (hors taxes), en stock ou non dans ma taille{us_txt}. Déjà suivies :
+3. CANADA (je vais à Québec, achat sur place ou en ligne) : même démarche avec les équivalents canadiens — par exemple Google Shopping Canada, comparateurs canadiens (Shopbot, PriceCanada…), bons plans datés (RedFlagDeals), circulaires des magasins (Flipp), Keepa ou camelcamelcamel pour Amazon.ca — et toutes les boutiques (site officiel .ca, grands magasins, chaînes de sport et de chaussures, magasins de la ville de Québec). Relève l'historique s'il existe, et les prix du jour en $ CA tels qu'affichés (hors taxes), en stock ou non dans ma taille{us_txt}. Déjà suivies :
 {ca_txt}
 4. ENREGISTRE : ouvre cette adresse, remplace le texte par tes résultats (une ligne par information, en gardant exactement ce format), puis clique sur « Create » :
 {issue}

@@ -39,3 +39,21 @@ def test_consigne_contient_l_essentiel():
            "categorie": "chaussures", "liens": [{"marchand": "JD Sports (Canada)", "url": "https://jdsports.ca/x", "pays": "CA"}]}
     t = enquete.consigne(art, "Zakkk1/prixjuste")
     assert "US 7" in t and "idealo" in t and "captcha" in t and "labels=enquete" in t and "jdsports.ca/x" in t
+
+
+def test_historique_canada_et_sources(depot):
+    corps = CORPS + "\nHistorique Canada : 2025-11-28 | 199 | RedFlagDeals\nSources : idealo, Dealabs, Shopbot, Flipp"
+    art = {"id": "timberland", "nom": "T", "categorie": "chaussures", "urgence": "pas_urgent", "liens": []}
+    depot.ecrire_article(art)
+    e = enquete.lire(corps, [art])
+    assert e["historique_ca"][0]["prix"] == 199.0 and e["sources"].startswith("idealo")
+    assert enquete.enregistrer(depot, art, e, ts="2026-11-22T20:00:00") == (3, 2, 1)
+    ca = [o for o in depot.releves("timberland") if o.get("pays") == "CA" and o["source"] == "historique"]
+    assert ca and ca[0]["prix"] == 199.0
+    res = analyse.analyser(art, analyse.filtrer_obs(art, depot.releves("timberland")), dt.date(2026, 11, 22))
+    assert res["chiffres"]["min_12m"] == 160.0  # le prix canadien ne se mêle pas à la courbe française
+
+
+def test_consigne_ouverte():
+    t = enquete.consigne({"id": "x", "nom": "X", "categorie": "autre", "liens": []}, "a/b")
+    assert "EXEMPLES" in t and "Dealabs" in t and "RedFlagDeals" in t and "Flipp" in t and "Sources :" in t
