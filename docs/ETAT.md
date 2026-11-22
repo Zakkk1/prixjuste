@@ -68,6 +68,8 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
   À la place : déploiement Pages vert, et le même site reconstruit en local (Python 3.12) depuis `main` affiche
   « 22/11/2026 » et les 5 photos de l'accueil, dont les deux CAT.
 - Rien à corriger dans le code.
+- Mise à jour 22/11 ~13 h UTC : le cron **a bien été déclenché**, avec retard (run n°9, `schedule`, 12:53 UTC) et
+  il est **vert** ; comme le relevé du jour était déjà fait, il n'a revisité aucune page (une visite par jour).
 
 ## Ce que l'utilisateur doit faire
 - Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
