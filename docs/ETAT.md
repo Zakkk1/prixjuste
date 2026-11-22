@@ -77,8 +77,12 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
 - Courbe : trous marqués « aucun prix connu » + origine de l'historique. Prévision : un mois exige 2 jours de prix
   (le « ~176 € en janvier » des Timberland reposait sur 1 prix suédois ; McMurdo passe de ATTENDS à SURVEILLE).
 - Demande n°7 (polaire TNF Glacier, M, noir) : 4 propositions publiées, issue fermée ; l'utilisateur choisit.
-- En attente de l'utilisateur : ce qu'il veut dire par « comparatif avec le Canada » (prix TNF Canada vu :
-  97,50 $ CA pour la Glacier zippée noire). Ne rien construire avant sa réponse.
+- Canada (réponse de l'utilisateur : option 1, voyage à Québec) : FAIT. Liens `pays: CA` (jamais dans le verdict),
+  taux BCE quotidien (`data/change.json`), bloc « Au Québec » taxes TPS+TVQ comprises, franchise 430 €.
+- Combler la courbe : idealo interdit par robots.txt (recherche et API du graphique) ; Le Dénicheur renvoie une
+  page anti-robot ; Keepa = Amazon seulement + clé API payante ; camelcamelcamel = Amazon seulement. Aucun
+  contournement. Levier honnête : plus de marchands lisibles par article (plus de points chaque jour + leurs
+  archives). Zalando « wheat » = probablement le modèle femme (10361, tailles 35-42) : non ajouté.
 
 ## Ce que l'utilisateur doit faire
 - Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
