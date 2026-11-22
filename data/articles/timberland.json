@@ -47,6 +47,15 @@
       "coloris": "Jaune (Wheat) · pointure non détaillée",
       "exact": true,
       "url": "https://tascon.es/products/timberland-botas-hombre-6-inch-premium-boot-wheat-amarillo"
+    },
+    {
+      "marchand": "JD Sports (Canada)",
+      "url": "https://jdsports.ca/products/timberland-6-boot-wheat",
+      "coloris": "Jaune (Wheat) · US 7 = 40",
+      "filtre": "re:\\|7\\|",
+      "exact": true,
+      "pays": "CA",
+      "devise": "CAD"
     }
   ],
   "liens_historiques": [

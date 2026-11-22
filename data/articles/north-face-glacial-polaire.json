@@ -37,9 +37,18 @@
           "coloris": "Noir",
           "taille": "M",
           "exact": true
+        },
+        {
+          "marchand": "The North Face (Canada)",
+          "url": "https://www.thenorthface.com/fr-ca/p/pour-hommes/molletons-pour-hommes/molletons-a-glissiere-pleine-longueur-pour-hommes-829791/polaire-glacier-pour-hommes-NF0A8D0R?color=JK3",
+          "coloris": "Noir",
+          "taille": "M",
+          "exact": true,
+          "pays": "CA",
+          "devise": "CAD"
         }
       ],
-      "note": "La polaire Glacier classique, zip intégral. 90 € en France et en Belgique, taille M noire en stock.",
+      "note": "La polaire Glacier classique, zip intégral. 90 € en France et en Belgique, taille M noire en stock. Au Québec : 97,50 $ CA hors taxes chez The North Face Canada.",
       "autres_coloris_ok": false
     },
     {

@@ -333,3 +333,11 @@ main { padding-bottom: 32px; }
 .trou { stroke: currentColor; stroke-width: 1; stroke-dasharray: 2 5; opacity: .35; }
 .t-trou { font-size: var(--fs, 12px); fill: currentColor; opacity: .55; }
 .origine { margin-top: 8px; font-size: 13px; opacity: .75; }
+
+/* le même article à l'étranger (achat sur place) */
+.etranger .etr-prix { font-size: 22px; margin: 4px 0 2px; }
+.etranger .etr-verdict { font-weight: 700; margin: 0 0 8px; }
+.etranger .etr-verdict.moins { color: #1F6B45; }
+.etranger .etr-verdict.plus { color: #B3261E; }
+.etranger .etr-detail { font-size: 14px; opacity: .85; }
+.etr-ligne { display: block; }

@@ -123,9 +123,11 @@ def a_relever(article, auj):
 
 
 def filtrer_obs(article, obs):
-    """Relevés pris en compte pour le verdict : seulement le coloris exact si l'article l'exige."""
+    """Relevés pris en compte pour le verdict : en France/UE seulement (un prix étranger, dans une autre
+    devise et hors taxes, se compare à part), et seulement le coloris exact si l'article l'exige."""
+    obs = [o for o in obs if not o.get("pays")]
     if article.get("autres_coloris_ok", True):
-        return list(obs)
+        return obs
     return [o for o in obs if o.get("exact", True)]
 
 

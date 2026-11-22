@@ -177,9 +177,10 @@ def hors_ue(url):
 # ---------------------------------------------------------------- orchestration
 
 def _ligne(art, lien, source, ts, r, prix_barre=None, note=None):
+    # un lien étranger déclare son pays et sa devise : on s'y fie plutôt qu'au JSON-LD (TNF y écrit « USD » à tort)
     return {"ts": ts, "lien": cle(lien), "marchand": lien.get("marchand", "?"),
-            "exact": bool(lien.get("exact", True)), "source": source, "prix": r["prix"],
-            "devise": r.get("devise", "EUR"), "livraison": r.get("livraison"), "en_stock": r.get("en_stock"),
+            "exact": bool(lien.get("exact", True)), "source": source, "pays": lien.get("pays"), "prix": r["prix"],
+            "devise": lien.get("devise") or ("EUR" if not lien.get("pays") else r.get("devise", "EUR")), "livraison": r.get("livraison"), "en_stock": r.get("en_stock"),
             "n_offres": r.get("n_offres"),
             "n_dispo": r.get("n_dispo"), "prix_barre": prix_barre, "note": note}
 

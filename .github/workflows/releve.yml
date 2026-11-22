@@ -45,6 +45,9 @@ jobs:
       - name: Relevé direct (1 visite par page et par jour, robots.txt respecté)
         run: python -m prixjuste collecter
 
+      - name: Taux de change du jour (BCE), pour les prix relevés à l'étranger
+        run: python -m prixjuste change || echo "::warning::taux BCE indisponible aujourd'hui (on garde le précédent)"
+
       - name: Publier les relevés du jour
         run: .github/scripts/publier-donnees.sh "Relevé du $(TZ=Europe/Paris date +%d/%m/%Y)"
 

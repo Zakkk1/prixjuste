@@ -40,6 +40,20 @@
       "coloris": "?",
       "exact": true,
       "url": "https://www.viladomat.com/en/men-s-mountainstyle-jackets/85268-799122-m-mcmurdo-parka.html"
+    },
+    {
+      "marchand": "The North Face (Canada)",
+      "url": "https://www.thenorthface.com/fr-ca/p/pour-hommes/vestes-et-gilets-pour-hommes/parka-pour-hommes-300775/parka-mcmurdo-pour-hommes-NF0A5GJF",
+      "exact": true,
+      "pays": "CA",
+      "devise": "CAD"
+    },
+    {
+      "marchand": "Sporting Life (Canada)",
+      "url": "https://www.sportinglife.ca/en-CA/men/clothing/coats-jackets/parkas/mens-mcmurdo-parka/25524638.html",
+      "exact": true,
+      "pays": "CA",
+      "devise": "CAD"
     }
   ],
   "liens_historiques": [

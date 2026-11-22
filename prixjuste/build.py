@@ -12,7 +12,7 @@ import shutil
 import urllib.parse
 from pathlib import Path
 
-from . import VERSION, agenda, ajout, analyse, plan
+from . import VERSION, agenda, ajout, analyse, etranger, plan
 from .collecte import cle, hors_ue
 from .donnees import Depot, maintenant
 
@@ -459,7 +459,7 @@ def sous_tampon_code(code, res):
 
 # ---------------------------------------------------------------- le comptoir
 
-def ligne_comptoir(art, res, obs, auj):
+def ligne_comptoir(art, res, obs, auj, comp=None):
     code = etat_article(art, res)
     href = f'a/{e(art["id"])}.html'
     variante = art.get("variante") or art.get("reference") or ""
@@ -477,6 +477,8 @@ def ligne_comptoir(art, res, obs, auj):
                 if act else '<span class="prix-ligne nul">—</span><span class="chez">aucun prix lisible ces 3 jours</span>')
         phrase = phrase_achat(res) if code == "paye" else res["verdict"][2]
         jg = bloc_jauge(jauge(res, auj), compact=True)
+        if comp:
+            prix += f'<span class="chez etr-ligne">{e(comp["nom_pays"])} ≈ {euros(comp["eur_ttc"])} taxes comprises</span>'
     return (f'<li><a class="etiquette" href="{href}">'
             f'{vignette(art)}'
             f'<span class="ligne-corps"><span class="nom">{e(art["nom"])}</span>'
@@ -606,6 +608,8 @@ def bloc_marchands(art, obs, journal):
                 f'<span class="m-det">{e(detail)}</span><span class="m-statut s-{classe}">{e(statut)}</span></li>')
 
     for lien in art.get("liens", []):
+        if lien.get("pays"):
+            continue  # comparé à part (bloc « Au Québec »)
         k = cle(lien)
         j = dernier_essai.get(k)
         if j:
@@ -651,7 +655,30 @@ def form_prix(art):
             '<button type="submit">Envoyer ce prix →</button></form></details>')
 
 
-def fiche(art, res, obs, journal, quand, auj, voisins=None):
+def bloc_etranger(comp):
+    """Le même article à l'étranger, converti en euros, taxes locales comprises (un achat sur place)."""
+    if not comp:
+        return ""
+    if comp["ecart"] is None:
+        verdict = ""
+    elif comp["ecart"] < -1:
+        verdict = f'<p class="etr-verdict moins">{euros(-comp["ecart"])} de moins qu’en France</p>'
+    elif comp["ecart"] > 1:
+        verdict = f'<p class="etr-verdict plus">{euros(comp["ecart"])} de plus qu’en France</p>'
+    else:
+        verdict = '<p class="etr-verdict">Même prix qu’en France</p>'
+    local = f'{comp["prix_local"]:,.2f}'.replace(",", "\u202f").replace(".", ",") + "\u00a0" + comp["symbole"]
+    rappels = "".join(f"<li>{e(r)}</li>" for r in comp["rappels"])
+    return (f'<section class="carte etranger"><h2 class="rubrique">{e(comp["nom_pays"][:1].upper() + comp["nom_pays"][1:])}</h2>'
+            f'<p class="etr-prix"><b>≈ {euros(comp["eur_ttc"])}</b> taxes comprises</p>{verdict}'
+            f'<p class="etr-detail">{e(local)} chez {e(comp["marchand"])} (relevé le {date_fr(comp["le"])}), '
+            f'soit {euros(comp["eur_ht"])} hors taxes + {e(comp["taxes_txt"])}. Change BCE du '
+            f'{date_fr(comp["taux_date"])} : 1 € = {str(comp["taux"]).replace(".", ",")} {e(comp["symbole"])}'
+            ' ; ta banque ajoute souvent 1 à 3 % de frais.</p>'
+            f'<ul class="notes">{rappels}</ul></section>')
+
+
+def fiche(art, res, obs, journal, quand, auj, voisins=None, comp=None):
     code = etat_article(art, res)
     act = res.get("actuel")
     variante = art.get("variante") or art.get("reference") or ""
@@ -712,6 +739,7 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None):
         corps.append('<section class="carte"><h2 class="rubrique">Contrôle des promos</h2>' + promos + '</section>')
     corps.append('<section class="carte"><h2 class="rubrique">Où l’acheter</h2>'
                  + bloc_marchands(art, obs, journal) + '</section>')
+    corps.append(bloc_etranger(comp))
     corps.append('<div class="actions">' + form_prix(art) + ("" if art.get("achat") else form_achat(art, act))
                  + carte(art, res, code, auj) + '</div>' + lien_equivalent(art))
     corps += ["</main>", pied("../")]
@@ -890,15 +918,18 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
 
     lignes, exports, pour_agenda = [], [], []
     voisins = {a["id"]: a for a in depot.articles()}
+    change = etranger.charger_change(depot)
     for art in voisins.values():
-        obs = analyse.filtrer_obs(art, depot.releves(art["id"]))
+        tous = depot.releves(art["id"])
+        obs = analyse.filtrer_obs(art, tous)
         res = analyse.analyser(art, obs, auj)
+        comp = etranger.comparaison(tous, (res.get("actuel") or {}).get("prix"), change, auj)
         pour_agenda.append((art, res))
         code = etat_article(art, res)
         jusqu = res.get("jusqu_a") or dt.date.max
-        lignes.append(((ORDRE[code], jusqu, art["nom"].lower()), ligne_comptoir(art, res, obs, auj)))
+        lignes.append(((ORDRE[code], jusqu, art["nom"].lower()), ligne_comptoir(art, res, obs, auj, comp)))
         (sortie / "a" / f"{art['id']}.html").write_text(
-            fiche(art, res, obs, depot.journal(art["id"]), quand, auj, voisins), encoding="utf-8")
+            fiche(art, res, obs, depot.journal(art["id"]), quand, auj, voisins, comp), encoding="utf-8")
         exports.append(export(art, res, code))
     lignes.sort(key=lambda x: x[0])
     proprio, nom_depot = DEPOT_GITHUB.split("/")

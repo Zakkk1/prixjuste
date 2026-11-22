@@ -197,6 +197,7 @@ def main(argv=None):
     prr.add_argument("--max", type=int, default=40)
     prr.add_argument("--minutes", type=float, default=15)
     sp.add_parser("notifier")
+    sp.add_parser("change")
     ve = sp.add_parser("verifier")
     ve.add_argument("url")
     ve.add_argument("--taille")
@@ -232,6 +233,10 @@ def main(argv=None):
         cmd_issue(depot, a)
     elif a.cmd == "premier-releve":
         cmd_premier_releve(depot, a.id, a.max, a.minutes)
+    elif a.cmd == "change":
+        from . import etranger
+        d, t = etranger.mettre_a_jour(depot, collecte.telecharger)
+        print(f"Taux BCE du {d} : 1 € = {t.get('CAD')} CAD")
     elif a.cmd == "notifier":
         from . import notifier
         gh = notifier.depuis_environnement()

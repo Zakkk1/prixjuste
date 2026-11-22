@@ -15,7 +15,7 @@ from pathlib import Path
 RACINE = Path(os.environ.get("PRIXJUSTE_DATA") or Path(__file__).resolve().parent.parent / "data")
 
 # ordre des champs d'un relevé (lisible en diff)
-CHAMPS_RELEVE = ["ts", "lien", "marchand", "exact", "source", "prix", "devise", "livraison", "en_stock",
+CHAMPS_RELEVE = ["ts", "lien", "marchand", "exact", "source", "pays", "prix", "devise", "livraison", "en_stock",
                  "n_offres", "n_dispo", "prix_barre", "note"]
 
 
