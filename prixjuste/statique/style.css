@@ -341,3 +341,5 @@ main { padding-bottom: 32px; }
 .etranger .etr-verdict.plus { color: #B3261E; }
 .etranger .etr-detail { font-size: 14px; opacity: .85; }
 .etr-ligne { display: block; }
+.ailleurs { margin-top: 8px; font-size: 13px; opacity: .85; }
+.ailleurs a { font-weight: 600; }

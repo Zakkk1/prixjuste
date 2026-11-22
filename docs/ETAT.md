@@ -84,6 +84,16 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
   contournement. Levier honnête : plus de marchands lisibles par article (plus de points chaque jour + leurs
   archives). Zalando « wheat » = probablement le modèle femme (10361, tailles 35-42) : non ajouté.
 
+## Recherche de marchands supplémentaires (22/11, 23 h)
+- 10 candidats testés (Intersport, Citadium, Trekkinn, Alpinstore, Decathlon, Patagonia EU, 43einhalb, Zalando enfant,
+  La Redoute, Spartoo) : AUCUN lisible honnêtement (robots.txt, 403, anti-robot ou pas de prix JSON-LD). Archives
+  Wayback de ces pages : 0 copie sur 2 ans sauf Zalando (3). La recherche par préfixe dans les archives d'idealo
+  expire (trop gros) ; il faudrait l'URL exacte d'une fiche idealo pour lire ses copies archivées.
+- Ajouté : sur chaque fiche, liens « Historique plus ancien : idealo · Le Dénicheur · Keepa » + « J'ai vu un prix »
+  avec date pour recopier un prix lu sur la courbe d'un comparateur (marqué « saisie »).
+- Pistes légales restantes, à décider par l'utilisateur : flux d'affiliation (Awin, Effiliation : inscription éditeur,
+  catalogues autorisés de Zalando, La Redoute, Decathlon…) ; Keepa API payante (Amazon seulement).
+
 ## Ce que l'utilisateur doit faire
 - Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
 

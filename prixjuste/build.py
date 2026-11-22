@@ -352,7 +352,21 @@ def figure_courbe(art, res, obs, auj):
     return (f'<figure class="courbe" data-points="{e(pts)}">{etroite[0]}{large[0]}'
             f'<figcaption class="origine">{e(origine_historique(obs, auj))}</figcaption>'
             '<output class="lecture" aria-live="polite">Meilleur prix de chaque jour, tous marchands confondus. '
-            'Touche un point pour le détail.</output></figure>')
+            'Touche un point pour le détail.</output></figure>' + historique_ailleurs(art))
+
+
+def historique_ailleurs(art):
+    """Les comparateurs gardent des années d'historique, mais refusent les robots : on y renvoie l'utilisateur
+    (un toucher), et un prix daté qu'il y lit rejoint la courbe via « J'ai vu un prix »."""
+    import re
+    import urllib.parse
+    q = urllib.parse.quote(art.get("recherche") or re.sub(r"\s*\(.*?\)", "", art["nom"]).strip())
+    liens = [(f"https://www.idealo.fr/prechcat.html?q={q}", "idealo"),
+             (f"https://ledenicheur.fr/search?search={q}", "Le Dénicheur"),
+             (f"https://keepa.com/#!search/4-{q}", "Keepa (Amazon)")]
+    l = " · ".join(f'<a href="{e(u)}" target="_blank" rel="noopener">{t}</a>' for u, t in liens)
+    return (f'<p class="ailleurs">Historique plus ancien : {l}. Un prix daté vu là-bas ? Recopie-le avec '
+            '« J’ai vu un prix » en choisissant sa date : il rejoint la courbe, marqué « saisie ».</p>')
 
 
 def origine_historique(obs, auj):
@@ -645,7 +659,8 @@ def bloc_marchands(art, obs, journal):
 def form_prix(art):
     return (f'<details class="vu"><summary>J\'ai vu un prix</summary>'
             f'<form class="form-prix" data-article="{e(art["id"])}" data-nom="{e(art["nom"])}" data-depot="{e(DEPOT_GITHUB)}">'
-            '<p class="aide">En magasin, dans une pub, ou sur un site que l\'outil ne peut pas lire. '
+            '<p class="aide">En magasin, dans une pub, sur un site que l\'outil ne peut pas lire, ou sur la courbe '
+            'd\'un comparateur (mets alors la date du prix lu). '
             'Le bouton ouvre une demande pré-remplie sur GitHub : il reste à l\'envoyer.</p>'
             '<div class="grille2"><label>Prix vu<input name="prix" inputmode="decimal" required placeholder="199,90"></label>'
             '<label>Prix barré <i>si affiché</i><input name="barre" inputmode="decimal" placeholder="230"></label></div>'
