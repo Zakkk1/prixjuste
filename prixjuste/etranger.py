@@ -62,15 +62,17 @@ def comparaison(releves, prix_france, change, auj, jours=7):
         return None
     recents = {}
     for o in releves:
-        if not est_etranger(o) or o.get("en_stock") == 0:
+        if not est_etranger(o) or o.get("source") == "historique":
             continue
         d = dt.date.fromisoformat(o["ts"][:10])
         if (auj - d).days > jours:
             continue
         if o["lien"] not in recents or o["ts"] >= recents[o["lien"]]["ts"]:
-            recents[o["lien"]] = o
+            recents[o["lien"]] = o  # le relevé le plus récent de chaque page décide (rupture comprise)
     meilleurs = []
     for o in recents.values():
+        if o.get("en_stock") == 0:
+            continue
         p = PAYS.get(o["pays"])
         t = change["taux"].get(p["devise"]) if p else None
         if not t:

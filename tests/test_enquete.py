@@ -57,3 +57,15 @@ def test_historique_canada_et_sources(depot):
 def test_consigne_ouverte():
     t = enquete.consigne({"id": "x", "nom": "X", "categorie": "autre", "liens": []}, "a/b")
     assert "EXEMPLES" in t and "Dealabs" in t and "RedFlagDeals" in t and "Flipp" in t and "Sources :" in t
+
+
+def test_point_isole_ecarte_mais_pas_les_soldes():
+    obs = [{"ts": f"2026-{m:02d}-15T12:00:00", "source": "historique", "prix": p, "marchand": "idealo (historique)"}
+           for m, p in ((1, 162), (2, 132), (3, 160), (5, 143), (6, 159), (7, 75), (9, 166), (11, 159))]
+    obs += [{"ts": "2026-11-22T08:00:00", "source": "direct", "prix": 230, "marchand": "Officiel"}] * 3
+    gardes, isoles = analyse.ecarter_isoles(obs)
+    assert [o["prix"] for o in isoles] == [75]
+    art = {"id": "x", "categorie": "autre", "urgence": "pas_urgent"}
+    res = analyse.analyser(art, obs, dt.date(2026, 11, 22))
+    assert res["chiffres"]["min_12m"] == 132 and res["actuel"]["prix"] == 230  # l'historique n'est pas une offre
+    assert any("75,00 €" in n for n in res["notes"])

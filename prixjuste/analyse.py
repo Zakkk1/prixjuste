@@ -122,6 +122,19 @@ def a_relever(article, auj):
     return pr is None or pr["en_retractation"]
 
 
+def ecarter_isoles(obs, seuil=0.6):
+    """Un point d'historique lu sur un comparateur très en dessous des autres (moins de 60 % de la médiane)
+    est presque toujours une erreur ou une seule taille bradée : on le garde dans les données, mais il ne
+    compte ni pour le plus bas, ni pour le verdict. Renvoie (relevés gardés, points écartés)."""
+    # comparé aux autres points d'historique (même nature : plus bas tous vendeurs), pas aux prix catalogue
+    prix = sorted(o["prix"] for o in obs if o.get("source") == "historique")
+    if len(prix) < 6:
+        return obs, []
+    med = prix[len(prix) // 2]
+    isoles = [o for o in obs if o.get("source") == "historique" and o["prix"] < seuil * med]
+    return [o for o in obs if o not in isoles], isoles
+
+
 def filtrer_obs(article, obs):
     """Relevés pris en compte pour le verdict : en France/UE seulement (un prix étranger, dans une autre
     devise et hors taxes, se compare à part), et seulement le coloris exact si l'article l'exige."""
@@ -154,6 +167,7 @@ def fiabilite(n):
 def analyser(article, obs, aujourdhui=None):
     auj = aujourdhui or dt.date.today()
     obs = filtrer_obs(article, obs)
+    obs, isoles = ecarter_isoles(obs)
     serie = serie_journaliere(obs)
     cat = article.get("categorie", "autre")
     repere_txt, _ = REPERES.get(cat, REPERES["autre"])
@@ -169,7 +183,9 @@ def analyser(article, obs, aujourdhui=None):
     c = res["chiffres"]
 
     # Prix actuel = meilleur relevé des 3 derniers jours (en stock ou stock inconnu)
-    recents = [o for o in obs if 0 <= (auj - _date(o["ts"])).days <= 3 and o.get("en_stock") != 0]
+    # une offre qu'on peut acheter : pas un point d'historique de comparateur (toutes tailles, tous vendeurs)
+    recents = [o for o in obs if 0 <= (auj - _date(o["ts"])).days <= 3 and o.get("en_stock") != 0
+               and o.get("source") != "historique"]
     actuel = min(recents, key=lambda o: o["prix"]) if recents else None
     res["actuel"] = actuel
     if actuel:
@@ -244,6 +260,9 @@ def analyser(article, obs, aujourdhui=None):
     _alerte(c, article.get("budget_max"))
     _bidon(res)
     del res["_obs"]
+    for o in isoles:
+        res["notes"].append(f"Prix isolé ignoré : {o['prix']:.2f}".replace(".", ",") + f" € le {_date(o['ts']):%d/%m/%Y} ({o.get('marchand')}), "
+                            "très en dessous de tous les autres (sans doute une erreur ou une seule taille).")
     pr = protection(article, auj)
     res["protection"] = pr
     if pr and pr["en_retractation"] and actuel and actuel["prix"] <= pr["prix"] - max(5, pr["prix"] * 0.05):
@@ -341,6 +360,10 @@ def _verdict(res, article, c, actuel, prix_hist, meilleur_mois, tendance, limite
                 c["alerte_limite"] = round(m)
             res["verdict"] = ("surveiller", "Le meilleur moment tombe après ta date limite",
                               txt + " Mets une alerte et achète au premier bon prix.")
+        elif p > c["p25"] * 1.10:
+            res["verdict"] = ("surveiller", "Plus cher que d'habitude",
+                              f"Sur 12 mois, il a souvent été à {c['p25']:.0f} € ou moins (plus bas : "
+                              f"{c['min_12m']:.0f} € le {c['min_12m_date']:%d/%m/%Y}). Achète plutôt sous {c['p25']:.0f} €.")
         else:
             res["verdict"] = ("surveiller", "Prix correct, sans plus",
                               f"Peu d'écart avec le meilleur mois ({c['meilleur_mois_prix']:.0f} €).")
