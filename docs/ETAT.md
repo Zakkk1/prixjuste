@@ -52,6 +52,23 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
   CAT Colorado 2.0 WP Pyramid (151,16 €, Butyjana) ; premier relevé publié, issue fermée avec le détail.
 - Facultatif : le secret `CLAUDE_CODE_OAUTH_TOKEN` (LISEZMOI) rend l'identification immédiate via `claude.yml`.
 
+## Contrôle du 22/11 (routine, ~06:35 UTC)
+- Relevé programmé (cron 04:41 UTC) **non déclenché par GitHub** : à 06:30 UTC, aucun run `schedule` dans l'historique
+  de `releve.yml` (8 runs, tous `workflow_dispatch`). Retard/omission côté GitHub, pas une erreur du code. Relevé lancé
+  à la main : run n°8 (44994069910) **vert**, jobs `releve` et `deployer` (deploy-pages) en succès à 06:32 UTC.
+  S'il part en retard, le cron ne revisitera pas les pages (« déjà lu aujourd'hui »).
+- Commits du run : `0208558` « Relevé du 22/11/2026 », `5a76f4f` « Archives et notifications du 22/11/2026 ».
+- Photos : `equivalent-moins-cher-timberland-6-inch` → photo sportano.com, `…-2` → photo butyjana, lues sur la page
+  suivie pendant le relevé direct (aucune visite en plus).
+- Relevé direct du 22/11 pour chaque article (journal `data/journal/*.jsonl`) : Timberland 6/6 ok ; CAT Hiker 2/2 ok
+  (90,99 €) ; CAT WP 2/2 ok (139 € Natural Shoes, 151,16 € Butyjana) ; McMurdo 2 ok (500 €, 373,90 €) + 2 Snowleader
+  « robots.txt interdit » + Weekendbee « captcha » ; Patagonia 3 ok (149,95 € au plus bas) + End « captcha ». Aucun
+  blocage contourné.
+- Site : https://zakkk1.github.io/prixjuste/ n'est pas joignable depuis le conteneur (hôte hors du réseau autorisé).
+  À la place : déploiement Pages vert, et le même site reconstruit en local (Python 3.12) depuis `main` affiche
+  « 22/11/2026 » et les 5 photos de l'accueil, dont les deux CAT.
+- Rien à corriger dans le code.
+
 ## Ce que l'utilisateur doit faire
 - Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
 
