@@ -39,6 +39,7 @@ jobs:
           gh label create prix --color 9A5B12 --description "Prix vu à la main" --force
           gh label create "à-identifier" --color 7A766E --description "Texte libre : en attente d'identification" --force
           gh label create achat --color 1A1917 --description "Article acheté : protection après achat" --force
+          gh label create enquete --color 1F6B45 --description "Enquête faite par Claude dans Chrome" --force
           gh label create suivi --color 23479A --description "Notifications d'un article suivi" --force
           gh label create choix --color 1E3A6E --description "Produit choisi parmi les propositions" --force
 

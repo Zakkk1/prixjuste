@@ -94,6 +94,14 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
 - Pistes légales restantes, à décider par l'utilisateur : flux d'affiliation (Awin, Effiliation : inscription éditeur,
   catalogues autorisés de Zalando, La Redoute, Decathlon…) ; Keepa API payante (Amazon seulement).
 
+## Enquête à la demande via Claude dans Chrome (22/11, décision de l'utilisateur)
+- Le robot quotidien reste pour les sites lisibles et les alertes ; l'historique et les boutiques qui refusent les
+  robots passent par une ENQUÊTE ponctuelle que l'utilisateur lance depuis son Chrome (extension Claude in Chrome).
+- Fiche : bloc « Enquête complète (Claude dans Chrome) » = consigne prête à copier (`prixjuste/enquete.py`) :
+  courbe idealo / Le Dénicheur / Keepa, prix dans la taille, prix au Canada, puis issue `enquete` pré-remplie.
+- `ajout.yml` intègre l'issue `enquete` sans IA : points « historique » sur la courbe, prix « navigateur »,
+  prix canadiens dans « Au Québec ». Pas encore testé de bout en bout avec une vraie enquête de l'utilisateur.
+
 ## Ce que l'utilisateur doit faire
 - Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
 

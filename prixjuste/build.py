@@ -12,7 +12,7 @@ import shutil
 import urllib.parse
 from pathlib import Path
 
-from . import VERSION, agenda, ajout, analyse, etranger, plan
+from . import VERSION, agenda, ajout, analyse, enquete, etranger, plan
 from .collecte import cle, hors_ue
 from .donnees import Depot, maintenant
 
@@ -34,7 +34,8 @@ TAMPONS = {  # code -> (classe, lignes du tampon)
     "paye": ("donnees", ["PAYÉ"]),
 }
 ORDRE = {"choisir": -1, "acheter": 0, "bidon": 1, "surveiller": 2, "attendre": 3, "donnees": 4, "attente": 5, "paye": 6}
-SOURCES = {"direct": "relevé en direct", "archive": "archive web", "manuel": "saisie manuelle"}
+SOURCES = {"direct": "relevé en direct", "archive": "archive web", "manuel": "saisie manuelle",
+           "historique": "courbe d'un comparateur, lue lors d'une enquête", "navigateur": "vu en naviguant (enquête)"}
 LECTURE = {"ok": ("lu", "ok"), "bloqué": ("bloqué", "bloque"), "vide": ("pas de prix lisible", "vide"),
            "erreur": ("erreur de lecture", "vide")}
 
@@ -640,10 +641,15 @@ def bloc_marchands(art, obs, journal):
         cout = (o.get("en_stock") == 0, o["prix"] + (o.get("livraison") or 0)) if o else (True, float("inf"))
         L.append((cout, ligne(lien.get("marchand", "?"), lien["url"], detail, statut, classe, o)))
     L = [x for _, x in sorted(L, key=lambda t: t[0])]  # du coût réel le plus bas au plus haut
-    manuels = {}
+    manuels, navig = {}, {}
     for o in obs:
         if o.get("source") == "manuel":
             manuels[o.get("marchand")] = o
+        elif o.get("source") == "navigateur" and not any(cle(l) == o["lien"] for l in art.get("liens", [])):
+            navig[o.get("marchand")] = o
+    for m, o in navig.items():
+        url = o["lien"] if o["lien"].startswith("http") else None
+        L.append(ligne(m, url, "vu en naviguant lors d'une enquête", "enquête", "archive", o))
     for m, o in manuels.items():
         L.append(ligne(m, None, "prix vu et saisi à la main", "saisie manuelle", "archive", o))
     H = [ligne(lien.get("marchand", "?"), lien["url"], lien.get("coloris", ""), "archives seulement",
@@ -654,6 +660,17 @@ def bloc_marchands(art, obs, journal):
                 f'dans les archives seulement <i>(anciens coloris, anciennes références)</i></summary>'
                 f'<ul class="marchands">{"".join(H)}</ul></details>')
     return res
+
+
+def bloc_enquete(art):
+    """Consigne prête à coller dans Claude dans Chrome (sur ordinateur) : l'enquête complète, à la demande."""
+    txt = enquete.consigne(art, DEPOT_GITHUB)
+    return ('<details class="vu enquete"><summary>Enquête complète (Claude dans Chrome)</summary>'
+            '<p class="aide">Sur ton ordinateur : copie cette consigne, ouvre Claude dans Chrome et colle-la. Claude '
+            'lit l\'historique d\'idealo ou de Le Dénicheur, les prix dans ta taille et au Canada, puis enregistre tout '
+            'ici (quelques minutes). À faire quand tu envisages d\'acheter.</p>'
+            f'<textarea class="consigne" readonly rows="8">{e(txt)}</textarea>'
+            '<button type="button" class="copier">Copier la consigne</button></details>')
 
 
 def form_prix(art):
@@ -755,7 +772,7 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None, comp=None):
     corps.append('<section class="carte"><h2 class="rubrique">Où l’acheter</h2>'
                  + bloc_marchands(art, obs, journal) + '</section>')
     corps.append(bloc_etranger(comp))
-    corps.append('<div class="actions">' + form_prix(art) + ("" if art.get("achat") else form_achat(art, act))
+    corps.append('<div class="actions">' + bloc_enquete(art) + form_prix(art) + ("" if art.get("achat") else form_achat(art, act))
                  + carte(art, res, code, auj) + '</div>' + lien_equivalent(art))
     corps += ["</main>", pied("../")]
     return page(f"{art['nom']} — PrixJuste", "".join(corps), "../",

@@ -350,3 +350,15 @@
   champ.addEventListener("input", majour);
   majour();
 })();
+
+
+// Copier la consigne d'enquête (Claude dans Chrome)
+document.querySelectorAll(".enquete .copier").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var t = b.parentNode.querySelector(".consigne");
+    var fini = function () { b.textContent = "Copiée ✓ — colle-la dans Claude dans Chrome"; };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(t.value).then(fini, function () { t.select(); document.execCommand("copy"); fini(); });
+    } else { t.select(); document.execCommand("copy"); fini(); }
+  });
+});

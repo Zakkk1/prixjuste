@@ -343,3 +343,4 @@ main { padding-bottom: 32px; }
 .etr-ligne { display: block; }
 .ailleurs { margin-top: 8px; font-size: 13px; opacity: .85; }
 .ailleurs a { font-weight: 600; }
+.enquete .consigne { width: 100%; font: 12px/1.45 ui-monospace, Menlo, monospace; margin: 8px 0; }

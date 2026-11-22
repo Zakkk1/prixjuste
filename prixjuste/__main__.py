@@ -79,6 +79,20 @@ def cmd_issue(depot, a):
         _sortie_github(mode="liens" if art["statut"] == "suivi" else "erreur", id=art["id"],
                        message="" if art["statut"] == "suivi" else "Cette proposition n'a aucune page lisible.")
         return
+    if "enquete" in labels:
+        from . import enquete
+        try:
+            enq = enquete.lire(corps, depot.articles())
+        except ValueError as e:
+            _sortie_github(mode="erreur", message=str(e))
+            return
+        art = depot.article(enq["article"])
+        nh, np_, nc = enquete.enregistrer(depot, art, enq)
+        texte = (f"Enquête enregistrée : {nh} point(s) d'historique, {np_} prix du jour, {nc} prix au Canada."
+                 + (f"\n\n> {enq['note']}" if enq.get("note") else "") + "\n\n"
+                 + ajout.compte_rendu(art, depot.releves(art["id"]), depot.journal(art["id"])))
+        _sortie_github(mode="enquete", id=art["id"], message=texte)
+        return
     if "achat" in labels:
         try:
             ach = ajout.lire_achat(titre, corps, depot.articles())

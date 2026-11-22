@@ -50,5 +50,6 @@ def test_bloc_quebec_sur_la_fiche(depot, tmp_path):
     fiche = (sortie / "a" / "x.html").read_text(encoding="utf-8")
     assert "Au Québec" in fiche and "taxes comprises" in fiche and "de moins qu’en France" in fiche
     assert "430 €" in fiche and "1,625" in fiche
-    assert fiche.count("en-ca/p/x") == 0  # pas mêlé à la liste des marchands français
+    marchands = fiche.split("Où l’acheter")[1].split("</section>")[0]
+    assert "en-ca/p/x" not in marchands  # pas mêlé à la liste des marchands français
     assert "au Québec ≈" in (sortie / "index.html").read_text(encoding="utf-8")
