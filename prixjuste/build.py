@@ -125,7 +125,7 @@ def prevision_mois(res, auj, n=4):
     for i in range(1, n + 1):
         m = (auj.month - 1 + i) % 12 + 1
         vals = sorted(par_mois.get(m, []))
-        med = vals[len(vals) // 2] if vals else None
+        med = vals[len(vals) // 2] if len(vals) >= 2 else None  # un seul prix ne fait pas une prévision
         tuiles.append({"mois": MOIS_COURT[m - 1], "prix": med})
     connus = [t for t in tuiles if t["prix"] is not None]
     if connus:
@@ -295,8 +295,18 @@ def courbe(ident, res, obs, auj, W, H, suffixe):
         tx, ty = place(cands, w)
         s.append(f'<text x="{tx:.1f}" y="{ty:.1f}" class="t-alerte">{t}</text>')
 
-    # le trait : un palier par jour connu, interrompu quand on n'a pas de prix pendant plus de 45 jours
+    # le trait : un palier par jour connu, interrompu quand on n'a pas de prix pendant plus de 45 jours ;
+    # le trou est dessiné en pointillé discret et dit « aucun prix connu » (on n'invente pas le prix entre-temps)
     chemin = _chemin_escalier(serie, X, Y)
+    for (da, pa), (db, pb) in zip(serie, serie[1:]):
+        if (db - da).days > 45:
+            xa, xb, ya_ = X(da), X(db), Y(pa)
+            s.append(f'<line x1="{xa + 6:.1f}" x2="{xb - 6:.1f}" y1="{ya_:.1f}" y2="{ya_:.1f}" class="trou"/>')
+            t = "aucun prix connu"
+            if xb - xa > largeur(t) + 30:
+                tx, ty = place([((xa + xb - largeur(t)) / 2, ya_ - 8), ((xa + xb - largeur(t)) / 2, ya_ + fs + 6)],
+                               largeur(t))
+                s.append(f'<text x="{tx:.1f}" y="{ty:.1f}" class="t-trou">{t}</text>')
     s.append(f'<path d="{chemin}" class="trait"/>')
 
     donnees = []
@@ -340,8 +350,25 @@ def figure_courbe(art, res, obs, auj):
     large = courbe(art["id"], res, obs, auj, 720, 280, "large")
     pts = json.dumps({"etroite": etroite[1], "large": large[1]}, ensure_ascii=False, separators=(",", ":"))
     return (f'<figure class="courbe" data-points="{e(pts)}">{etroite[0]}{large[0]}'
+            f'<figcaption class="origine">{e(origine_historique(obs, auj))}</figcaption>'
             '<output class="lecture" aria-live="polite">Meilleur prix de chaque jour, tous marchands confondus. '
             'Touche un point pour le détail.</output></figure>')
+
+
+def origine_historique(obs, auj):
+    """D'où vient la courbe : depuis quand le prix est relevé chaque jour, et combien de prix d'archives avant."""
+    directs = sorted(o["ts"][:10] for o in obs if o.get("source") in ("direct", "manuel"))
+    debut = directs[0] if directs else None
+    archives = {o["ts"][:10] for o in obs if o.get("source") == "archive"
+                and 0 <= (auj - dt.date.fromisoformat(o["ts"][:10])).days <= 365
+                and (debut is None or o["ts"][:10] < debut)}
+    txt = f"Relevé chaque matin depuis le {date_fr(debut)}" if debut else "Pas encore de relevé direct"
+    if archives:
+        txt += (f" ; avant, {len(archives)} prix retrouvé{'s' if len(archives) > 1 else ''} dans les archives du web"
+                " (elles gardent peu de copies des pages produit)")
+    else:
+        txt += " ; aucune copie plus ancienne de ces pages dans les archives du web"
+    return txt + ". La courbe se remplit jour après jour."
 
 
 # ---------------------------------------------------------------- morceaux de page
@@ -473,13 +500,15 @@ def bloc_plan(cands):
             'sans dépasser le budget ; les plus pressés passent d\'abord.</p></details>')
 
 
-def comptoir(lignes, quand, prochain=None, plan_html=""):
+def comptoir(lignes, quand, prochain=None, plan_html="", noms=None):
+    liste = json.dumps(noms or [], ensure_ascii=False, separators=(",", ":"))
     corps = [entete("", quand, accueil=True),
              '<main>',
-             '<form class="demande" action="ajouter.html" method="get">'
+             f'<form class="demande" action="ajouter.html" method="get" data-liste="{e(liste)}">'
              '<h1><label for="objet">Qu\'est-ce que tu veux acheter&nbsp;?</label></h1>'
              '<div class="champ-ligne"><input id="objet" name="objet" type="text" autocomplete="off" required '
-             'placeholder="ex. parka McMurdo, taille L"><button type="submit">Suivre</button></div></form>']
+             'placeholder="ex. parka McMurdo, taille L"><button type="submit">Suivre</button></div>'
+             '<div class="pistes" hidden aria-live="polite"></div></form>']
     if prochain:
         d, txt = prochain
         corps.append(f'<p class="prochain"><span>Prochain moment</span> {e(txt)} — {date_fr(d)} · '
@@ -811,8 +840,10 @@ def ajouter(quand, profil=None):
              '<label>Budget max <i>€</i><input name="budget" inputmode="decimal" placeholder="250"></label></div>',
              '<label>Liens produit <i>si tu en as, un par ligne</i>'
              '<textarea name="liens" rows="3" placeholder="https://…"></textarea></label>',
-             '<p class="aide">Avec des liens, le suivi démarre tout de suite (sans IA). Sans lien, la demande attend '
-             'que Claude identifie la référence exacte et des pages marchands lisibles.</p>',
+             '<p class="aide"><b>Combien de temps ?</b> Avec un lien produit : le premier prix et le verdict arrivent '
+             'en 2 minutes environ. Sans lien : des propositions avec photo arrivent au plus tard dans les 3 heures '
+             '(quelques minutes si Claude est activé sur le dépôt). Ce n\'est pas instantané parce que le site n\'a '
+             'pas de serveur : c\'est GitHub qui fait le travail, à ta demande.</p>',
              '<button type="submit">Ouvrir la demande sur GitHub →</button>',
              '<p class="aide">Tu arrives sur GitHub avec la demande déjà écrite : il reste à appuyer sur '
              '« Create ». Aucun mot de passe ni jeton n\'est stocké ici.</p>',
@@ -874,7 +905,8 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
     url_site = os.environ.get("PAGES_URL") or f"https://{proprio.lower()}.github.io/{nom_depot}"
     (sortie / "agenda.ics").write_text(agenda.ics(pour_agenda, auj, url_site), encoding="utf-8", newline="")
     (sortie / "index.html").write_text(comptoir([l for _, l in lignes], quand, agenda.prochain(pour_agenda, auj),
-                                                bloc_plan(plan.candidats(pour_agenda, auj))),
+                                                bloc_plan(plan.candidats(pour_agenda, auj)),
+                                                [{"id": a["id"], "nom": a["nom"]} for a, _ in pour_agenda]),
                                        encoding="utf-8")
     profil = ajout.charger_profil(depot)
     (sortie / "ajouter.html").write_text(ajouter(quand, profil), encoding="utf-8")

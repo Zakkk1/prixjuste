@@ -182,3 +182,12 @@ def test_rupture_de_taille_avance_la_date():
     assert res["verdict"][0] == "attendre"
     assert res["jusqu_a"] == dt.date(2027, 1, 15)
     assert "Ta taille a déjà manqué" in res["verdict"][2] and "janvier 2026" in res["verdict"][2]
+
+
+def test_un_prix_isole_ne_fait_pas_un_meilleur_mois():
+    # 1 seul prix bas en janvier (une archive) : pas de « attends janvier » ni de « déjà vu vers … en janvier »
+    obs = annee(lambda m: 220)
+    obs = [r for r in obs if dt.date.fromisoformat(r["ts"][:10]).month != 1] + [o("2026-01-15", 150), o(AUJ, 220)]
+    res = analyse.analyser(ART, obs, AUJ)
+    assert res["chiffres"].get("meilleur_mois") != 1
+    assert not any("janvier" in n for n in res["notes"])

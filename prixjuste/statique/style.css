@@ -324,3 +324,12 @@ main { padding-bottom: 32px; }
   background: var(--marine); color: #FFFFFF; font-weight: 700; text-decoration: none;
 }
 .c-voir { font-size: 14px; font-weight: 600; }
+
+/* pistes immédiates sous le champ de recherche */
+.pistes { margin-top: 12px; display: grid; gap: 6px; font-size: 14px; }
+.pistes a { font-weight: 600; }
+.pistes-suivre { opacity: .8; font-size: 13px; }
+/* courbe : trou sans relevé, et origine de l'historique */
+.trou { stroke: currentColor; stroke-width: 1; stroke-dasharray: 2 5; opacity: .35; }
+.t-trou { font-size: var(--fs, 12px); fill: currentColor; opacity: .55; }
+.origine { margin-top: 8px; font-size: 13px; opacity: .75; }

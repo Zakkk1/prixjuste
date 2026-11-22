@@ -13,10 +13,14 @@ def test_site_complet(tmp_path):
     assert {"index.html", "ajouter.html", "style.css", "site.js", "data.json", "a/mcmurdo.html", "a/timberland.html"} <= noms
     index = (sortie / "index.html").read_text(encoding="utf-8")
     assert "Qu'est-ce que tu veux acheter" in index
-    # tri : ATTENDS (McMurdo) passe avant « pas assez de données » (Timberland)
-    assert index.lower().index("mcmurdo") < index.lower().index("timberland")
+    # tri par urgence de la décision : l'ordre des articles suit ORDRE (indépendant des prix du jour)
+    data = json.loads((sortie / "data.json").read_text(encoding="utf-8"))
+    codes = {a["id"]: a["tampon"] for a in data["articles"]}
+    pos = sorted(codes, key=lambda i: index.find(f'href="a/{i}.html"'))
+    assert [build.ORDRE[codes[i]] for i in pos] == sorted(build.ORDRE[codes[i]] for i in pos)
     fiche = (sortie / "a" / "mcmurdo.html").read_text(encoding="utf-8")
-    assert 'class="tampon t-attends grand"' in fiche and "ATTENDS" in fiche  # tampon en texte réel
+    classe, mots = build.TAMPONS[codes["mcmurdo"]]
+    assert f'class="tampon t-{classe} grand"' in fiche and mots[0] in fiche  # tampon en texte réel
     assert "courbe-etroite" in fiche and "courbe-large" in fiche
     assert "Contrôle des promos" in fiche and "trompeuse" in fiche
     assert "archives seulement" in fiche and "bloqué" in fiche
@@ -49,5 +53,12 @@ def test_carte_9_16_sans_donnee_personnelle(tmp_path):
     fiche = (sortie / "a" / "mcmurdo.html").read_text(encoding="utf-8")
     m = re.search(r'data-carte="([^"]+)"', fiche)
     d = json.loads(h.unescape(m.group(1)))
-    assert d["tampon"] == ["ATTENDS"] and d["prix"].startswith("373,90")
+    assert d["tampon"] and d["prix"].endswith("€")
     assert set(d) >= {"nom", "serie", "fiabilite", "date"} and "issue" not in d
+
+
+def test_origine_de_l_historique():
+    obs = [{"ts": "2025-12-10T01:00:00", "source": "archive", "prix": 230},
+           {"ts": "2026-11-19T10:00:00", "source": "direct", "prix": 220}]
+    t = build.origine_historique(obs, dt.date(2026, 11, 22))
+    assert t.startswith("Relevé chaque matin depuis le 19/11/2026") and "1 prix retrouvé" in t

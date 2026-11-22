@@ -194,6 +194,9 @@ def analyser(article, obs, aujourdhui=None):
     par_mois = {}
     for d, v in serie.items():
         par_mois.setdefault(d.month, []).append(v)
+    # un mois ne compte qu'avec au moins 2 jours de prix : un prix isolé (une archive, un autre pays)
+    # ne suffit pas à annoncer « moins cher en janvier »
+    par_mois = {m: vs for m, vs in par_mois.items() if len(vs) >= 2}
     meilleur_mois = None
     # au moins 3 mois différents et 5 jours de prix : pas de « meilleur mois » inventé sur 4 points
     if len(par_mois) >= 3 and len(serie) >= 5:

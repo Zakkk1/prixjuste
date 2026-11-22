@@ -297,3 +297,56 @@
   champ.addEventListener("input", afficher);
   afficher();
 })();
+
+
+// Pistes immédiates sous « Qu'est-ce que tu veux acheter ? » : ce qui est déjà dans ta liste, et les prix
+// existants chez les comparateurs (ouverts par toi, dans un nouvel onglet). Rien n'est relevé ni envoyé ici.
+(function () {
+  "use strict";
+  var form = document.querySelector("form.demande[data-liste]");
+  if (!form) return;
+  var champ = form.querySelector("#objet"), zone = form.querySelector(".pistes");
+  var liste = JSON.parse(form.dataset.liste || "[]");
+  function norm(t) { return String(t).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+  function lien(url, texte) {
+    var a = document.createElement("a");
+    a.href = url; a.textContent = texte; a.target = "_blank"; a.rel = "noopener";
+    return a;
+  }
+  function majour() {
+    var q = champ.value.trim();
+    zone.textContent = "";
+    if (q.length < 3) { zone.hidden = true; return; }
+    var mots = norm(q).split(/\s+/).filter(function (m) { return m.length > 2; });
+    var deja = liste.filter(function (a) {
+      var n = norm(a.nom);
+      return mots.length && mots.every(function (m) { return n.indexOf(m) >= 0; });
+    });
+    if (deja.length) {
+      var p1 = document.createElement("p");
+      p1.appendChild(document.createTextNode("Déjà dans ta liste : "));
+      deja.slice(0, 3).forEach(function (a, i) {
+        if (i) p1.appendChild(document.createTextNode(" · "));
+        var x = lien("a/" + a.id + ".html", a.nom); x.removeAttribute("target"); p1.appendChild(x);
+      });
+      zone.appendChild(p1);
+    }
+    var e = encodeURIComponent(q);
+    var p2 = document.createElement("p");
+    p2.appendChild(document.createTextNode("Voir tout de suite les modèles et prix existants : "));
+    [["https://www.idealo.fr/prechcat.html?q=" + e, "idealo"],
+     ["https://ledenicheur.fr/search?search=" + e, "Le Dénicheur"],
+     ["https://www.google.com/search?tbm=shop&q=" + e, "Google Shopping"]].forEach(function (c, i) {
+      if (i) p2.appendChild(document.createTextNode(" · "));
+      p2.appendChild(lien(c[0], c[1]));
+    });
+    zone.appendChild(p2);
+    var p3 = document.createElement("p");
+    p3.className = "pistes-suivre";
+    p3.textContent = "« Suivre » : PrixJuste te propose des modèles avec photo (d'ici 3 h au plus), puis relève leurs prix chaque jour. Avec un lien produit, c'est en 2 minutes.";
+    zone.appendChild(p3);
+    zone.hidden = false;
+  }
+  champ.addEventListener("input", majour);
+  majour();
+})();
