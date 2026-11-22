@@ -105,6 +105,15 @@ Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les i
   actuel ; point aberrant (< 60 % de la médiane de l'historique) écarté avec une note ; verdict « Plus cher que
   d'habitude ». L'étiquette `enquete` n'existait pas encore (posée à la main sur l'issue n°8) : elle existe désormais.
 
+## 23/11 : Patagonia 1/4 zip, Glacier, équivalents, Québec
+- Nouvel article `patagonia-better-sweater-1-4-zip` (25523 noir M ; Hawaiisurf, Outnorth, Alpinstore lisibles).
+  L'ancien article zip intégral (25528) est gardé en attendant la décision de l'utilisateur.
+- Enquête : comparaison de plusieurs modèles (lignes « Modèle », pour les fiches à choisir), « Équivalent »
+  (bloc « Aussi bien, à comparer » + bouton « Le suivre aussi »), promo « au panier » à vérifier en ajoutant au
+  panier sans compte ni paiement.
+- Timberland Canada officiel suivi par le robot (filtre US 7 largeur M) ; le -30 % au panier n'est pas visible
+  par robot : à confirmer par l'enquête. Notification « Au Québec, sous ton alerte » ajoutée.
+
 ## Ce que l'utilisateur doit faire
 - Rien d'obligatoire. Ajouter des objets depuis le site ; les verdicts se fiabilisent au fil des relevés quotidiens.
 

@@ -30,7 +30,7 @@ def _oui(v):
 def lire(corps, articles):
     """Corps d'issue -> {article, historique:[(date, prix, source)], prix:[...], canada:[...], note} ou ValueError."""
     res = {"article": None, "historique": [], "historique_ca": [], "prix": [], "canada": [], "note": None,
-           "sources": None}
+           "sources": None, "modeles": [], "equivalents": []}
     for ligne in (corps or "").replace("\r", "").split("\n"):
         m = re.match(r"^\s*(?:[-*]\s*)?([A-Za-zÀ-ÿ ]{4,20}?)\s*[:：]\s*(.+)$", ligne)
         if not m:
@@ -53,6 +53,21 @@ def lire(corps, articles):
             res[cle].append({"prix": p, "marchand": champs[1] or "?", "url": url,
                              "en_stock": (1 if _oui(autres[0]) else 0) if autres else None,
                              "barre": _nombre(autres[1]) if len(autres) > 1 else None})
+        elif cle == "modele" and len(champs) >= 3:
+            n, p = _nombre(champs[0]), _nombre(champs[1])
+            if n and p:
+                url = next((c for c in champs if c.startswith("http")), "")
+                autres = [c for c in champs[3:] if c and not c.startswith("http")]
+                res["modeles"].append({"n": int(n), "prix": p, "marchand": champs[2], "url": url,
+                                       "en_stock": (1 if _oui(autres[0]) else 0) if autres else None,
+                                       "commentaire": " | ".join(autres[1:])[:200] if len(autres) > 1 else ""})
+        elif cle == "equivalent" and len(champs) >= 2:
+            url = next((c for c in champs if c.startswith("http")), "")
+            autres = [c for c in champs[1:] if c and not c.startswith("http")]
+            prix = _nombre(autres[0]) if autres else None
+            res["equivalents"].append({"nom": champs[0][:120], "prix": prix,
+                                       "marchand": autres[1] if len(autres) > 1 else "", "url": url,
+                                       "pourquoi": " | ".join(autres[2:])[:240]})
         elif cle == "note":
             res["note"] = val[:300]
         elif cle == "sources":
@@ -60,8 +75,9 @@ def lire(corps, articles):
     ids = {a["id"] for a in articles}
     if res["article"] not in ids:
         raise ValueError(f"Article inconnu : « {res['article']} ». Articles : {', '.join(sorted(ids))}.")
-    if not (res["historique"] or res["historique_ca"] or res["prix"] or res["canada"]):
-        raise ValueError("Aucune ligne « Historique », « Prix » ou « Canada » lisible dans l'enquête.")
+    if not (res["historique"] or res["historique_ca"] or res["prix"] or res["canada"] or res["modeles"]
+            or res["equivalents"]):
+        raise ValueError("Aucune ligne « Historique », « Prix », « Canada », « Modèle » ou « Équivalent » lisible.")
     return res
 
 
@@ -69,6 +85,19 @@ def enregistrer(depot, art, enq, ts=None):
     """Ajoute les relevés de l'enquête. Renvoie (n_historique, n_prix, n_canada) réellement ajoutés."""
     ts = ts or maintenant()
     n = [0, 0, 0]
+    modif = False
+    if enq.get("modeles") and art.get("candidats"):
+        for m in enq["modeles"]:
+            if 1 <= m["n"] <= len(art["candidats"]):
+                art["candidats"][m["n"] - 1]["enquete"] = {**m, "le": ts[:10]}
+                modif = True
+    if enq.get("equivalents"):
+        art["equivalents"] = [{**q, "le": ts[:10]} for q in enq["equivalents"]][:4]
+        modif = True
+    if modif:
+        depot.ecrire_article(art)
+    if art.get("statut") == "a_choisir":
+        return tuple(n)  # plusieurs modèles possibles : pas de relevés tant que le choix n'est pas fait
     for cle_h, extra in (("historique", {}), ("historique_ca", {"pays": "CA", "devise": "CAD"})):
         for h in enq.get(cle_h, []):
             src = h["source"]
@@ -118,10 +147,22 @@ def consigne(art, depot_github):
             connus.append(l)
     fr = "\n".join(f"   - {l.get('marchand')} : {l['url']}" for l in connus if not l.get("pays"))
     ca = "\n".join(f"   - {l.get('marchand')} : {l['url']}" for l in connus if l.get("pays") == "CA")
-    modele = ("Article : {id}\nHistorique : AAAA-MM-JJ | prix en € | source (idealo, Dealabs…)\n"
+    cands = art.get("candidats") or []
+    if cands:
+        modeles = "\n".join(f"   {i}. {c.get('nom')} — {c.get('variante') or ''} — {c.get('url') or ''}"
+                             for i, c in enumerate(cands, 1))
+        bloc_modeles = (f"0. JE N'AI PAS ENCORE CHOISI entre ces modèles. Pour CHACUN, trouve le prix le plus bas du jour "
+                        f"dans ma taille et mon coloris, et le plus bas vu sur 12 mois (comparateurs) :\n{modeles}\n"
+                        "   Une ligne par modèle : « Modèle : numéro | prix | boutique | adresse | oui ou non | "
+                        "plus bas vu (prix, date, source) et ton avis en une phrase ».\n")
+        modele_l = ("Modèle : 1 | prix | boutique | adresse | oui ou non | plus bas vu et avis\n")
+    else:
+        bloc_modeles, modele_l = "", ""
+    modele = ("Article : {id}\n" + modele_l + "Historique : AAAA-MM-JJ | prix en € | source (idealo, Dealabs…)\n"
               "Prix : prix | boutique | adresse | oui ou non | prix barré si affiché\n"
               "Historique Canada : AAAA-MM-JJ | prix en $ CA | source (RedFlagDeals…)\n"
               "Canada : prix en $ CA | boutique | adresse | oui ou non\n"
+              "Équivalent : nom | prix | boutique | adresse | pourquoi\n"
               "Sources : tous les sites consultés, séparés par des virgules\nNote : une phrase"
               ).format(id=art["id"])
     issue = (f"https://github.com/{depot_github}/issues/new?labels=enquete&title="
@@ -136,11 +177,12 @@ def consigne(art, depot_github):
 
 Tu navigues dans mon Chrome, pour moi, une seule fois. Les sites cités ne sont que des EXEMPLES : cherche toi-même (Google, Google Shopping) tous ceux qui ont ce produit. Règles : une visite par page ; si un site affiche un captcha ou refuse l'accès, passe au suivant sans contourner ; n'achète rien, ne te connecte à rien.
 
-1. HISTORIQUE EN FRANCE (le plus important) : trouve les comparateurs et sites qui gardent l'historique de ce modèle exact — par exemple idealo, Le Dénicheur, Google Shopping, Kelkoo, et les bons plans datés de Dealabs ; pour Amazon.fr, Keepa ou camelcamelcamel ; cherche aussi « {nom} historique prix ». Relève 6 à 15 points datés sur 1 à 2 ans : le plus bas, le plus haut, Black Friday, soldes de janvier et d'été, aujourd'hui (en notant la source de chaque point).
+{bloc_modeles}1. HISTORIQUE EN FRANCE (le plus important) : trouve les comparateurs et sites qui gardent l'historique de ce modèle exact — par exemple idealo, Le Dénicheur, Google Shopping, Kelkoo, et les bons plans datés de Dealabs ; pour Amazon.fr, Keepa ou camelcamelcamel ; cherche aussi « {nom} historique prix ». Relève 6 à 15 points datés sur 1 à 2 ans : le plus bas, le plus haut, Black Friday, soldes de janvier et d'été, aujourd'hui (en notant la source de chaque point).
 2. PRIX DU JOUR dans ma taille, en France et en Europe : pars des comparateurs pour lister TOUTES les boutiques qui l'ont, puis garde les 6 moins chères en stock dans ma taille (prix, en stock ou non, prix barré s'il y en a un). Déjà suivies (à revérifier) :
 {fr_txt}
-3. CANADA (je vais à Québec, achat sur place ou en ligne) : même démarche avec les équivalents canadiens — par exemple Google Shopping Canada, comparateurs canadiens (Shopbot, PriceCanada…), bons plans datés (RedFlagDeals), circulaires des magasins (Flipp), Keepa ou camelcamelcamel pour Amazon.ca — et toutes les boutiques (site officiel .ca, grands magasins, chaînes de sport et de chaussures, magasins de la ville de Québec). Relève l'historique s'il existe, et les prix du jour en $ CA tels qu'affichés (hors taxes), en stock ou non dans ma taille{us_txt}. Déjà suivies :
+3. CANADA (je vais à Québec, achat sur place ou en ligne) : même démarche avec les équivalents canadiens — par exemple Google Shopping Canada, comparateurs canadiens (Shopbot, PriceCanada…), bons plans datés (RedFlagDeals), circulaires des magasins (Flipp), Keepa ou camelcamelcamel pour Amazon.ca — et toutes les boutiques (site officiel .ca, grands magasins, chaînes de sport et de chaussures, magasins de la ville de Québec). Relève l'historique s'il existe, et les prix du jour en $ CA tels qu'affichés (hors taxes), en stock ou non dans ma taille{us_txt}. Si une promo « au panier » est annoncée (ex. -30 % appliqué au panier), ajoute l'article au panier SANS te connecter ni payer pour lire le prix réellement facturé, et indique-le dans la note. Déjà suivies :
 {ca_txt}
+3 bis. ÉQUIVALENTS : propose 2 ou 3 autres produits tout aussi bien (même usage, qualité et chaleur comparables, bons avis), idéalement moins chers, avec leur prix dans ma taille et une phrase factuelle sur ce qu'on gagne ou perd.
 4. ENREGISTRE : ouvre cette adresse, remplace le texte par tes résultats (une ligne par information, en gardant exactement ce format), puis clique sur « Create » :
 {issue}
 

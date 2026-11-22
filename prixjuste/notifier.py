@@ -9,7 +9,7 @@ import json
 import os
 import urllib.request
 
-from . import analyse
+from . import analyse, etranger
 from .ajout import LIBELLES, euros
 
 ETIQUETTE = "suivi"
@@ -38,6 +38,14 @@ def message(art, res, nouveaux):
     code, titre, expli = res["verdict"]
     act = res.get("actuel")
     lignes = [f"**{LIBELLES[code]}** — {titre}", "", expli]
+    quebec = ""
+    if "quebec" in nouveaux:
+        q = res["_quebec"]
+        quebec = (f"**Au Québec, sous ton alerte** : {q['prix_local']:.2f} $ CA chez {q['marchand']}, soit environ "
+                  f"{euros(q['eur_ttc'])} taxes comprises (alerte {euros(res['chiffres']['alerte'])}).")
+        if nouveaux == {"quebec"}:
+            return quebec
+        return message(art, res, nouveaux - {"quebec"}) + "\n\n" + quebec
     if "baisse_achat" in nouveaux:
         b, pr = res["baisse_apres_achat"], res["protection"]
         return (f"**Il a baissé depuis ton achat** : {euros(b['prix'])} chez {b['marchand']}, soit {euros(b['ecart'])} "
@@ -86,8 +94,15 @@ def notifier(depot, github, pages_url="", aujourdhui=None, log=print, mention=No
     for art in depot.articles():
         if art.get("statut", "suivi") != "suivi" or not analyse.a_relever(art, aujourdhui or dt.date.today()):
             continue
-        res = analyse.analyser(art, depot.releves(art["id"]), aujourdhui)
+        tous = depot.releves(art["id"])
+        res = analyse.analyser(art, tous, aujourdhui)
         motifs = signal(art, res)
+        comp = etranger.comparaison(tous, (res.get("actuel") or {}).get("prix"), etranger.charger_change(depot),
+                                    aujourdhui or dt.date.today())
+        if comp and res["chiffres"].get("alerte") and comp["eur_ttc"] <= res["chiffres"]["alerte"] \
+                and not art.get("achat"):
+            motifs.add("quebec")
+            res["_quebec"] = comp
         e = etat.setdefault(art["id"], {})
         nouveaux = motifs - set(e.get("motifs", []))
         if nouveaux:

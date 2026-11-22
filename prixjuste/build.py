@@ -761,6 +761,8 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None, comp=None):
 
     if code == "choisir":
         corps.append(bloc_candidats(art))
+        corps.append(bloc_equivalents(art))
+        corps.append('<div class="actions">' + bloc_enquete(art) + '</div>')
         corps += ["</main>", pied("../")]
         return page(f"{art['nom']} — PrixJuste", "".join(corps), "../", classe="p-fiche")
 
@@ -778,11 +780,44 @@ def fiche(art, res, obs, journal, quand, auj, voisins=None, comp=None):
     corps.append('<section class="carte"><h2 class="rubrique">Où l’acheter</h2>'
                  + bloc_marchands(art, obs, journal) + '</section>')
     corps.append(bloc_etranger(comp))
+    corps.append(bloc_equivalents(art))
     corps.append('<div class="actions">' + bloc_enquete(art) + form_prix(art) + ("" if art.get("achat") else form_achat(art, act))
                  + carte(art, res, code, auj) + '</div>' + lien_equivalent(art))
     corps += ["</main>", pied("../")]
     return page(f"{art['nom']} — PrixJuste", "".join(corps), "../",
                 description=f"{TAMPONS[code][1][0]} — {titre}", classe="p-fiche")
+
+
+def enquete_candidat(c):
+    q = c.get("enquete")
+    if not q:
+        return ""
+    stock = {1: "en stock dans ta taille", 0: "pas en stock dans ta taille"}.get(q.get("en_stock"), "")
+    lien = (f'<a href="{e(q["url"])}" rel="noopener nofollow">{e(q["marchand"])}</a>' if q.get("url")
+            else e(q.get("marchand")))
+    return (f'<p class="c-enquete"><b>Enquête du {date_fr(q["le"])} :</b> {euros(q["prix"])} chez {lien}'
+            + (f", {stock}" if stock else "") + (f". {e(q['commentaire'])}" if q.get("commentaire") else "") + "</p>")
+
+
+def bloc_equivalents(art):
+    """Produits « tout aussi bien » trouvés par la dernière enquête ; on peut les suivre d'un toucher."""
+    eqs = art.get("equivalents") or []
+    if not eqs:
+        return ""
+    L = []
+    for q in eqs:
+        corps = "\n".join([f"Objet : {q['nom']}"] + ([f"Taille : {art['taille']}"] if art.get("taille") else [])
+                          + ["Urgence : " + art.get("urgence", "pas_urgent"), "Liens :", q.get("url") or "(aucun)",
+                             "", "<!-- prixjuste:ajout -->"])
+        u = urllib.parse.urlencode({"title": f"Ajout : {q['nom']}", "body": corps, "labels": "ajout"},
+                                   quote_via=urllib.parse.quote)
+        prix = f" — {euros(q['prix'])}" + (f" chez {e(q['marchand'])}" if q.get("marchand") else "") if q.get("prix") else ""
+        nom = (f'<a href="{e(q["url"])}" rel="noopener nofollow">{e(q["nom"])}</a>' if q.get("url") else e(q["nom"]))
+        L.append(f'<li><p class="eq-nom">{nom}{prix}</p>'
+                 + (f'<p class="eq-pourquoi">{e(q["pourquoi"])}</p>' if q.get("pourquoi") else "")
+                 + f'<a class="eq-suivre" href="https://github.com/{DEPOT_GITHUB}/issues/new?{e(u)}">Le suivre aussi</a></li>')
+    return (f'<section class="carte equivalents"><h2 class="rubrique">Aussi bien, à comparer</h2>'
+            f'<p class="aide">Trouvés lors de l’enquête du {date_fr(eqs[0]["le"])}.</p><ul>{"".join(L)}</ul></section>')
 
 
 def bloc_candidats(art):
@@ -800,6 +835,7 @@ def bloc_candidats(art):
                  + (f'<p class="c-var">{e(c["variante"])}</p>' if c.get("variante") else "")
                  + f'<p class="c-prix">{prix}</p>'
                  + (f'<p class="c-note">{e(c["note"])}</p>' if c.get("note") else "")
+                 + enquete_candidat(c)
                  + f'</div><div class="c-actions"><a class="c-choisir" href="https://github.com/{DEPOT_GITHUB}/issues/new?{e(q)}">'
                  f'C’est celui-là</a>{voir}</div></li>')
     num = art.get("issue")

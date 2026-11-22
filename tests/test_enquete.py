@@ -69,3 +69,40 @@ def test_point_isole_ecarte_mais_pas_les_soldes():
     res = analyse.analyser(art, obs, dt.date(2026, 11, 22))
     assert res["chiffres"]["min_12m"] == 132 and res["actuel"]["prix"] == 230  # l'historique n'est pas une offre
     assert any("75,00 €" in n for n in res["notes"])
+
+
+def test_modeles_et_equivalents(depot, tmp_path):
+    from prixjuste import build
+    art = {"id": "g", "nom": "Glacier", "statut": "a_choisir", "categorie": "vetement_hiver", "urgence": "pas_urgent",
+           "liens": [], "candidats": [{"nom": "Glacier zippée", "prix": 90.0, "marchand": "TNF", "liens": []},
+                                      {"nom": "Glacier col zippé", "prix": 70.0, "marchand": "TNF", "liens": []}]}
+    depot.ecrire_article(art)
+    corps = ("Article : g\nModèle : 2 | 49 | The North Face | https://tnf.fr/x | oui | plus bas 45 € (idealo, 28/11/2025)\n"
+             "Équivalent : Columbia Steens Mountain | 45 | Decathlon | https://ex.fr/c | plus chaude, moins habillée\n"
+             "Sources : idealo, Dealabs")
+    e = enquete.lire(corps, [art])
+    assert e["modeles"][0]["n"] == 2 and e["equivalents"][0]["prix"] == 45.0
+    assert enquete.enregistrer(depot, art, e, ts="2026-11-23T10:00:00") == (0, 0, 0)  # pas de relevé avant le choix
+    a = depot.article("g")
+    assert a["candidats"][1]["enquete"]["prix"] == 49.0 and a["equivalents"][0]["nom"] == "Columbia Steens Mountain"
+    sortie = build.construire(depot, tmp_path / "site", aujourdhui=dt.date(2026, 11, 23))
+    fiche = (sortie / "a" / "g.html").read_text(encoding="utf-8")
+    assert "Enquête du 23/11/2026" in fiche and "Aussi bien, à comparer" in fiche and "Le suivre aussi" in fiche
+    assert "JE N" in fiche  # la consigne d'enquête compare les modèles proposés
+
+
+def test_alerte_quebec(depot):
+    import json
+    from prixjuste import notifier
+    from tests.test_notifier import FauxGitHub
+    from tests.test_analyse import annee, o, AUJ
+    depot.ecrire_article({"id": "x", "nom": "Parka X", "categorie": "autre", "urgence": "pas_urgent", "liens": []})
+    for r in annee(lambda m: 250) + [o(AUJ, 260)]:
+        depot.ajouter_releve("x", r)
+    ca = o(AUJ, 150, marchand="Boutique CA")
+    ca.update({"pays": "CA", "devise": "CAD", "lien": "https://ex.ca/x"})
+    depot.ajouter_releve("x", ca)
+    (depot.racine / "change.json").write_text(json.dumps({"date": "2026-11-20", "taux": {"CAD": 1.6}}))
+    gh = FauxGitHub()
+    assert notifier.notifier(depot, gh, "", AUJ, log=lambda *a: None) == 1
+    assert "Au Québec, sous ton alerte" in gh.commentaires[0][1]

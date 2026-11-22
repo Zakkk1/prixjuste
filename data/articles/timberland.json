@@ -56,6 +56,15 @@
       "exact": true,
       "pays": "CA",
       "devise": "CAD"
+    },
+    {
+      "marchand": "Timberland (Canada, officiel)",
+      "url": "https://www.timberland.com/fr-ca/p/hommes/chaussures-10039/bottes-impermeables-timberland-premium-6-pouces-pour-hommes-TB110061713",
+      "coloris": "Jaune (Wheat) · US 7 = 40",
+      "filtre": "re::070:M:",
+      "exact": true,
+      "pays": "CA",
+      "devise": "CAD"
     }
   ],
   "liens_historiques": [

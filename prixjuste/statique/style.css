@@ -344,3 +344,8 @@ main { padding-bottom: 32px; }
 .ailleurs { margin-top: 8px; font-size: 13px; opacity: .85; }
 .ailleurs a { font-weight: 600; }
 .enquete .consigne { width: 100%; font: 12px/1.45 ui-monospace, Menlo, monospace; margin: 8px 0; }
+.c-enquete { font-size: 13px; margin-top: 6px; }
+.equivalents ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.eq-nom { font-weight: 600; }
+.eq-pourquoi { font-size: 13px; opacity: .85; margin: 2px 0 4px; }
+.eq-suivre { font-size: 13px; font-weight: 600; }
