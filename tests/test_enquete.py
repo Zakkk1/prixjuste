@@ -57,6 +57,7 @@ def test_historique_canada_et_sources(depot):
 def test_consigne_ouverte():
     t = enquete.consigne({"id": "x", "nom": "X", "categorie": "autre", "liens": []}, "a/b")
     assert "EXEMPLES" in t and "Dealabs" in t and "RedFlagDeals" in t and "Flipp" in t and "Sources :" in t
+    assert "PriceCanada" not in t and "estimées" in t
 
 
 def test_point_isole_ecarte_mais_pas_les_soldes():
