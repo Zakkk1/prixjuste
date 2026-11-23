@@ -6,16 +6,23 @@
   "motifs": []
  },
  "mcmurdo": {
+  "issue": 9,
+  "motifs": [
+   "quebec"
+  ]
+ },
+ "patagonia-better-sweater-1-4-zip": {
   "motifs": []
  },
  "patagonia-sweater-fleece-jacket-taille-m": {
-  "motifs": []
- },
- "timberland": {
-  "issue": 2,
+  "issue": 10,
   "motifs": [
    "acheter",
    "alerte"
   ]
+ },
+ "timberland": {
+  "issue": 2,
+  "motifs": []
  }
 }
