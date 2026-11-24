@@ -1,0 +1,227 @@
+{
+ "type": "tenue",
+ "titre": "Hiver : 3 looks stylés pour toi",
+ "le": "2026-11-24",
+ "taille": "M · W29-30 · pointure 40",
+ "demande": "Trouve-moi des tenues stylées pour l'hiver, sur Pinterest.",
+ "look": "Trois styles très présents sur Pinterest cet hiver, construits autour de ta parka et de tes boots, pour une silhouette mince et grande : des couches qui donnent du volume en haut, une coupe droite en bas, des boots qui ancrent le tout.",
+ "resume": "Trois looks complets entre 665 et 725 € ; si tu prends déjà la parka et les boots, il reste 150 à 210 € par look. La bonne affaire de ce soir : la polaire The North Face Glacier col zippé à 49 € (−30 %), le même style que la Patagonia pour 80 € de moins.",
+ "options": [
+  {
+   "nom": "1. Workwear jaune",
+   "idee": "Le classique : parka sombre, polaire, jean brut, Timberland jaunes et bonnet. La pièce forte, ce sont les boots.",
+   "pinterest": "https://www.pinterest.com/search/pins/?q=timberland%206%20inch%20outfit%20men%20winter",
+   "pieces": [
+    {
+     "role": "Parka",
+     "nom": "The North Face McMurdo Parka",
+     "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1772790300/NF0A5GJF8K2-HERO/Mens-McMurdo-Parka-TNF-Summit-Navy-HERO.jpg",
+     "marchand": "The North Face (officiel)",
+     "prix": 325.0,
+     "prix_avant": 500.0,
+     "taille": "M",
+     "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF",
+     "verdict": "acheter",
+     "article": "mcmurdo",
+     "pourquoi": "−35 % jusqu'au 01/12, M en stock (vérifié ce soir). Mi-longue : elle couvre les hanches sans t'engloutir."
+    },
+    {
+     "role": "Polaire",
+     "nom": "The North Face Glacier, col zippé noir",
+     "reference": "NF0A8D0Q",
+     "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1770145676/NF0A8D0QJK3-HERO/Mens-Glacier-14-Zip-Fleece-TNF-TNF-Black-HERO.jpg",
+     "marchand": "The North Face (officiel)",
+     "prix": 49.0,
+     "prix_avant": 70.0,
+     "taille": "M",
+     "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-a-col-zippe-glacier-pour-homme-NF0A8D0Q?color=JK3",
+     "verdict": "acheter",
+     "pourquoi": "49 € au lieu de 70 € (Black Friday), M en stock, vérifié ce soir. Le même col 1/4 zip que la Patagonia, pour 80 € de moins."
+    },
+    {
+     "role": "Jean",
+     "nom": "Levi's 501 Original, brut ou bleu foncé",
+     "marchand": "Levi's (officiel)",
+     "prix": 110.0,
+     "url": "https://www.levi.com/FR/fr_FR/c/levi_clothing_men_jeans_501_original",
+     "taille": "W29 ou W30, L32",
+     "verdict": "attendre",
+     "quand_court": "→ 30/11",
+     "pourquoi": "Coupe droite, ni slim ni large : parfaite avec des boots. 110 € prix catalogue ; Levi's le solde souvent de 30 à 50 % (vu à 55 €). Prix lu dans la recherche, le site refuse le robot."
+    },
+    {
+     "role": "Chaussures",
+     "nom": "Timberland 6-Inch Premium jaune",
+     "image": "https://assets.timberland.eu/images/t_Thumbnail/v1757347665/TB110061713-MKTG1/Timberland-Premium-6Inch-Waterproof-Boot-for-Men-in-Yellow.jpg",
+     "marchand": "E.Leclerc (vendeur tiers)",
+     "prix": 190.79,
+     "url": "https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667",
+     "taille": "39,5 ou 40",
+     "verdict": "attendre",
+     "quand_court": "< 160 €",
+     "article": "timberland",
+     "pourquoi": "La pièce qui fait le look. Alerte posée : tu es prévenu dès qu'elle passe sous 160 €."
+    },
+    {
+     "role": "Bonnet",
+     "nom": "Carhartt WIP Acrylic Watch Hat",
+     "marchand": "Carhartt WIP",
+     "prix": 25.0,
+     "image": "https://cdn.media.amplience.net/i/carhartt_wip/I020175_482_XX-OF-01?$google_struc_main_of$",
+     "url": "https://carhartt-wip.com/en/men/acrylic-watch-hat-ash-heather-2140_1",
+     "verdict": "acheter",
+     "pourquoi": "Le bonnet court et côtelé qui va avec tout le workwear. Environ 25 €, déjà à son prix normal : pas la peine d'attendre."
+    }
+   ]
+  },
+  {
+   "nom": "2. Gorpcore tout noir",
+   "idee": "Tout en noir, matières techniques, cargo droit ; les boots jaunes en seule touche de couleur.",
+   "pinterest": "https://www.pinterest.com/search/pins/?q=gorpcore%20winter%20outfit%20men%20black",
+   "pieces": [
+    {
+     "role": "Parka",
+     "nom": "The North Face McMurdo Parka",
+     "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1772790300/NF0A5GJF8K2-HERO/Mens-McMurdo-Parka-TNF-Summit-Navy-HERO.jpg",
+     "marchand": "The North Face (officiel)",
+     "prix": 325.0,
+     "prix_avant": 500.0,
+     "taille": "M",
+     "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF",
+     "verdict": "acheter",
+     "article": "mcmurdo",
+     "pourquoi": "−35 % jusqu'au 01/12, M en stock (vérifié ce soir). Mi-longue : elle couvre les hanches sans t'engloutir."
+    },
+    {
+     "role": "Polaire",
+     "nom": "The North Face Glacier zippée noire",
+     "reference": "NF0A8D0R",
+     "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1770145691/NF0A8D0RJK3-HERO/Mens-Glacier-Fleece-TNF-TNF-Black-HERO.jpg",
+     "marchand": "The North Face (officiel)",
+     "prix": 63.0,
+     "prix_avant": 90.0,
+     "taille": "M",
+     "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-glacier-pour-homme-NF0A8D0R?color=JK3",
+     "verdict": "acheter",
+     "pourquoi": "63 € au lieu de 90 €, M en stock, vérifié ce soir. Zippée, elle se porte ouverte sous la parka."
+    },
+    {
+     "role": "Pantalon",
+     "nom": "Carhartt WIP Regular Cargo Pant noir",
+     "marchand": "Carhartt WIP",
+     "prix": 119.0,
+     "url": "https://carhartt-wip.com/en/men/regular-cargo-pant-black-rinsed-309_1",
+     "taille": "29/32",
+     "verdict": "attendre",
+     "quand_court": "→ 30/11",
+     "pourquoi": "Coupe droite en toile épaisse. Environ 119 € au prix normal, souvent soldé autour de 85 € : attends le Black Friday."
+    },
+    {
+     "role": "Chaussures",
+     "nom": "Timberland 6-Inch Premium jaune",
+     "image": "https://assets.timberland.eu/images/t_Thumbnail/v1757347665/TB110061713-MKTG1/Timberland-Premium-6Inch-Waterproof-Boot-for-Men-in-Yellow.jpg",
+     "marchand": "E.Leclerc (vendeur tiers)",
+     "prix": 190.79,
+     "url": "https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667",
+     "taille": "39,5 ou 40",
+     "verdict": "attendre",
+     "quand_court": "< 160 €",
+     "article": "timberland",
+     "pourquoi": "La pièce qui fait le look. Alerte posée : tu es prévenu dès qu'elle passe sous 160 €."
+    },
+    {
+     "role": "Bonnet",
+     "nom": "Carhartt WIP Acrylic Watch Hat",
+     "marchand": "Carhartt WIP",
+     "prix": 25.0,
+     "image": "https://cdn.media.amplience.net/i/carhartt_wip/I020175_482_XX-OF-01?$google_struc_main_of$",
+     "url": "https://carhartt-wip.com/en/men/acrylic-watch-hat-ash-heather-2140_1",
+     "verdict": "acheter",
+     "pourquoi": "Le bonnet court et côtelé qui va avec tout le workwear. Environ 25 €, déjà à son prix normal : pas la peine d'attendre."
+    }
+   ]
+  },
+  {
+   "nom": "3. Clean d'hiver",
+   "idee": "Plus habillé : col roulé fin sous la parka, jean brut, boots. Simple, et ça marche partout.",
+   "pinterest": "https://www.pinterest.com/search/pins/?q=men%20turtleneck%20parka%20boots%20outfit%20winter",
+   "pieces": [
+    {
+     "role": "Parka",
+     "nom": "The North Face McMurdo Parka",
+     "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1772790300/NF0A5GJF8K2-HERO/Mens-McMurdo-Parka-TNF-Summit-Navy-HERO.jpg",
+     "marchand": "The North Face (officiel)",
+     "prix": 325.0,
+     "prix_avant": 500.0,
+     "taille": "M",
+     "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF",
+     "verdict": "acheter",
+     "article": "mcmurdo",
+     "pourquoi": "−35 % jusqu'au 01/12, M en stock (vérifié ce soir). Mi-longue : elle couvre les hanches sans t'engloutir."
+    },
+    {
+     "role": "Pull",
+     "nom": "Uniqlo pull col roulé 100 % mérinos",
+     "marchand": "Uniqlo",
+     "prix": 39.9,
+     "url": "https://www.uniqlo.com/fr/fr/products/E486066-000/00",
+     "taille": "M (ou S si tu le veux près du corps)",
+     "verdict": "acheter",
+     "pourquoi": "Fin, chaud et sans volume : idéal sous une parka quand on est mince. Environ 35-40 €, prix lu dans la recherche."
+    },
+    {
+     "role": "Jean",
+     "nom": "Levi's 501 Original, brut ou bleu foncé",
+     "marchand": "Levi's (officiel)",
+     "prix": 110.0,
+     "url": "https://www.levi.com/FR/fr_FR/c/levi_clothing_men_jeans_501_original",
+     "taille": "W29 ou W30, L32",
+     "verdict": "attendre",
+     "quand_court": "→ 30/11",
+     "pourquoi": "Coupe droite, ni slim ni large : parfaite avec des boots. 110 € prix catalogue ; Levi's le solde souvent de 30 à 50 % (vu à 55 €). Prix lu dans la recherche, le site refuse le robot."
+    },
+    {
+     "role": "Chaussures",
+     "nom": "Timberland 6-Inch Premium jaune",
+     "image": "https://assets.timberland.eu/images/t_Thumbnail/v1757347665/TB110061713-MKTG1/Timberland-Premium-6Inch-Waterproof-Boot-for-Men-in-Yellow.jpg",
+     "marchand": "E.Leclerc (vendeur tiers)",
+     "prix": 190.79,
+     "url": "https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667",
+     "taille": "39,5 ou 40",
+     "verdict": "attendre",
+     "quand_court": "< 160 €",
+     "article": "timberland",
+     "pourquoi": "La pièce qui fait le look. Alerte posée : tu es prévenu dès qu'elle passe sous 160 €."
+    }
+   ]
+  }
+ ],
+ "conseils": [
+  "Silhouette mince : évite le très oversize partout. Une pièce ample (la parka) et le reste droit, pas moulant.",
+  "Ourlet du jean : L32, ou retroussé d'un ou deux tours au-dessus des boots.",
+  "La parka et les boots servent dans les 3 looks : une fois achetées, chaque look ne coûte plus que 150 à 210 €.",
+  "Achète maintenant la polaire Glacier (49 € jusqu'au 01/12) et le bonnet ; attends le Black Friday pour le jean et le cargo."
+ ],
+ "sources": [
+  {
+   "nom": "The North Face, Glacier col zippé (prix lu par le robot le 24/11)",
+   "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-a-col-zippe-glacier-pour-homme-NF0A8D0Q?color=JK3"
+  },
+  {
+   "nom": "Levi's 501 (prix catalogue 110 €, site non lisible par le robot)",
+   "url": "https://www.levi.com/FR/fr_FR/c/levi_clothing_men_jeans_501_original"
+  },
+  {
+   "nom": "Carhartt WIP Regular Cargo, prix relevés chez plusieurs revendeurs",
+   "url": "https://www.snowleader.com/en/regular-cargo-pant-black-rinsed-CARH01751.html"
+  },
+  {
+   "nom": "Tendances homme hiver 2026 (Harrods)",
+   "url": "https://www.harrods.com/c/stories/men/new-season-fashion-trends"
+  },
+  {
+   "nom": "Tendances homme automne-hiver 2026-2027 (Paris Select Book)",
+   "url": "https://www.parisselectbook.com/2026/01/30/tendances-mode-homme-automne-hiver-2026-2027-les-10-styles-qui-marquent-la-saison/"
+  }
+ ]
+}

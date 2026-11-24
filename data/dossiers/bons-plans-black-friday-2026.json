@@ -4,7 +4,7 @@
  "le": "2026-11-24",
  "valable_jusqu_au": "2026-12-01",
  "demande": "Il y a le Black Friday : déniche-moi des trucs.",
- "resume": "Une vraie affaire en France : la parka McMurdo à 325 € (−35 %), en M. À Québec : la Timberland Heritage 6-Inch à environ 95 € taxes comprises. La Patagonia 1/4 zip et la Timberland Premium jaune ne sont pas encore à un bon prix : attends.",
+ "resume": "Deux vraies affaires en France : la parka McMurdo à 325 € (−35 %) et la polaire Glacier col zippé à 49 € (−30 %), en M. À Québec : la Timberland Heritage à environ 95 €. La Patagonia et la Timberland Premium jaune : attends.",
  "plans": [
   {
    "nom": "The North Face McMurdo Parka homme",
@@ -20,6 +20,19 @@
    "taille": "M en stock",
    "pourquoi": "325 € au lieu de 500 €, l'offre Black Friday de la marque court jusqu'au 01/12. C'est dans les prix les plus bas vus sur 12 mois (le plus bas : 250 €, rare).",
    "quand": "Au Québec, Sporting Life l'affichait à 404,98 $ CA le 22/11 (environ 296 € taxes comprises), mais ce site refuse maintenant le robot : à vérifier sur place."
+  },
+  {
+   "nom": "The North Face Glacier, col zippé noir",
+   "reference": "NF0A8D0Q",
+   "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1770145676/NF0A8D0QJK3-HERO/Mens-Glacier-14-Zip-Fleece-TNF-TNF-Black-HERO.jpg",
+   "marchand": "The North Face (officiel)",
+   "prix": 49.0,
+   "prix_avant": 70.0,
+   "taille": "M",
+   "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-a-col-zippe-glacier-pour-homme-NF0A8D0Q?color=JK3",
+   "verdict": "acheter",
+   "pourquoi": "49 € au lieu de 70 € (Black Friday), M en stock, vérifié ce soir. Le même col 1/4 zip que la Patagonia, pour 80 € de moins.",
+   "fin": "2026-12-01"
   },
   {
    "nom": "Patagonia Better Sweater 1/4 Zip noir",

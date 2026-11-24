@@ -1,5 +1,7 @@
 RELAIS: non
 
+- 24/11 nuit : dossier « Hiver : 3 looks » (workwear, gorpcore, clean) avec liens Pinterest ; polaire Glacier col zippé à 49 € (−30 %, M en stock) ajoutée aux bons plans. Levi's (403), Uniqlo (pas de JSON-LD), Carhartt WIP (prix en GBP pour le robot) : prix lus dans la recherche.
+
 - 24/11 soir : alertes fixées (Timberland 160 €, Patagonia 110 €) ; Outnorth retiré (taille illisible, `liens_retires`) ; Heritage 6-Inch soldée au Canada vérifiée (129,99 $ CA, US 7 en stock) ; Sporting Life refuse désormais le robot.
 
 ## Refonte du 24/11 : assistant d'achat (demande de l'utilisateur)

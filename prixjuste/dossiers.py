@@ -128,6 +128,8 @@ def verifier(d, articles=()):
         for i, o in enumerate(d.get("options", []), 1):
             if not o.get("nom"):
                 err.append(f"option {i} : « nom » manquant")
+            if o.get("pinterest") and not URL_RE.match(o["pinterest"]):
+                err.append(f"option {i} : « pinterest » n'est pas une adresse web")
             if not o.get("pieces"):
                 err.append(f"option {i} : aucune pièce")
             for j, p in enumerate(o.get("pieces", []), 1):

@@ -1020,6 +1020,8 @@ def page_dossier(d, change, suivis, quand):
             corps.append(f'<section class="option"><div class="option-tete"><h2 class="rubrique">{e(o["nom"])}</h2>'
                          + (f'<span class="total">{euros(tot)}</span>' if tot is not None else "") + '</div>'
                          + (f'<p class="aide">{e(o["idee"])}</p>' if o.get("idee") else "")
+                         + (f'<p class="aide"><a href="{e(o["pinterest"])}" rel="noopener nofollow" target="_blank">'
+                            'Voir ce look en photos sur Pinterest →</a></p>' if o.get("pinterest") else "")
                          + '<ol class="pieces">' + "".join(carte_piece(p, change, suivis, taille) for p in o["pieces"])
                          + "</ol></section>")
     elif t == "achat":
