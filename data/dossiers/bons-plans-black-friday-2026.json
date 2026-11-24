@@ -4,7 +4,7 @@
  "le": "2026-11-24",
  "valable_jusqu_au": "2026-12-01",
  "demande": "Il y a le Black Friday : déniche-moi des trucs.",
- "resume": "Deux vraies bonnes affaires sur tes articles : la parka McMurdo à 325 € (−35 %) et la Patagonia 1/4 zip à 104 €. La Timberland, elle, n'est pas encore à un bon prix : attends.",
+ "resume": "Une vraie affaire en France : la parka McMurdo à 325 € (−35 %), en M. À Québec : la Timberland Heritage 6-Inch à environ 95 € taxes comprises. La Patagonia 1/4 zip et la Timberland Premium jaune ne sont pas encore à un bon prix : attends.",
  "plans": [
   {
    "nom": "The North Face McMurdo Parka homme",
@@ -17,22 +17,37 @@
    "fin": "2026-12-01",
    "verdict": "acheter",
    "article": "mcmurdo",
-   "taille": "M à confirmer",
+   "taille": "M en stock",
    "pourquoi": "325 € au lieu de 500 €, l'offre Black Friday de la marque court jusqu'au 01/12. C'est dans les prix les plus bas vus sur 12 mois (le plus bas : 250 €, rare).",
-   "quand": "Si tu es à Québec avant le 01/12 : environ 296 € taxes comprises chez Sporting Life (404,98 $ CA, vu le 22/11)."
+   "quand": "Au Québec, Sporting Life l'affichait à 404,98 $ CA le 22/11 (environ 296 € taxes comprises), mais ce site refuse maintenant le robot : à vérifier sur place."
   },
   {
    "nom": "Patagonia Better Sweater 1/4 Zip noir",
    "reference": "25523",
    "image": "https://www.hawaiisurf.com/cdn/shop/files/better-sweater-14-zip-fleece-sweat-polaire-homme-9495979.jpg?v=1774023591",
-   "marchand": "Outnorth (Suède)",
-   "prix": 104.0,
-   "url": "https://www.outnorth.com/int/brands/patagonia/men-s-better-sweater-1-4-zip-156546-FS113201",
-   "verdict": "acheter",
+   "marchand": "Hawaiisurf",
+   "prix": 129.95,
+   "url": "https://www.hawaiisurf.com/en/products/better-sweater-1-4-zip-fleece-sweat-polaire-homme",
+   "verdict": "attendre",
    "article": "patagonia-better-sweater-1-4-zip",
    "taille": "M",
-   "pourquoi": "104 € en M, en stock : 25 € de moins que Hawaiisurf (129,95 €) et 36 € de moins qu'Alpinstore (139,90 €). Le 1/4 zip que tu as préféré en boutique.",
-   "quand": "Outnorth livre depuis la Suède, dans l'UE : pas de douane."
+   "pourquoi": "Outnorth l'affichait à 104 €, mais il n'y reste qu'une taille sur six, sans doute pas le M. En M, le meilleur prix vérifié est 129,95 € chez Hawaiisurf : c'est son prix normal (130 € chez Patagonia). Alerte posée à 110 €.",
+   "quand_court": "< 110 €"
+  },
+  {
+   "nom": "Timberland Heritage 6-Inch imperméable (blé, col bleu)",
+   "reference": "TB0A5RNWEM4",
+   "image": "https://assets.timberland.com/images/t_Thumbnail/v1780062844/TB0A5RNWEM4-HERO/Mens-Timberland-Premium-6Inch-Waterproof-Boot-TBL-HERO.png",
+   "marchand": "Timberland (Canada, officiel)",
+   "pays": "CA",
+   "devise": "CAD",
+   "prix": 129.99,
+   "url": "https://www.timberland.com/en-ca/p/men/footwear-10039/mens-timberland-heritage-6-inch-waterproof-boot-TB0A5RNWEM4",
+   "taille": "US 7 (40)",
+   "verdict": "acheter",
+   "quand_court": "à Québec",
+   "pourquoi": "Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
+   "quand": "À acheter sur place à Québec, tant que la promo dure."
   },
   {
    "nom": "Timberland 6-Inch Premium jaune",

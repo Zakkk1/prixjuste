@@ -103,3 +103,10 @@ def test_annonce_une_seule_fois(tmp_path):
     assert "https://ex.io/pj/d/bp.html" in corps and "@moi" in corps
     assert notifier.annoncer(depot, gh, "", log=lambda *a: None) == 0
     assert gh.ouvertes == [notifier.TITRE_ANNONCES]
+
+
+def test_un_lien_retire_ne_compte_plus():
+    from prixjuste import analyse
+    art = {"id": "p", "liens_retires": ["https://a.fr/x"]}
+    obs = [{"lien": "https://a.fr/x", "prix": 104}, {"lien": "https://b.fr/y", "prix": 129.95}]
+    assert [o["prix"] for o in analyse.filtrer_obs(art, obs)] == [129.95]

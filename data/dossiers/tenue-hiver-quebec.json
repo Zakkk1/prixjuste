@@ -5,7 +5,7 @@
  "taille": "M · pointure 40",
  "demande": "Ma tenue d'hiver pour Québec, avec les pièces que je suis déjà.",
  "look": "Parka longue en duvet, polaire à col zippé, boots jaunes imperméables : chaud jusqu'à −20 °C, et le look outdoor classique.",
- "resume": "La tenue complète coûte environ 620 € au meilleur prix d'aujourd'hui, ou environ 490 € en prenant la parka à Québec et la boot CAT à la place de la Timberland.",
+ "resume": "La tenue complète coûte environ 645 € au meilleur prix d'aujourd'hui, ou environ 520 € en achetant la parka et la Timberland Heritage soldée sur place à Québec.",
  "options": [
   {
    "nom": "Les pièces exactes",
@@ -27,12 +27,13 @@
      "role": "Polaire",
      "nom": "Patagonia Better Sweater 1/4 Zip noir",
      "image": "https://www.hawaiisurf.com/cdn/shop/files/better-sweater-14-zip-fleece-sweat-polaire-homme-9495979.jpg?v=1774023591",
-     "marchand": "Outnorth (Suède)",
-     "prix": 104.0,
-     "url": "https://www.outnorth.com/int/brands/patagonia/men-s-better-sweater-1-4-zip-156546-FS113201",
-     "verdict": "acheter",
+     "marchand": "Hawaiisurf",
+     "prix": 129.95,
+     "url": "https://www.hawaiisurf.com/en/products/better-sweater-1-4-zip-fleece-sweat-polaire-homme",
+     "verdict": "attendre",
      "article": "patagonia-better-sweater-1-4-zip",
-     "pourquoi": "Le moins cher en M, en stock."
+     "pourquoi": "Prix normal en M ; Outnorth était moins cher mais n'a sans doute plus ta taille.",
+     "quand_court": "< 110 €"
     },
     {
      "role": "Chaussures",
@@ -50,7 +51,7 @@
   },
   {
    "nom": "Même allure, moins cher",
-   "idee": "La parka achetée sur place à Québec, la CAT jaune miel à la place de la Timberland.",
+   "idee": "Achetée sur place à Québec : la parka et la Timberland Heritage soldée.",
    "pieces": [
     {
      "role": "Manteau",
@@ -70,28 +71,35 @@
      "role": "Polaire",
      "nom": "Patagonia Better Sweater 1/4 Zip noir",
      "image": "https://www.hawaiisurf.com/cdn/shop/files/better-sweater-14-zip-fleece-sweat-polaire-homme-9495979.jpg?v=1774023591",
-     "marchand": "Outnorth (Suède)",
-     "prix": 104.0,
-     "url": "https://www.outnorth.com/int/brands/patagonia/men-s-better-sweater-1-4-zip-156546-FS113201",
-     "verdict": "acheter",
-     "article": "patagonia-better-sweater-1-4-zip"
+     "marchand": "Hawaiisurf",
+     "prix": 129.95,
+     "url": "https://www.hawaiisurf.com/en/products/better-sweater-1-4-zip-fleece-sweat-polaire-homme",
+     "verdict": "attendre",
+     "article": "patagonia-better-sweater-1-4-zip",
+     "quand_court": "< 110 €",
+     "pourquoi": "Prix normal en M ; Outnorth était moins cher mais n'a sans doute plus ta taille."
     },
     {
-     "role": "Chaussures",
-     "nom": "CAT Colorado 2.0 Hiker WP jaune miel",
-     "image": "https://sportano.com/img/986c30c27a3d26a3ee16c136f92f4ff5/1/9/195021324461_20-jpg/men-s-shoes-caterpillar-colorado-2-0-hiker-wp-honey-reset-0.jpg",
-     "marchand": "Sportano",
-     "prix": 90.99,
-     "url": "https://sportano.fr/p/774751/chaussures-homme-caterpillar-colorado-2-0-hiker-wp-honey-reset",
-     "verdict": "surveiller",
-     "article": "equivalent-moins-cher-timberland-6-inch",
-     "pourquoi": "Même allure que la Timberland, 100 € de moins. Prix suivi depuis 4 jours seulement : il est déjà bas, mais pas encore confirmé."
+     "nom": "Timberland Heritage 6-Inch imperméable (blé, col bleu)",
+     "reference": "TB0A5RNWEM4",
+     "image": "https://assets.timberland.com/images/t_Thumbnail/v1780062844/TB0A5RNWEM4-HERO/Mens-Timberland-Premium-6Inch-Waterproof-Boot-TBL-HERO.png",
+     "marchand": "Timberland (Canada, officiel)",
+     "pays": "CA",
+     "devise": "CAD",
+     "prix": 129.99,
+     "url": "https://www.timberland.com/en-ca/p/men/footwear-10039/mens-timberland-heritage-6-inch-waterproof-boot-TB0A5RNWEM4",
+     "taille": "US 7 (40)",
+     "verdict": "acheter",
+     "quand_court": "à Québec",
+     "pourquoi": "Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
+     "quand": "À acheter sur place à Québec, tant que la promo dure.",
+     "role": "Chaussures"
     }
    ]
   }
  ],
  "conseils": [
-  "Au retour en France : rien à payer à la douane jusqu'à 430 € d'achats faits au Canada (voyage en avion). La parka seule (environ 296 €) passe.",
-  "Une tenue de ce genre se monte pièce par pièce : achète d'abord ce qui est au plus bas (parka, polaire), la boot quand elle passe sous 160 €."
+  "Au retour en France : rien à payer à la douane jusqu'à 430 € d'achats faits au Canada (voyage en avion). Parka et Heritage ensemble, environ 391 € : ça passe.",
+  "Achète d'abord ce qui est au plus bas (la parka) ; la Patagonia quand elle passe sous 110 €, la Timberland Premium sous 160 € : tu es prévenu sur ton téléphone."
  ]
 }

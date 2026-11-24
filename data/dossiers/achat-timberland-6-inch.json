@@ -58,15 +58,31 @@
  ],
  "historique": [
   "Sur 12 mois (comparateurs lus lors de l'enquête du 22/11 et archives) : souvent à 160 € ou moins ; le plus bas : 132 € le 21/02/2026.",
+  "Sur Amazon (Keepa) : 179 € en janvier, 165,99 € en septembre, 189,79 € le 23/11.",
   "Le Dénicheur affiche « dès 119,95 € » pour la 6-Inch Premium WP homme, sans préciser le coloris ni la pointure : souvent le noir ou une petite taille. À vérifier avant d'y croire.",
   "Black Friday le 27/11, Cyber Monday le 30/11, soldes d'hiver à partir du 06/01/2027."
  ],
  "canada": [
   "En jaune, 230 $ CA au Canada, soit environ 168 € taxes du Québec comprises : 23 € de moins que le moins cher en France, 62 € de moins que le site officiel. Intéressant si tu y es déjà, mais encore au-dessus des 160 € visés.",
-  "La section soldes de Timberland Canada propose aujourd'hui une 6-Inch Premium homme (autre coloris) à 129,99 $ CA, soit environ 95 € taxes comprises. Le coloris et ta pointure ne sont pas confirmés : regarde-la si le jaune n'est pas obligatoire.",
+  "Timberland Canada solde la Heritage 6-Inch (blé, col bleu) à 129,99 $ CA, soit environ 95 € taxes comprises, et il en reste en US 7 (ton 40) : vérifié le 24/11. Ce n'est pas la Premium jaune : regarde la photo avant.",
   "Rien à payer à la douane au retour tant que tes achats restent sous 430 € (voyage en avion)."
  ],
  "equivalents": [
+  {
+   "nom": "Timberland Heritage 6-Inch imperméable (blé, col bleu)",
+   "reference": "TB0A5RNWEM4",
+   "image": "https://assets.timberland.com/images/t_Thumbnail/v1780062844/TB0A5RNWEM4-HERO/Mens-Timberland-Premium-6Inch-Waterproof-Boot-TBL-HERO.png",
+   "marchand": "Timberland (Canada, officiel)",
+   "pays": "CA",
+   "devise": "CAD",
+   "prix": 129.99,
+   "url": "https://www.timberland.com/en-ca/p/men/footwear-10039/mens-timberland-heritage-6-inch-waterproof-boot-TB0A5RNWEM4",
+   "taille": "US 7 (40)",
+   "verdict": "acheter",
+   "quand_court": "à Québec",
+   "pourquoi": "Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
+   "quand": "À acheter sur place à Québec, tant que la promo dure."
+  },
   {
    "nom": "CAT Colorado 2.0 Hiker WP jaune miel",
    "reference": "P726349",

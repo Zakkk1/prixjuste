@@ -1,37 +1,38 @@
 {
-  "id": "patagonia-better-sweater-1-4-zip",
-  "statut": "suivi",
-  "cree_le": "2026-11-23",
-  "demande": "Patagonia Better Sweater 1/4 zip (vu en magasin, préféré au zip intégral)",
-  "nom": "Patagonia Better Sweater 1/4 Zip homme",
-  "reference": "25523 (col zippé, noir BLK)",
-  "variante": "Noir · taille M",
-  "categorie": "vetement_hiver",
-  "urgence": "pas_urgent",
-  "taille": "M",
-  "coloris": "noir",
-  "autres_coloris_ok": false,
-  "image": "https://www.hawaiisurf.com/cdn/shop/files/better-sweater-14-zip-fleece-sweat-polaire-homme-9495979.jpg?v=1774023591",
-  "liens": [
-    {
-      "marchand": "Hawaiisurf",
-      "url": "https://www.hawaiisurf.com/en/products/better-sweater-1-4-zip-fleece-sweat-polaire-homme",
-      "coloris": "Noir · M",
-      "filtre": "re:BLACK-M\\b",
-      "exact": true
-    },
-    {
-      "marchand": "Outnorth (Suède)",
-      "url": "https://www.outnorth.com/int/brands/patagonia/men-s-better-sweater-1-4-zip-156546-FS113201",
-      "coloris": "Noir · taille non détaillée",
-      "exact": true
-    },
-    {
-      "marchand": "Alpinstore",
-      "url": "https://www.alpinstore.com/fr/553052-pull-over-patagonia-better-sweater-14-zip-black-homme.html",
-      "coloris": "Noir · taille non détaillée",
-      "exact": true
-    }
-  ],
-  "liens_historiques": []
+ "id": "patagonia-better-sweater-1-4-zip",
+ "statut": "suivi",
+ "cree_le": "2026-11-23",
+ "demande": "Patagonia Better Sweater 1/4 zip (vu en magasin, préféré au zip intégral)",
+ "nom": "Patagonia Better Sweater 1/4 Zip homme",
+ "reference": "25523 (col zippé, noir BLK)",
+ "variante": "Noir · taille M",
+ "categorie": "vetement_hiver",
+ "urgence": "pas_urgent",
+ "taille": "M",
+ "coloris": "noir",
+ "autres_coloris_ok": false,
+ "image": "https://www.hawaiisurf.com/cdn/shop/files/better-sweater-14-zip-fleece-sweat-polaire-homme-9495979.jpg?v=1774023591",
+ "liens": [
+  {
+   "marchand": "Hawaiisurf",
+   "url": "https://www.hawaiisurf.com/en/products/better-sweater-1-4-zip-fleece-sweat-polaire-homme",
+   "coloris": "Noir · M",
+   "filtre": "re:BLACK-M\\b",
+   "exact": true
+  },
+  {
+   "marchand": "Alpinstore",
+   "url": "https://www.alpinstore.com/fr/553052-pull-over-patagonia-better-sweater-14-zip-black-homme.html",
+   "coloris": "Noir · taille non détaillée",
+   "exact": true
+  }
+ ],
+ "liens_historiques": [],
+ "budget_max": 110,
+ "notes_liens": [
+  "Outnorth (104 €) retiré le 24/11 : la page ne dit pas quelle taille est en stock (une seule sur six), impossible de confirmer le M."
+ ],
+ "liens_retires": [
+  "https://www.outnorth.com/int/brands/patagonia/men-s-better-sweater-1-4-zip-156546-FS113201"
+ ]
 }

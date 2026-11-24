@@ -137,8 +137,10 @@ def ecarter_isoles(obs, seuil=0.6):
 
 def filtrer_obs(article, obs):
     """Relevés pris en compte pour le verdict : en France/UE seulement (un prix étranger, dans une autre
-    devise et hors taxes, se compare à part), et seulement le coloris exact si l'article l'exige."""
-    obs = [o for o in obs if not o.get("pays")]
+    devise et hors taxes, se compare à part), et seulement le coloris exact si l'article l'exige.
+    Les pages retirées (`liens_retires` : taille illisible, mauvais produit…) ne comptent plus du tout."""
+    retires = set(article.get("liens_retires") or [])
+    obs = [o for o in obs if not o.get("pays") and o.get("lien") not in retires]
     if article.get("autres_coloris_ok", True):
         return obs
     return [o for o in obs if o.get("exact", True)]
