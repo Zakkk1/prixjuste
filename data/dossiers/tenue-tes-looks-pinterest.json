@@ -1,0 +1,208 @@
+{
+ "type": "tenue",
+ "titre": "Tes looks Pinterest : 3 styles, pièce par pièce",
+ "le": "2026-11-24",
+ "taille": "M · W29 L32 · pointure 40",
+ "demande": "Voilà le genre d'outfits que j'aime bien (5 photos Pinterest).",
+ "look": "Tes 5 photos racontent deux styles : le new-yorkais (doudoune ou veste de travail délavée, jean très large, Timberland jaunes, casquette des Yankees) et le minimal (pull col rond, t-shirt blanc qui dépasse, pantalon large, mocassins). Point commun : pantalon ample, haut simple, une seule pièce forte.",
+ "resume": "Trois looks tirés de tes photos. Achète maintenant les petites pièces (pulls Uniqlo, casquette) ; attends le Black Friday pour la Nuptse (vise 250 €), le jean et la veste Carhartt. Les Timberland reviennent dans 3 photos sur 5 : ce sont elles qui comptent.",
+ "options": [
+  {
+   "nom": "1. New York, doudoune (photo 1)",
+   "idee": "Nuptse noire courte, pull marine, t-shirt blanc, jean baggy clair, Timberland, casquette.",
+   "pinterest": "https://www.pinterest.com/search/pins/?q=nuptse%20baggy%20jeans%20timberland%20outfit",
+   "pieces": [
+    {
+     "role": "Doudoune",
+     "nom": "The North Face 1996 Retro Nuptse noire",
+     "reference": "NF0A3C8D",
+     "image": "https://img01.ztat.net/article/spp-media-p1/c2be3a4755374c71b1cab8a6574b2ca1/65260892b2ec443087611229743048a6.jpg?imwidth=400",
+     "marchand": "Zalando",
+     "prix": 279.95,
+     "prix_avant": 350.0,
+     "url": "https://www.zalando.fr/the-north-face-1996-retro-nuptse-jacket-doudoune-black-th321u01e-q12.html",
+     "taille": "M",
+     "verdict": "attendre",
+     "quand_court": "< 250 €",
+     "article": "nuptse-1996",
+     "pourquoi": "279,95 € en M chez Zalando (350 € chez JD Sports), vérifié ce soir. Correct, mais le Black Friday de The North Face (−30 % jusqu'au 01/12) peut la mettre vers 245 € : vise 250 €, alerte posée.",
+     "quand": "Si elle n'est pas sous 250 € le 30/11, prends-la à 279,95 € avant le 01/12."
+    },
+    {
+     "role": "Pull",
+     "nom": "Pull col rond 100 % laine, bleu marine",
+     "marchand": "Uniqlo",
+     "prix": 39.9,
+     "url": "https://www.uniqlo.com/fr/fr/homme/mailles/merinos-extra-fin",
+     "taille": "M",
+     "verdict": "acheter",
+     "pourquoi": "Le pull marine de la photo 1. Environ 40 €, prix normal et correct, pas besoin d'attendre. Prix lu dans la recherche."
+    },
+    {
+     "role": "Dessous",
+     "nom": "T-shirt blanc épais qui dépasse en bas",
+     "verdict": "deja",
+     "pourquoi": "Le détail de toutes tes photos : 2 cm de blanc sous le pull ou la veste. Un t-shirt blanc épais que tu as sûrement déjà."
+    },
+    {
+     "role": "Jean",
+     "nom": "Levi's 578 Baggy, délavé clair",
+     "marchand": "Levi's (officiel)",
+     "prix": 110.0,
+     "url": "https://www.levi.com/FR/fr_FR/jeans-loose/c/levi_collections_baggy",
+     "taille": "W29 L32",
+     "verdict": "attendre",
+     "quand_court": "→ 30/11",
+     "pourquoi": "Le jean large et clair qui tombe sur les boots. 110 € au prix normal, régulièrement à 55 € en promo : attends le Black Friday. Prix lu dans la recherche, le site refuse le robot."
+    },
+    {
+     "role": "Chaussures",
+     "nom": "Timberland 6-Inch Premium jaune",
+     "image": "https://assets.timberland.eu/images/t_Thumbnail/v1757347665/TB110061713-MKTG1/Timberland-Premium-6Inch-Waterproof-Boot-for-Men-in-Yellow.jpg",
+     "marchand": "E.Leclerc (vendeur tiers)",
+     "prix": 190.79,
+     "url": "https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667",
+     "taille": "39,5 ou 40",
+     "verdict": "attendre",
+     "quand_court": "< 160 €",
+     "article": "timberland",
+     "pourquoi": "Elles sont sur 3 de tes 5 photos : c'est LA pièce de ton style. Alerte posée à 160 €."
+    },
+    {
+     "role": "Casquette",
+     "nom": "New Era 59FIFTY New York Yankees noire",
+     "marchand": "11teamsports",
+     "prix": 45.85,
+     "url": "https://www.11teamsports.com/fr-fr/p/new-era-mlb-new-york-yankees-59fifty-fitted-capuchon-noir",
+     "verdict": "acheter",
+     "pourquoi": "La casquette des photos 1 et 2. Taille fixe : mesure ton tour de tête (7 1/4 ≈ 58 cm). Vue dès 38 € ailleurs, prix lu dans la recherche."
+    }
+   ]
+  },
+  {
+   "nom": "2. Workwear délavé (photos 2 et 3)",
+   "idee": "Veste de travail délavée, t-shirt blanc, pantalon large (jean ou double knee), Timberland, casquette.",
+   "pinterest": "https://www.pinterest.com/search/pins/?q=carhartt%20washed%20jacket%20baggy%20jeans%20timberland%20outfit",
+   "pieces": [
+    {
+     "role": "Veste",
+     "nom": "Carhartt veste Sierra coutil délavé, doublure sherpa, capuche",
+     "reference": "104392",
+     "marchand": "Carhartt (officiel)",
+     "image": "https://imgcdn.carhartt.com/is/image/Carhartt/EU_104392_BLK",
+     "prix": 179.99,
+     "url": "https://carhartt.com/fr-fr/p/relaxed-fit-washed-duck-sherpa-lined-jacket/104392",
+     "taille": "S ou M",
+     "verdict": "attendre",
+     "quand_court": "→ 30/11",
+     "pourquoi": "La veste délavée à col sherpa de la photo 3. 179,99 € vérifié ce soir. Coupe « relaxed » américaine : à 65 kg, le S suffit sans doute."
+    },
+    {
+     "role": "Dessous",
+     "nom": "T-shirt blanc épais qui dépasse en bas",
+     "verdict": "deja",
+     "pourquoi": "Le détail de toutes tes photos : 2 cm de blanc sous le pull ou la veste. Un t-shirt blanc épais que tu as sûrement déjà."
+    },
+    {
+     "role": "Pantalon",
+     "nom": "Carhartt WIP Double Knee Pant, gris",
+     "marchand": "Carhartt WIP",
+     "prix": 129.0,
+     "url": "https://carhartt-wip.com/en/men-pants/double-knee-pant-yosemite-rinsed-2061_1",
+     "taille": "29/32",
+     "verdict": "attendre",
+     "quand_court": "→ 30/11",
+     "pourquoi": "Le pantalon de charpentier gris et large de la photo 2. 129 € au prix normal, vu soldé autour de 82 € : attends. Prix lu dans la recherche."
+    },
+    {
+     "role": "Chaussures",
+     "nom": "Timberland 6-Inch Premium jaune",
+     "image": "https://assets.timberland.eu/images/t_Thumbnail/v1757347665/TB110061713-MKTG1/Timberland-Premium-6Inch-Waterproof-Boot-for-Men-in-Yellow.jpg",
+     "marchand": "E.Leclerc (vendeur tiers)",
+     "prix": 190.79,
+     "url": "https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667",
+     "taille": "39,5 ou 40",
+     "verdict": "attendre",
+     "quand_court": "< 160 €",
+     "article": "timberland",
+     "pourquoi": "Elles sont sur 3 de tes 5 photos : c'est LA pièce de ton style. Alerte posée à 160 €."
+    },
+    {
+     "role": "Casquette",
+     "nom": "New Era 59FIFTY New York Yankees noire",
+     "marchand": "11teamsports",
+     "prix": 45.85,
+     "url": "https://www.11teamsports.com/fr-fr/p/new-era-mlb-new-york-yankees-59fifty-fitted-capuchon-noir",
+     "verdict": "acheter",
+     "pourquoi": "La casquette des photos 1 et 2. Taille fixe : mesure ton tour de tête (7 1/4 ≈ 58 cm). Vue dès 38 € ailleurs, prix lu dans la recherche."
+    }
+   ]
+  },
+  {
+   "nom": "3. Minimal (photos 4 et 5)",
+   "idee": "Pull col rond gris ou noir, t-shirt blanc, pantalon large plissé, mocassins en cuir.",
+   "pinterest": "https://www.pinterest.com/search/pins/?q=crewneck%20sweater%20wide%20pleated%20trousers%20loafers%20men",
+   "pieces": [
+    {
+     "role": "Pull",
+     "nom": "Pull col rond 100 % laine, gris chiné",
+     "marchand": "Uniqlo",
+     "prix": 39.9,
+     "url": "https://www.uniqlo.com/fr/fr/homme/mailles/merinos-extra-fin",
+     "taille": "M",
+     "verdict": "acheter",
+     "pourquoi": "Le pull gris de la photo 4, en noir pour la photo 5. Prends-le un peu ample (M). Prix lu dans la recherche."
+    },
+    {
+     "role": "Dessous",
+     "nom": "T-shirt blanc épais qui dépasse en bas",
+     "verdict": "deja",
+     "pourquoi": "Le détail de toutes tes photos : 2 cm de blanc sous le pull ou la veste. Un t-shirt blanc épais que tu as sûrement déjà."
+    },
+    {
+     "role": "Pantalon",
+     "nom": "Pantalon large plissé, anthracite",
+     "marchand": "Uniqlo",
+     "prix": 49.9,
+     "url": "https://www.uniqlo.com/fr/fr/men/bottoms",
+     "taille": "M ou 76 cm",
+     "verdict": "acheter",
+     "pourquoi": "Le pantalon large de la photo 5. Environ 50 € (vu à 39,90 € en Belgique). Pour la photo 4 : la même coupe en écru."
+    },
+    {
+     "role": "Chaussures",
+     "nom": "G.H. Bass Weejuns, mocassins cuir (noir ou marron)",
+     "marchand": "Breuninger",
+     "prix": 151.99,
+     "url": "https://www.breuninger.com/be/fr/marques/g-h-bass/",
+     "taille": "40",
+     "verdict": "surveiller",
+     "pourquoi": "Les mocassins des photos 4 et 5, le classique. 150 à 210 € selon le modèle ; prends ta vraie pointure, ils se font au pied. Prix lu dans la recherche."
+    }
+   ]
+  }
+ ],
+ "conseils": [
+  "Silhouette mince et jean très large : ça marche si le haut a du volume (doudoune, veste épaisse) et si le bas tombe sur la chaussure. Prends ta vraie taille de taille (W29), pas plus grand : le baggy vient de la coupe, pas de la taille.",
+  "Doudoune Nuptse ou parka McMurdo ? La Nuptse colle à tes photos (courte, streetwear) ; la McMurdo (longue) protège mieux du froid de Québec. Si tu n'en prends qu'une pour ce style : la Nuptse.",
+  "Le petit t-shirt blanc qui dépasse sous le pull : c'est le détail commun à toutes tes photos, gratuit si tu en as déjà."
+ ],
+ "sources": [
+  {
+   "nom": "Zalando, Nuptse 1996 noire (prix lu par le robot le 24/11)",
+   "url": "https://www.zalando.fr/the-north-face-1996-retro-nuptse-jacket-doudoune-black-th321u01e-q12.html"
+  },
+  {
+   "nom": "JD Sports, Nuptse 1996 (350 €, lu par le robot)",
+   "url": "https://www.jdsports.fr/product/noir-the-north-face-veste-nuptse-1996/19709092_jdsportsfr/"
+  },
+  {
+   "nom": "Carhartt, veste Sierra (179,99 €, lu par le robot)",
+   "url": "https://carhartt.com/fr-fr/p/relaxed-fit-washed-duck-sherpa-lined-jacket/104392"
+  },
+  {
+   "nom": "The North Face France, Black Friday (−30 % du 24/11 au 01/12)",
+   "url": "https://www.thenorthface.com/fr-fr/black-friday"
+  }
+ ]
+}
