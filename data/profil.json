@@ -1,7 +1,19 @@
 {
  "pointure": "40",
- "taille": null,
+ "taille": "M",
  "marques": {
-  "timberland": {"pointure": -0.5, "pourquoi": "Timberland conseille une demi-pointure en dessous pour la 6-Inch Premium"}
- }
+  "timberland": {
+   "pointure": -0.5,
+   "pourquoi": "Timberland conseille une demi-pointure en dessous pour la 6-Inch Premium"
+  }
+ },
+ "preferences": [
+  "Polaire : préfère le col 1/4 zip au full zip (vu en boutique).",
+  "Style : outdoor, workwear d'hiver (Timberland, The North Face, Patagonia)."
+ ],
+ "voyage": {
+  "destination": "Québec (Canada)",
+  "pourquoi": "comparer avec les prix au Québec, taxes comprises"
+ },
+ "garde_robe": []
 }

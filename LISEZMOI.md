@@ -5,6 +5,21 @@ Tu dis quel objet tu veux. L'outil relève les prix tout seul chaque matin et te
 
 Site : https://zakkk1.github.io/prixjuste/
 
+## L'assistant d'achat (le plus simple)
+
+Ouvre Claude (application → Code → une session sur le dépôt **prixjuste**) et écris, comme à quelqu'un :
+
+- **Une tenue** : envoie la photo d'un look (Pinterest, Instagram, capture d'écran) + « j'aime bien ».
+  Claude retrouve chaque pièce, une version moins chère, le meilleur du style, le meilleur prix et le verdict
+  de chaque pièce (ACHÈTE, ATTENDS jusqu'à quand, SURVEILLE, ÉVITE), avec le total de chaque option.
+- **Un achat** : « je veux les Timberland 6-Inch, pointure 40 ». Toutes les boutiques en France et au Canada
+  (prix au Québec taxes comprises), l'historique, puis : achète maintenant ou attends, avec la date et le prix visé.
+- **Les bons plans** : « trouve-moi des bons plans ». Les vraies promos du moment pour toi, fausses promos écartées.
+
+La réponse arrive dans la conversation ; le dossier s'ajoute au site (« Mes dossiers »). Ce que tu décides
+d'attendre est suivi chaque jour par le robot, et ton téléphone est prévenu quand le prix passe sous la cible.
+Tes tailles sont gardées (`data/profil.json`) : tu ne les donnes qu'une fois. Méthode : `docs/ASSISTANT.md`.
+
 ## Ajouter un objet
 
 1. Sur le site, tape l'objet dans « Qu'est-ce que tu veux acheter ? » → **Suivre**.

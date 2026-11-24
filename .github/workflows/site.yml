@@ -9,6 +9,8 @@ on:
       - "prixjuste/build.py"
       - "prixjuste/statique/**"
       - "data/articles/**"
+      - "data/dossiers/**"
+      - "data/profil.json"
   workflow_dispatch:
 
 permissions:
@@ -30,6 +32,25 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
+
+  annoncer:
+    # Les dossiers faits sans l'utilisateur (« annoncer »: true) sont commentés sur une issue, avec mention :
+    # son téléphone sonne. Sans état à garder (la marque du dossier est dans le commentaire).
+    needs: deployer
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Annoncer les nouveaux dossiers
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PAGES_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: python -m prixjuste annoncer
 
   deployer:
     needs: construire

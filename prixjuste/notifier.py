@@ -85,6 +85,12 @@ class GitHub:
     def commenter(self, numero, corps):
         self._req("POST", f"/issues/{numero}/comments", {"body": corps})
 
+    def issues(self, etiquette):
+        return self._req("GET", f"/issues?labels={etiquette}&state=all&per_page=100")
+
+    def commentaires(self, numero):
+        return self._req("GET", f"/issues/{numero}/comments?per_page=100")
+
 
 def notifier(depot, github, pages_url="", aujourdhui=None, log=print, mention=None):
     pages_url = _url_minuscule(pages_url)
@@ -130,3 +136,42 @@ def depuis_environnement():
     if not (jeton and depot):
         return None
     return GitHub(depot, jeton, os.environ.get("GITHUB_API_URL", "https://api.github.com"))
+
+
+# ---------------------------------------------------------------- dossiers de l'assistant
+
+TITRE_ANNONCES = "Assistant : nouveaux dossiers"
+
+
+def annoncer(depot, github, pages_url="", log=print, mention=None):
+    """Un commentaire par dossier marqué « annoncer » (fait par une routine, quand tu n'es pas dans la conversation).
+    Sans état à garder : la marque <!-- dossier:id --> dans les commentaires dit ce qui est déjà annoncé."""
+    from . import dossiers
+    pages_url = _url_minuscule(pages_url)
+    a_faire = [d for d in dossiers.charger(depot) if d.get("annoncer")]
+    if not a_faire:
+        return 0
+    numero, deja = None, ""
+    if github:
+        numero = next((i["number"] for i in github.issues(ETIQUETTE) if i["title"] == TITRE_ANNONCES), None)
+        if numero:
+            deja = "\n".join(c.get("body") or "" for c in github.commentaires(numero))
+    n = 0
+    for d in sorted(a_faire, key=lambda d: d["le"]):
+        marque = f"<!-- dossier:{d['id']} -->"
+        if marque in deja:
+            continue
+        corps = f"**{dossiers.TYPES[d['type']]} — {d['titre']}**\n\n{d['resume']}"
+        if pages_url:
+            corps += f"\n\nLe dossier : {pages_url}/d/{d['id']}.html"
+        if mention:
+            corps += f"\n\n@{mention}"
+        corps += f"\n\n{marque}"
+        if github:
+            if not numero:
+                numero = github.ouvrir(TITRE_ANNONCES, "Les dossiers préparés par Claude sans toi (bons plans du Black "
+                                       "Friday, des soldes…) sont annoncés ici. Abonne-toi pour être prévenu.")
+            github.commenter(numero, corps)
+        log(f"[annonce] {d['id']}")
+        n += 1
+    return n

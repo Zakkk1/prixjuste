@@ -12,7 +12,7 @@ def test_site_complet(tmp_path):
     noms = {p.relative_to(sortie).as_posix() for p in sortie.rglob("*") if p.is_file()}
     assert {"index.html", "ajouter.html", "style.css", "site.js", "data.json", "a/mcmurdo.html", "a/timberland.html"} <= noms
     index = (sortie / "index.html").read_text(encoding="utf-8")
-    assert "Qu'est-ce que tu veux acheter" in index
+    assert "Ton assistant d'achat" in index and "ajouter.html" in index
     # tri par urgence de la décision : l'ordre des articles suit ORDRE (indépendant des prix du jour)
     data = json.loads((sortie / "data.json").read_text(encoding="utf-8"))
     codes = {a["id"]: a["tampon"] for a in data["articles"]}

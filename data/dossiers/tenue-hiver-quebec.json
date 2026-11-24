@@ -1,0 +1,97 @@
+{
+ "type": "tenue",
+ "titre": "Hiver à Québec : ta tenue avec tes pièces",
+ "le": "2026-11-24",
+ "taille": "M · pointure 40",
+ "demande": "Ma tenue d'hiver pour Québec, avec les pièces que je suis déjà.",
+ "look": "Parka longue en duvet, polaire à col zippé, boots jaunes imperméables : chaud jusqu'à −20 °C, et le look outdoor classique.",
+ "resume": "La tenue complète coûte environ 620 € au meilleur prix d'aujourd'hui, ou environ 490 € en prenant la parka à Québec et la boot CAT à la place de la Timberland.",
+ "options": [
+  {
+   "nom": "Les pièces exactes",
+   "idee": "Ce que tu as choisi, au meilleur prix lu aujourd'hui en France.",
+   "pieces": [
+    {
+     "role": "Manteau",
+     "nom": "The North Face McMurdo Parka",
+     "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1746464442/NF0A5GJFEKP-HERO/Mens-McMurdo-Parka.jpg",
+     "marchand": "The North Face (officiel)",
+     "prix": 325.0,
+     "prix_avant": 500.0,
+     "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF",
+     "verdict": "acheter",
+     "article": "mcmurdo",
+     "pourquoi": "−35 %, offre valable jusqu'au 01/12."
+    },
+    {
+     "role": "Polaire",
+     "nom": "Patagonia Better Sweater 1/4 Zip noir",
+     "image": "https://www.hawaiisurf.com/cdn/shop/files/better-sweater-14-zip-fleece-sweat-polaire-homme-9495979.jpg?v=1774023591",
+     "marchand": "Outnorth (Suède)",
+     "prix": 104.0,
+     "url": "https://www.outnorth.com/int/brands/patagonia/men-s-better-sweater-1-4-zip-156546-FS113201",
+     "verdict": "acheter",
+     "article": "patagonia-better-sweater-1-4-zip",
+     "pourquoi": "Le moins cher en M, en stock."
+    },
+    {
+     "role": "Chaussures",
+     "nom": "Timberland 6-Inch Premium jaune",
+     "image": "https://assets.timberland.eu/images/t_Thumbnail/v1757347665/TB110061713-MKTG1/Timberland-Premium-6Inch-Waterproof-Boot-for-Men-in-Yellow.jpg",
+     "marchand": "E.Leclerc (vendeur tiers)",
+     "prix": 190.79,
+     "url": "https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667",
+     "verdict": "attendre",
+     "quand_court": "→ 30/11",
+     "article": "timberland",
+     "pourquoi": "Attends : vise 160 € ou moins."
+    }
+   ]
+  },
+  {
+   "nom": "Même allure, moins cher",
+   "idee": "La parka achetée sur place à Québec, la CAT jaune miel à la place de la Timberland.",
+   "pieces": [
+    {
+     "role": "Manteau",
+     "nom": "The North Face McMurdo Parka",
+     "image": "https://assets.thenorthface.eu/images/t_Thumbnail/v1746464442/NF0A5GJFEKP-HERO/Mens-McMurdo-Parka.jpg",
+     "marchand": "Sporting Life (Québec)",
+     "pays": "CA",
+     "devise": "CAD",
+     "prix": 404.98,
+     "url": "https://www.sportinglife.ca/en-CA/men/clothing/coats-jackets/parkas/mens-mcmurdo-parka/25524638.html",
+     "verdict": "acheter",
+     "article": "mcmurdo",
+     "pourquoi": "Taxes du Québec comprises, environ 30 € de moins qu'en France.",
+     "quand": "Seulement si tu y vas bientôt : prix vu le 22/11, il peut changer."
+    },
+    {
+     "role": "Polaire",
+     "nom": "Patagonia Better Sweater 1/4 Zip noir",
+     "image": "https://www.hawaiisurf.com/cdn/shop/files/better-sweater-14-zip-fleece-sweat-polaire-homme-9495979.jpg?v=1774023591",
+     "marchand": "Outnorth (Suède)",
+     "prix": 104.0,
+     "url": "https://www.outnorth.com/int/brands/patagonia/men-s-better-sweater-1-4-zip-156546-FS113201",
+     "verdict": "acheter",
+     "article": "patagonia-better-sweater-1-4-zip"
+    },
+    {
+     "role": "Chaussures",
+     "nom": "CAT Colorado 2.0 Hiker WP jaune miel",
+     "image": "https://sportano.com/img/986c30c27a3d26a3ee16c136f92f4ff5/1/9/195021324461_20-jpg/men-s-shoes-caterpillar-colorado-2-0-hiker-wp-honey-reset-0.jpg",
+     "marchand": "Sportano",
+     "prix": 90.99,
+     "url": "https://sportano.fr/p/774751/chaussures-homme-caterpillar-colorado-2-0-hiker-wp-honey-reset",
+     "verdict": "surveiller",
+     "article": "equivalent-moins-cher-timberland-6-inch",
+     "pourquoi": "Même allure que la Timberland, 100 € de moins. Prix suivi depuis 4 jours seulement : il est déjà bas, mais pas encore confirmé."
+    }
+   ]
+  }
+ ],
+ "conseils": [
+  "Au retour en France : rien à payer à la douane jusqu'à 430 € d'achats faits au Canada (voyage en avion). La parka seule (environ 296 €) passe.",
+  "Une tenue de ce genre se monte pièce par pièce : achète d'abord ce qui est au plus bas (parka, polaire), la boot quand elle passe sous 160 €."
+ ]
+}

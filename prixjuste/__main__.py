@@ -9,6 +9,9 @@
                                                       (titre/corps lus dans ISSUE_TITLE / ISSUE_BODY)
   python -m prixjuste premier-releve ID               relevé + archives + compte rendu (après un ajout)
   python -m prixjuste notifier                        commente l'issue « Suivi » d'un article quand son verdict change
+  python -m prixjuste dossier [FICHIER…]              vérifie les dossiers de l'assistant (data/dossiers/)
+  python -m prixjuste convertir 230 CAD               prix canadien -> euros, taxes du Québec comprises
+  python -m prixjuste annoncer                        notifie les dossiers marqués « annoncer » (bons plans…)
   python -m prixjuste verifier URL [--taille T] [--filtre F]
                                                       la page est-elle lisible honnêtement ? (robots.txt, prix)
 """
@@ -199,6 +202,44 @@ def cmd_archives(a):
     print("ARCHIVE SANS PRIX LISIBLE")
 
 
+def cmd_dossier(depot, fichiers):
+    """Vérifie les dossiers de l'assistant (code 1 s'il y a un problème) et affiche leur résumé."""
+    import json
+    from . import dossiers, etranger
+    change = etranger.charger_change(depot)
+    chemins = [Path(f) for f in fichiers] or sorted((depot.racine / "dossiers").glob("*.json"))
+    articles, mauvais = depot.articles(), 0
+    for f in chemins:
+        try:
+            d = json.loads(Path(f).read_text(encoding="utf-8"))
+        except (OSError, ValueError) as ex:
+            print(f"✗ {f} : illisible ({ex})")
+            mauvais += 1
+            continue
+        d.setdefault("id", Path(f).stem)
+        err = dossiers.verifier(d, articles)
+        if err:
+            mauvais += 1
+            print(f"✗ {f}")
+            for x in err:
+                print(f"    - {x}")
+        else:
+            print(f"✓ {f}\n" + dossiers.resume_texte(d, change))
+    return 1 if mauvais else 0
+
+
+def cmd_convertir(depot, prix, devise):
+    from . import etranger
+    ch = etranger.charger_change(depot)
+    t = (ch or {}).get("taux", {}).get(devise.upper())
+    if not t:
+        sys.exit(f"Pas de taux BCE pour {devise} (lance « python -m prixjuste change »).")
+    ht = prix / t
+    print(f"{prix:.2f} {devise.upper()} = {ht:.2f} € (taux BCE du {ch['date']} : 1 € = {t} {devise.upper()})")
+    if devise.upper() == "CAD":
+        print(f"Au Québec, taxes comprises (TPS 5 % + TVQ 9,975 %) : {ht * 1.14975:.2f} €")
+
+
 def cmd_verdicts(depot):
     for art in _articles(depot):
         res = analyse.analyser(art, depot.releves(art["id"]))
@@ -236,6 +277,12 @@ def main(argv=None):
     prr.add_argument("--minutes", type=float, default=15)
     sp.add_parser("notifier")
     sp.add_parser("change")
+    do = sp.add_parser("dossier")
+    do.add_argument("fichiers", nargs="*", help="data/dossiers/*.json (tous si rien)")
+    cv = sp.add_parser("convertir")
+    cv.add_argument("prix", type=float)
+    cv.add_argument("devise", nargs="?", default="CAD")
+    sp.add_parser("annoncer")
     ar = sp.add_parser("archives")
     ar.add_argument("url", help="page exacte, ou préfixe terminé par * pour lister les pages archivées")
     ar.add_argument("--contient", help="mot présent dans l'URL (avec un préfixe)")
@@ -288,6 +335,17 @@ def main(argv=None):
         pages = os.environ.get("PAGES_URL", "")
         n = notifier.notifier(depot, gh, pages, mention=os.environ.get("GITHUB_REPOSITORY_OWNER"))
         print(f"{n} notification(s).")
+    elif a.cmd == "dossier":
+        sys.exit(cmd_dossier(depot, a.fichiers))
+    elif a.cmd == "convertir":
+        cmd_convertir(depot, a.prix, a.devise)
+    elif a.cmd == "annoncer":
+        from . import notifier
+        gh = notifier.depuis_environnement()
+        if not gh:
+            print("Pas de jeton GitHub : simulation, aucune notification envoyée.")
+        n = notifier.annoncer(depot, gh, os.environ.get("PAGES_URL", ""), mention=os.environ.get("GITHUB_REPOSITORY_OWNER"))
+        print(f"{n} dossier(s) annoncé(s).")
     elif a.cmd == "archives":
         cmd_archives(a)
     elif a.cmd == "verifier":

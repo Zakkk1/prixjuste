@@ -1,5 +1,17 @@
 RELAIS: non
 
+## Refonte du 24/11 : assistant d'achat (demande de l'utilisateur)
+- Mode principal : l'utilisateur écrit à Claude (photo de tenue, produit à acheter, bons plans) ; skills
+  `.claude/skills/{tenue,achat,bons-plans}`, méthode `docs/ASSISTANT.md`, rôle décrit en tête de `CLAUDE.md`.
+- Dossiers `data/dossiers/*.json` (types tenue / achat / bons-plans), vérifiés par `python -m prixjuste dossier`,
+  publiés sur le site (accueil « Ton assistant d'achat » + « Mes dossiers », pages `d/<id>.html`).
+- `python -m prixjuste convertir 230 CAD` (prix au Québec taxes comprises) ; `annoncer` (job de `site.yml`) commente
+  les dossiers `"annoncer": true` sur l'issue « Assistant : nouveaux dossiers » avec mention (téléphone).
+- 3 premiers dossiers réels du 24/11 : achat Timberland (ATTENDS → 30/11, cible 160 €), bons plans Black Friday
+  (McMurdo 325 €, Patagonia 1/4 zip 104 €), tenue « Hiver à Québec » (≈ 620 € ou ≈ 490 €).
+- Routines Black Friday (27/11) et Cyber Monday (30/11) : dossier bons plans fait sans l'utilisateur, annoncé.
+- Profil : taille M, préférences (1/4 zip), Québec ; seules les tailles sont publiées sur le site.
+
 # État de la construction
 
 Dernière mise à jour : 21/11/2026, ~16 h 40 UTC. Tout le BRIEF et toutes les idées de IDEES.md sont faits ; design refait pour la lisibilité.

@@ -1,0 +1,106 @@
+{
+ "type": "achat",
+ "titre": "Timberland 6-Inch Premium jaune",
+ "le": "2026-11-24",
+ "taille": "39,5 ou 40",
+ "demande": "La Timberland, j'aimerais bien l'acheter : je l'achète maintenant ou c'est mieux quand ?",
+ "article": "timberland",
+ "verdict": "attendre",
+ "quand_court": "→ 30/11",
+ "quand": "2026-11-30",
+ "prix_cible": 160,
+ "valable_jusqu_au": "2026-12-01",
+ "resume": "N'achète pas à 190–230 € : sur 12 mois elle est souvent descendue à 160 € ou moins (132 € en février). Attends le Black Friday (27/11) et le Cyber Monday (30/11) ; achète sous 160 €. Sinon, prochain bon moment : les soldes d'hiver du 6 janvier.",
+ "produit": {
+  "nom": "Timberland 6-Inch Premium imperméable, homme",
+  "reference": "TB110061713 (jaune Wheat)",
+  "image": "https://assets.timberland.eu/images/t_Thumbnail/v1757347665/TB110061713-MKTG1/Timberland-Premium-6Inch-Waterproof-Boot-for-Men-in-Yellow.jpg",
+  "url": "https://www.timberland.com/fr-fr/p/homme-10029/6-inch-boot-impermeable-timberland-premium-pour-homme-en-jaune-TB110061713"
+ },
+ "offres": [
+  {
+   "nom": "Timberland 6-Inch Premium jaune",
+   "marchand": "E.Leclerc (vendeur tiers Infopavon)",
+   "prix": 190.79,
+   "url": "https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667",
+   "pourquoi": "Le moins cher lu en France aujourd'hui, mais c'est un vendeur tiers : vérifie la note du vendeur et les retours."
+  },
+  {
+   "nom": "Timberland 6-Inch Premium jaune",
+   "marchand": "Sports Direct",
+   "prix": 220.0,
+   "url": "https://www.sportsdirect.fr/timberland-premium-6-inch-hiker-boots-182098"
+  },
+  {
+   "nom": "Timberland 6-Inch Premium jaune",
+   "marchand": "Timberland (officiel)",
+   "prix": 230.0,
+   "url": "https://www.timberland.com/fr-fr/p/homme-10029/6-inch-boot-impermeable-timberland-premium-pour-homme-en-jaune-TB110061713",
+   "pourquoi": "En stock en 39,5 et en 40. Aux États-Unis, la marque exclut ce coloris de ses promotions : il baisse plutôt chez les revendeurs."
+  },
+  {
+   "nom": "Timberland 6-Inch Premium jaune",
+   "marchand": "JD Sports (Canada)",
+   "pays": "CA",
+   "devise": "CAD",
+   "prix": 230.0,
+   "url": "https://jdsports.ca/products/timberland-6-boot-wheat",
+   "pourquoi": "En US 7 (ton 40), à acheter sur place à Québec."
+  },
+  {
+   "nom": "Timberland 6-Inch Premium jaune",
+   "marchand": "Timberland (Canada, officiel)",
+   "pays": "CA",
+   "devise": "CAD",
+   "prix": 230.0,
+   "url": "https://www.timberland.com/fr-ca/p/hommes/chaussures-10039/bottes-impermeables-timberland-premium-6-pouces-pour-hommes-TB110061713"
+  }
+ ],
+ "historique": [
+  "Sur 12 mois (comparateurs lus lors de l'enquête du 22/11 et archives) : souvent à 160 € ou moins ; le plus bas : 132 € le 21/02/2026.",
+  "Le Dénicheur affiche « dès 119,95 € » pour la 6-Inch Premium WP homme, sans préciser le coloris ni la pointure : souvent le noir ou une petite taille. À vérifier avant d'y croire.",
+  "Black Friday le 27/11, Cyber Monday le 30/11, soldes d'hiver à partir du 06/01/2027."
+ ],
+ "canada": [
+  "En jaune, 230 $ CA au Canada, soit environ 168 € taxes du Québec comprises : 23 € de moins que le moins cher en France, 62 € de moins que le site officiel. Intéressant si tu y es déjà, mais encore au-dessus des 160 € visés.",
+  "La section soldes de Timberland Canada propose aujourd'hui une 6-Inch Premium homme (autre coloris) à 129,99 $ CA, soit environ 95 € taxes comprises. Le coloris et ta pointure ne sont pas confirmés : regarde-la si le jaune n'est pas obligatoire.",
+  "Rien à payer à la douane au retour tant que tes achats restent sous 430 € (voyage en avion)."
+ ],
+ "equivalents": [
+  {
+   "nom": "CAT Colorado 2.0 Hiker WP jaune miel",
+   "reference": "P726349",
+   "image": "https://sportano.com/img/986c30c27a3d26a3ee16c136f92f4ff5/1/9/195021324461_20-jpg/men-s-shoes-caterpillar-colorado-2-0-hiker-wp-honey-reset-0.jpg",
+   "marchand": "Sportano",
+   "prix": 90.99,
+   "url": "https://sportano.fr/p/774751/chaussures-homme-caterpillar-colorado-2-0-hiker-wp-honey-reset",
+   "taille": "40",
+   "verdict": "surveiller",
+   "article": "equivalent-moins-cher-timberland-6-inch",
+   "pourquoi": "Même allure de boot jaune en nubuck, imperméable, deux fois et demie moins chère. CAT ne fait pas de demi-pointure : prends le 40."
+  }
+ ],
+ "conseils": [
+  "Méfie-toi des sites qui vendent la Timberland jaune à −60 % ou −70 % pendant le Black Friday : ce sont presque toujours de fausses boutiques. Reste sur les marchands de cette page.",
+  "Pointure : Timberland conseille une demi-pointure en dessous, donc 39,5 si tu chausses du 40."
+ ],
+ "sources": [
+  {
+   "nom": "Le Dénicheur, 6-Inch Premium WP homme",
+   "url": "https://ledenicheur.fr/product.php?p=13026691",
+   "note": "non lisible par le robot"
+  },
+  {
+   "nom": "Timberland US : coloris Wheat exclu des promotions",
+   "url": "https://www.timberland.com/en-us/p/men/footwear-10039/mens-timberland-premium-6-inch-waterproof-boot-TB110061713"
+  },
+  {
+   "nom": "Timberland Canada, soldes chaussures",
+   "url": "https://www.timberland.com/en-ca/c/sale/sale-footwear-0125"
+  },
+  {
+   "nom": "Taux de change BCE du 24/11/2026",
+   "url": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
+  }
+ ]
+}

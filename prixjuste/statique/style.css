@@ -349,3 +349,48 @@ main { padding-bottom: 32px; }
 .eq-nom { font-weight: 600; }
 .eq-pourquoi { font-size: 13px; opacity: .85; margin: 2px 0 4px; }
 .eq-suivre { font-size: 13px; font-weight: 600; }
+
+/* ------------------------------------------------------------- l'assistant et ses dossiers */
+.assistant h1 { margin-bottom: 12px; }
+.demandes { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 10px; font-size: 15px; color: var(--encre-2); }
+.demandes b { display: block; color: var(--encre); font-weight: 800; }
+.bouton {
+  display: inline-flex; align-items: center; min-height: 50px; padding: 0 22px; border-radius: 14px;
+  background: var(--marine); color: #FFFFFF; font: 700 15px/1 var(--texte); text-decoration: none;
+}
+.assistant .aide { margin-top: 12px; }
+.rubrique-ligne { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 30px 4px 10px; }
+.p-comptoir .rubrique-ligne .rubrique { margin: 0; }
+.rubrique-ligne a { font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+
+.sur-titre { font-size: 13px; font-weight: 700; color: var(--encre-2); letter-spacing: .02em; }
+.dossier .bandeau h1 { margin: 6px 0 12px; font: 800 clamp(24px, 6.5vw, 32px)/1.15 var(--texte); letter-spacing: -.03em; }
+.verdict-dossier { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 12px; font-size: 15px; }
+.verdict-dossier .tampon { font-size: 14px; padding: 8px 14px; }
+.resume { font-size: 16px; color: var(--encre); }
+.bandeau .aide { margin-top: 10px; }
+.look { margin: 14px 4px 0; font-size: 15px; color: var(--encre-2); }
+.option { margin-top: 26px; }
+.option-tete { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 4px; }
+.option-tete .rubrique { margin: 0; }
+.total { font: 800 20px/1 var(--texte); letter-spacing: -.02em; white-space: nowrap; }
+.option > .aide { margin: 6px 4px 12px; }
+.option > .rubrique { margin: 0 4px 12px; }
+.pieces { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.piece {
+  display: grid; grid-template-columns: 72px minmax(0, 1fr) auto;
+  grid-template-areas: "vign corps tampon" "phr phr phr" "act act act";
+  column-gap: 14px; row-gap: 10px; padding: 14px; background: var(--carte); border-radius: var(--rayon);
+}
+.piece .nom { font: 800 16px/1.3 var(--texte); }
+.piece .nom a { color: var(--encre); }
+.piece .var { font-size: 13px; color: var(--encre-2); }
+.piece .avant { font-size: 14px; color: var(--encre-2); }
+.phrase-piece { grid-area: phr; font-size: 14px; color: var(--encre-2); padding-top: 10px; border-top: 1px solid var(--filet); }
+.actions-piece { grid-area: act; font-size: 14px; font-weight: 700; }
+.actions-piece a { text-decoration: none; }
+.puces { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 15px; }
+.sources { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; overflow-wrap: anywhere; }
+.sources i { font-style: normal; color: var(--encre-2); }
+.dossier > .aide { margin: 18px 4px 0; }
+.suivi-lien a { font-weight: 700; }

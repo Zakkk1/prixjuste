@@ -12,7 +12,7 @@ import shutil
 import urllib.parse
 from pathlib import Path
 
-from . import VERSION, agenda, ajout, analyse, enquete, etranger, plan
+from . import VERSION, agenda, ajout, analyse, dossiers, enquete, etranger, plan
 from .collecte import cle, hors_ue
 from .donnees import Depot, maintenant
 
@@ -523,26 +523,23 @@ def bloc_plan(cands):
             'sans dépasser le budget ; les plus pressés passent d\'abord.</p></details>')
 
 
-def comptoir(lignes, quand, prochain=None, plan_html="", noms=None):
-    liste = json.dumps(noms or [], ensure_ascii=False, separators=(",", ":"))
-    corps = [entete("", quand, accueil=True),
-             '<main>',
-             f'<form class="demande" action="ajouter.html" method="get" data-liste="{e(liste)}">'
-             '<h1><label for="objet">Qu\'est-ce que tu veux acheter&nbsp;?</label></h1>'
-             '<div class="champ-ligne"><input id="objet" name="objet" type="text" autocomplete="off" required '
-             'placeholder="ex. parka McMurdo, taille L"><button type="submit">Suivre</button></div>'
-             '<div class="pistes" hidden aria-live="polite"></div></form>']
+def comptoir(lignes, quand, prochain=None, plan_html="", noms=None, dossiers_html=None):
+    corps = [entete("", quand, accueil=True), '<main>', bloc_assistant()]
     if prochain:
         d, txt = prochain
         corps.append(f'<p class="prochain"><span>Prochain moment</span> {e(txt)} — {date_fr(d)} · '
                      '<a href="agenda.ics">ajouter à mon agenda</a></p>')
+    if dossiers_html:
+        corps.append('<h2 class="rubrique">Mes dossiers</h2><ol class="etiquettes">' + "".join(dossiers_html) + "</ol>")
+    corps.append('<div class="rubrique-ligne"><h2 class="rubrique">Prix suivis chaque jour</h2>'
+                 '<a href="ajouter.html">+ suivre un article</a></div>')
     if lignes:
-        corps.append('<h2 class="rubrique">Ma liste</h2><ol class="etiquettes">' + "".join(lignes) + "</ol>" + plan_html)
+        corps.append('<ol class="etiquettes">' + "".join(lignes) + "</ol>" + plan_html)
     else:
-        corps.append('<p class="vide-txt">Rien au comptoir pour l\'instant.</p>')
+        corps.append('<p class="vide-txt">Rien n\'est suivi pour l\'instant.</p>')
     corps.append("</main>")
     corps.append(pied(""))
-    return page("PrixJuste — ma liste", "".join(corps), classe="p-comptoir")
+    return page("PrixJuste — assistant d'achat", "".join(corps), classe="p-comptoir")
 
 
 # ---------------------------------------------------------------- la fiche
@@ -920,6 +917,174 @@ def carte(art, res, code, auj):
             '<p class="aide">Image verticale à partager : le prix, l\'historique réel et le tampon, avec la date.</p></div>')
 
 
+# ---------------------------------------------------------------- l'assistant : dossiers
+
+def tampon_dossier(code, sous=None, taille="petit"):
+    classe, lbl = dossiers.VERDICTS[code]
+    corps = e(lbl) + (f'<small>{e(sous)}</small>' if sous else "")
+    return f'<strong class="tampon t-{classe} {taille}"><span>{corps}</span></strong>'
+
+
+def prix_piece(p, change):
+    """« 168,36 € » ; pour un prix étranger : « 230 $ CA ≈ 168,36 € taxes comprises »."""
+    if p.get("prix") is None:
+        return '<span class="prix-ligne nul">—</span>'
+    v = dossiers.en_euros(p, change)
+    if p.get("devise", "EUR") == "EUR":
+        h = f'<span class="prix-ligne">{euros(v)}</span>'
+    else:
+        sym = (etranger.PAYS.get(p.get("pays") or "") or {}).get("symbole") or p["devise"]
+        h = (f'<span class="prix-ligne">{p["prix"]:.2f} {e(sym)}</span>'.replace(".", ",")
+             + (f'<span class="chez">≈ {euros(v)} taxes comprises</span>' if v is not None else ""))
+    if p.get("prix_avant") and p["prix_avant"] > p["prix"]:
+        h += f'<s class="avant">{p["prix_avant"]:.2f}</s>'.replace(".", ",")
+    return h
+
+
+def lien_suivre(p, taille=None):
+    corps = "\n".join([f"Objet : {p['nom']}"] + ([f"Taille : {taille}"] if taille else [])
+                      + ["Urgence : pas_urgent", "Liens :", p.get("url") or "(aucun)", "", "<!-- prixjuste:ajout -->"])
+    u = urllib.parse.urlencode({"title": f"Ajout : {p['nom']}", "body": corps, "labels": "ajout"},
+                               quote_via=urllib.parse.quote)
+    return f"https://github.com/{DEPOT_GITHUB}/issues/new?{u}"
+
+
+def carte_piece(p, change, suivis, taille=None):
+    code = p.get("verdict")
+    sous = p.get("quand_court")
+    vign = vignette({"nom": p.get("role") or p["nom"], "image": p.get("image")})
+    titre = e(p["nom"])
+    if p.get("url"):
+        titre = f'<a href="{e(p["url"])}" rel="noopener nofollow" target="_blank">{titre}</a>'
+    var = " · ".join(x for x in (p.get("role"), p.get("reference"), p.get("taille") and f"taille {p['taille']}") if x)
+    chez = []
+    if p.get("marchand"):
+        chez.append(f'chez {e(p["marchand"])}')
+    if p.get("en_stock") is False:
+        chez.append("pas dans ta taille")
+    if p.get("fin"):
+        chez.append(f'jusqu\'au {date_fr(p["fin"])}')
+    phrase = " ".join(x for x in (p.get("pourquoi"), p.get("quand")) if x)
+    actions = []
+    if p.get("article") and p["article"] in suivis:
+        actions.append(f'<a href="../a/{e(p["article"])}.html">Prix suivi chaque jour →</a>')
+    elif p.get("url") and code in ("attendre", "surveiller"):
+        actions.append(f'<a href="{e(lien_suivre(p, p.get("taille") or taille))}">Suivre son prix</a>')
+    if p.get("seconde_main"):
+        actions.append(f'<a href="{e(p["seconde_main"])}" rel="noopener nofollow" target="_blank">En seconde main</a>')
+    return ('<li class="piece">'
+            f'{vign}<span class="ligne-corps"><span class="nom">{titre}</span>'
+            + (f'<span class="var">{e(var)}</span>' if var else "")
+            + f'<span class="prix-bloc">{prix_piece(p, change)}'
+            + (f'<span class="chez">{" · ".join(chez)}</span>' if chez else "") + '</span></span>'
+            + (f'<span class="tampon-bloc">{tampon_dossier(code, sous)}</span>' if code else "")
+            + (f'<p class="phrase-piece">{e(phrase)}</p>' if phrase else "")
+            + (f'<p class="actions-piece">{" · ".join(actions)}</p>' if actions else "")
+            + '</li>')
+
+
+def _sources(d):
+    s = d.get("sources") or []
+    if not s:
+        return ""
+    L = "".join(f'<li><a href="{e(x["url"])}" rel="noopener nofollow" target="_blank">{e(x.get("nom") or x["url"])}</a>'
+                + (f' <i>{e(x["note"])}</i>' if x.get("note") else "") + "</li>" for x in s)
+    return f'<details class="archives"><summary>Sources <i>({len(s)})</i></summary><ul class="sources">{L}</ul></details>'
+
+
+def _liste(titre, items):
+    return (f'<section class="carte"><h2 class="rubrique">{e(titre)}</h2><ul class="puces">'
+            + "".join(f"<li>{e(x)}</li>" for x in items) + "</ul></section>") if items else ""
+
+
+def page_dossier(d, change, suivis, quand):
+    taille = d.get("taille")
+    t = d["type"]
+    tete = [f'<p class="sur-titre">{e(dossiers.TYPES[t])} · {date_fr(d["le"])}'
+            + (f' · taille {e(taille)}' if taille else "") + '</p>',
+            f'<h1>{e(d["titre"])}</h1>']
+    if t == "achat":
+        tete.append(f'<div class="verdict-dossier">{tampon_dossier(d["verdict"], d.get("quand_court"), "")}'
+                    + (f'<span>Prix cible <b>{euros(d["prix_cible"])}</b></span>' if d.get("prix_cible") else "")
+                    + "</div>")
+    tete.append(f'<p class="resume">{e(d["resume"])}</p>')
+    if d.get("demande"):
+        tete.append(f'<p class="aide">Ta demande : « {e(d["demande"])} »</p>')
+    corps = [entete("../", quand), '<main class="dossier">', '<a class="retour" href="../index.html">← Accueil</a>',
+             f'<section class="bandeau">{"".join(tete)}</section>']
+    if t == "tenue":
+        if d.get("look"):
+            corps.append(f'<p class="look">{e(d["look"])}</p>')
+        for o in d["options"]:
+            tot = dossiers.total(o["pieces"], change)
+            corps.append(f'<section class="option"><div class="option-tete"><h2 class="rubrique">{e(o["nom"])}</h2>'
+                         + (f'<span class="total">{euros(tot)}</span>' if tot is not None else "") + '</div>'
+                         + (f'<p class="aide">{e(o["idee"])}</p>' if o.get("idee") else "")
+                         + '<ol class="pieces">' + "".join(carte_piece(p, change, suivis, taille) for p in o["pieces"])
+                         + "</ol></section>")
+    elif t == "achat":
+        offres = sorted(d["offres"], key=lambda p: (p.get("en_stock") is False, dossiers.en_euros(p, change) or 9e9))
+        corps.append('<section class="option"><h2 class="rubrique">Où l\'acheter, du moins cher au plus cher</h2>'
+                     '<ol class="pieces">' + "".join(carte_piece(p, change, suivis, taille) for p in offres)
+                     + "</ol></section>")
+        if d.get("historique"):
+            corps.append(_liste("L'historique", d["historique"]))
+        if d.get("canada"):
+            corps.append(_liste("Au Canada", d["canada"]))
+        if d.get("equivalents"):
+            corps.append('<section class="option"><h2 class="rubrique">Aussi bien, moins cher</h2><ol class="pieces">'
+                         + "".join(carte_piece(p, change, suivis, taille) for p in d["equivalents"]) + "</ol></section>")
+    else:
+        corps.append('<section class="option"><ol class="pieces">'
+                     + "".join(carte_piece(p, change, suivis, taille) for p in d["plans"]) + "</ol></section>")
+    corps.append(_liste("Pièges à éviter" if t == "bons-plans" else "Conseils", d.get("conseils") or d.get("pieges")))
+    if d.get("article") and d["article"] in suivis:
+        corps.append(f'<p class="aide suivi-lien"><a href="../a/{e(d["article"])}.html">Voir son prix suivi chaque jour '
+                     'et la courbe →</a></p>')
+    fin = d.get("valable_jusqu_au")
+    corps.append(f'<p class="aide">Prix vus le {date_fr(d["le"])}'
+                 + (f', conseil valable jusqu\'au {date_fr(fin)}' if fin else "")
+                 + ". Les prix bougent : vérifie sur la page de la boutique avant de payer.</p>")
+    corps.append(_sources(d))
+    corps.append("</main>")
+    corps.append(pied("../"))
+    return page(f"{d['titre']} — PrixJuste", "".join(corps), "../", d.get("resume", ""), classe="p-dossier")
+
+
+def ligne_dossier(d, change):
+    t = d["type"]
+    if t == "achat":
+        tp = tampon_dossier(d["verdict"], d.get("quand_court"))
+    elif t == "tenue":
+        n = len(d["options"])
+        tp = f'<strong class="tampon t-donnees petit"><span>{n} OPTION{"S" if n > 1 else ""}</span></strong>'
+    else:
+        n = len(d["plans"])
+        tp = f'<strong class="tampon t-achete petit"><span>{n} PLAN{"S" if n > 1 else ""}</span></strong>'
+    img = next((p.get("image") for p in dossiers.pieces(d) if p.get("image")), None)
+    return (f'<li><a class="etiquette" href="d/{e(d["id"])}.html">{vignette({"nom": d["titre"], "image": img})}'
+            f'<span class="ligne-corps"><span class="nom">{e(d["titre"])}</span>'
+            f'<span class="var">{e(dossiers.TYPES[t])} · {date_fr(d["le"])}</span></span>'
+            f'<span class="tampon-bloc">{tp}</span><span class="phrase">{e(d["resume"])}</span></a></li>')
+
+
+ASSISTANT = ("https://claude.ai/code")
+
+
+def bloc_assistant():
+    return ('<section class="demande assistant"><h1>Ton assistant d\'achat</h1>'
+            '<ul class="demandes">'
+            '<li><b>Une tenue</b> Envoie la photo d\'un look à Claude : pièces exactes, versions moins chères, '
+            'prix et verdict pour chacune.</li>'
+            '<li><b>Un achat</b> « Je veux les Timberland, pointure 40 » : toutes les boutiques, France et Canada, '
+            'puis achète maintenant ou attends, avec la date.</li>'
+            '<li><b>Les bons plans</b> « Trouve-moi des bons plans » : les vraies promos du moment pour toi, '
+            'fausses promos écartées.</li></ul>'
+            f'<a class="bouton" href="{ASSISTANT}" rel="noopener">Demander à Claude</a>'
+            '<p class="aide">Ouvre une session sur le dépôt prixjuste et écris ta demande : la réponse arrive dans '
+            'la conversation, et le dossier s\'ajoute ici.</p></section>')
+
+
 # ---------------------------------------------------------------- ajouter
 
 def ajouter(quand, profil=None):
@@ -986,6 +1151,7 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
     if sortie.exists():
         shutil.rmtree(sortie)
     (sortie / "a").mkdir(parents=True)
+    (sortie / "d").mkdir()
     for f in ("style.css", "site.js"):
         shutil.copy(STATIQUE / f, sortie / f)
     (sortie / ".nojekyll").write_text("")
@@ -1009,13 +1175,18 @@ def construire(depot=None, sortie=Path("site"), aujourdhui=None, quand=None):
     proprio, nom_depot = DEPOT_GITHUB.split("/")
     url_site = os.environ.get("PAGES_URL") or f"https://{proprio.lower()}.github.io/{nom_depot}"
     (sortie / "agenda.ics").write_text(agenda.ics(pour_agenda, auj, url_site), encoding="utf-8", newline="")
+    les_dossiers = dossiers.charger(depot)
+    for d in les_dossiers:
+        (sortie / "d" / f"{d['id']}.html").write_text(page_dossier(d, change, voisins, quand), encoding="utf-8")
     (sortie / "index.html").write_text(comptoir([l for _, l in lignes], quand, agenda.prochain(pour_agenda, auj),
                                                 bloc_plan(plan.candidats(pour_agenda, auj)),
-                                                [{"id": a["id"], "nom": a["nom"]} for a, _ in pour_agenda]),
+                                                [{"id": a["id"], "nom": a["nom"]} for a, _ in pour_agenda],
+                                                [ligne_dossier(d, change) for d in les_dossiers]),
                                        encoding="utf-8")
     profil = ajout.charger_profil(depot)
-    (sortie / "ajouter.html").write_text(ajouter(quand, profil), encoding="utf-8")
-    (sortie / "data.json").write_text(json.dumps({"genere": maintenant(), "articles": exports}, default=_json,
+    (sortie / "ajouter.html").write_text(  # seulement les tailles : le reste du profil n'est pas publié
+        ajouter(quand, {k: profil[k] for k in ("pointure", "taille", "marques") if k in profil}), encoding="utf-8")
+    (sortie / "data.json").write_text(json.dumps({"genere": maintenant(), "articles": exports, "dossiers": les_dossiers}, default=_json,
                                                  ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Site : {sortie}/ ({len(exports)} article(s))")
     return sortie

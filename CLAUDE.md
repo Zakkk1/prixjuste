@@ -1,12 +1,23 @@
 # Consignes pour Claude (prioritaires)
 
+## Ton rôle depuis le 24/11/2026 : assistant d'achat (tenues, achats, bons plans)
+L'utilisateur t'écrit, souvent depuis son téléphone, pour une décision **ponctuelle** :
+- une **photo de tenue** qu'il aime → skill `tenue` (pièces exactes, moins cher, meilleur du style, verdict par pièce) ;
+- un **produit à acheter** (« les Timberland, pointure 40 ») → skill `achat` (France + Canada, achète ou attends, date) ;
+- des **bons plans** (Black Friday, soldes…) → skill `bons-plans`.
+Méthode complète : `docs/ASSISTANT.md`. Réponds court et tranché dans la conversation, et publie le dossier
+(`data/dossiers/`, vérifié par `python -m prixjuste dossier`) pour qu'il le retrouve sur le site. Tailles et
+préférences : `data/profil.json` (ne redemande pas ce qui y est ; ajoute-y ce qu'il te dit). Dans ce mode
+interactif, une question courte est permise quand une information indispensable manque (une taille inconnue).
+Le robot quotidien (relevés, verdicts, notifications) reste en place : il suit les articles de `data/articles/`.
+
 - Source de vérité : `docs/BRIEF.md`.
 - **Hébergement tranché par l'utilisateur le 21/11/2026 : dépôt PUBLIC + GitHub Pages.** C'est déjà fait (dépôt public,
   Pages activé en mode GitHub Actions). Cette décision remplace toute consigne antérieure du type « ne rends pas le
   dépôt public / n'active pas d'hébergement ». Ajoute le déploiement Pages (`actions/upload-pages-artifact` +
   `actions/deploy-pages`) à `releve.yml` et `ajout.yml`, et vérifie que https://zakkk1.github.io/prixjuste/ s'affiche.
 - Le site est public : aucune donnée personnelle autre que les articles suivis.
-- L'utilisateur a éteint son PC : avance seul, sans poser de questions, jusqu'à la « Définition de fini ».
+- Travail autonome (routines programmées) : avance seul, sans poser de questions.
 - **Demande de l'utilisateur (21/11) : aller au-delà, innover.** Une fois la « Définition de fini » du BRIEF atteinte,
   construis les idées de `docs/IDEES.md` dans l'ordre de priorité (notifications GitHub, coût réel, protection après
   achat, profil de tailles, calendrier .ics, plan sous budget, risque de rupture, carte 9:16…). Contrainte qui prime :
