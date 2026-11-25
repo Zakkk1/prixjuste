@@ -1,9 +1,16 @@
 {
  "equivalent-moins-cher-timberland-6-inch": {
-  "motifs": []
+  "issue": 12,
+  "motifs": [
+   "acheter",
+   "alerte"
+  ]
  },
  "equivalent-moins-cher-timberland-6-inch-2": {
-  "motifs": []
+  "issue": 11,
+  "motifs": [
+   "acheter"
+  ]
  },
  "mcmurdo": {
   "issue": 9,
@@ -11,6 +18,9 @@
    "acheter",
    "quebec"
   ]
+ },
+ "nuptse-1996": {
+  "motifs": []
  },
  "patagonia-better-sweater-1-4-zip": {
   "motifs": []
