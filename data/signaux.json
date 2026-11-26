@@ -20,7 +20,10 @@
   ]
  },
  "nuptse-1996": {
-  "motifs": []
+  "issue": 13,
+  "motifs": [
+   "acheter"
+  ]
  },
  "patagonia-better-sweater-1-4-zip": {
   "motifs": []
@@ -34,6 +37,8 @@
  },
  "timberland": {
   "issue": 2,
-  "motifs": []
+  "motifs": [
+   "bidon"
+  ]
  }
 }
