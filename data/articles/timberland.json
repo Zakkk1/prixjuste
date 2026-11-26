@@ -4,18 +4,11 @@
  "cree_le": "2026-11-19",
  "nom": "Timberland 6-Inch Premium homme (imperméable)",
  "reference": "TB110061713 (jaune Wheat, le modèle classique)",
- "variante": "Jaune (Wheat) · pointure 39,5 (ta pointure 40 moins une demi-pointure, conseil Timberland) ou 40",
+ "variante": "Jaune (Wheat) · pointure 40 (essayée en magasin le 26/11)",
  "categorie": "chaussures",
  "urgence": "pas_urgent",
  "autres_coloris_ok": false,
  "liens": [
-  {
-   "marchand": "Timberland (officiel)",
-   "coloris": "Jaune · 39,5",
-   "taille": "39.5",
-   "exact": true,
-   "url": "https://www.timberland.com/fr-fr/p/homme-10029/6-inch-boot-impermeable-timberland-premium-pour-homme-en-jaune-TB110061713"
-  },
   {
    "marchand": "Timberland (officiel)",
    "coloris": "Jaune · 40",
@@ -96,5 +89,6 @@
   }
  ],
  "image": "https://assets.timberland.eu/images/t_Thumbnail/v1757347665/TB110061713-MKTG1/Timberland-Premium-6Inch-Waterproof-Boot-for-Men-in-Yellow.jpg",
- "budget_max": 160
+ "budget_max": 160,
+ "taille": "40"
 }
