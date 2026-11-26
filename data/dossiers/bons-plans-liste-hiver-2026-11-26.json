@@ -29,7 +29,7 @@
    "taille": "W29 ou W30, L32",
    "verdict": "acheter",
    "pourquoi": "Le jean droit classique qui tombe bien sur des boots. Vu à 47-49,90 € sur Amazon pour le Black Friday (Ouest-France) : payable avec ton crédit Amazon. Vérifie qu'il est vendu par Amazon.",
-   "quand": "Bleu moyen ou brut : les deux vont avec les Timberland jaunes."
+   "quand": "Plan B vérifié par le robot ce soir : 65,95 € chez Zalando (délavage clair « brightside »), en stock en 29x32 et 30x32 : https://www.zalando.fr/levis-501-levisoriginal-jean-droit-brightside-le221000v-k45.html"
   },
   {
    "nom": "The North Face Glacier, polaire col zippé noire",
@@ -51,7 +51,7 @@
    "url": "https://www.decathlon.fr/tous-les-sports/randonnee-trek/chaussettes-homme",
    "taille": "39-42",
    "verdict": "acheter",
-   "pourquoi": "12,50 € la paire, moins cher que les Solognac à 14 €. Commande-les sur decathlon.fr avec retrait gratuit en magasin."
+   "pourquoi": "12,50 € la paire. Encore moins cher si dispo : les Norfolk en mérinos (60 %) en lot de 4 à 34,99 €, soit 8,75 € la paire, vendues sur decathlon.fr. Retrait gratuit en magasin."
   },
   {
    "nom": "Simond t-shirt manches longues mérinos Merino Fresh",
@@ -74,7 +74,8 @@
    "verdict": "attendre",
    "quand_court": "< 160 €",
    "article": "timberland",
-   "pourquoi": "Toujours 190 à 230 € ce matin, et la « remise » affichée chez E.Leclerc est trompeuse (le robot l'a marquée BIDON). Le Black Friday est demain : vise 160 €."
+   "pourquoi": "Toujours 190 à 230 € ce matin, et la « remise » affichée chez E.Leclerc est trompeuse (le robot l'a marquée BIDON). Le Black Friday est demain : vise 160 €.",
+   "quand": "Zalando : plus de 40 en stock (ni adulte ni junior). Le Dénicheur affiche « dès 126 € » pour la 6-Inch Premium WP homme, mais sans coloris ni pointure : vérifie le jaune en 40 avant d'y croire."
   },
   {
    "nom": "CAT Colorado 2.0 Hiker WP jaune miel",
@@ -98,6 +99,7 @@
   }
  ],
  "pieges": [
+  "Zalando affiche une « McMurdo » noire à 189-203 € : c'est la version ENFANT (tailles 6 à 20 ans), vérifié par le robot. Pas pour toi.",
   "Amazon : n'achète que « vendu et expédié par Amazon » (contrefaçons The North Face et Timberland chez les vendeurs tiers). Un Levi's 501 à 151,99 € « en promo » circule : ce n'est pas le bon.",
   "Prix barrés : la « remise » sur la Timberland chez E.Leclerc est calculée sur 220 €, alors qu'elle a déjà été vue à 132 €."
  ],
