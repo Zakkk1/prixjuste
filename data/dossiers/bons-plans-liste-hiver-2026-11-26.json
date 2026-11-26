@@ -1,0 +1,118 @@
+{
+ "type": "bons-plans",
+ "titre": "Ta liste d'achats d'hiver",
+ "le": "2026-11-26",
+ "valable_jusqu_au": "2026-12-01",
+ "demande": "Chaussettes et t-shirt mérinos, Timberland, un jean regular pour aller avec, et ce que j'ai oublié.",
+ "resume": "À acheter : la parka McMurdo (325 €), la polaire Glacier (49 €), un jean Levi's 501 sur Amazon avec ton crédit (~50 €) et des chaussettes mérinos. À attendre demain (Black Friday) : la Timberland (vise 160 €) et le t-shirt mérinos.",
+ "plans": [
+  {
+   "nom": "The North Face McMurdo Parka",
+   "role": "Parka",
+   "marchand": "The North Face (officiel)",
+   "prix": 325.0,
+   "prix_avant": 500.0,
+   "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF",
+   "taille": "S ou M",
+   "fin": "2026-12-01",
+   "verdict": "acheter",
+   "article": "mcmurdo",
+   "pourquoi": "−35 % jusqu'au 01/12, relevé ce matin par le robot. Si Amazon l'a vraiment à ~278 € dans ta taille (vendu par Amazon), prends-la là-bas avec ton crédit."
+  },
+  {
+   "nom": "Levi's 501 Original",
+   "role": "Jean",
+   "marchand": "Amazon",
+   "prix": 49.9,
+   "prix_avant": 97.0,
+   "url": "https://www.amazon.fr/s?k=Levi%27s+501+Original+homme",
+   "taille": "W29 ou W30, L32",
+   "verdict": "acheter",
+   "pourquoi": "Le jean droit classique qui tombe bien sur des boots. Vu à 47-49,90 € sur Amazon pour le Black Friday (Ouest-France) : payable avec ton crédit Amazon. Vérifie qu'il est vendu par Amazon.",
+   "quand": "Bleu moyen ou brut : les deux vont avec les Timberland jaunes."
+  },
+  {
+   "nom": "The North Face Glacier, polaire col zippé noire",
+   "role": "Polaire",
+   "marchand": "The North Face (officiel)",
+   "prix": 49.0,
+   "prix_avant": 70.0,
+   "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/polaire-a-col-zippe-glacier-pour-homme-NF0A8D0Q?color=JK3",
+   "taille": "M",
+   "fin": "2026-12-01",
+   "verdict": "acheter",
+   "pourquoi": "−30 % jusqu'au 01/12, le même col 1/4 zip que la Patagonia pour 80 € de moins."
+  },
+  {
+   "nom": "Quechua chaussettes randonnée mérinos SH900 (lot de 2)",
+   "role": "Chaussettes",
+   "marchand": "Decathlon",
+   "prix": 24.99,
+   "url": "https://www.decathlon.fr/tous-les-sports/randonnee-trek/chaussettes-homme",
+   "taille": "39-42",
+   "verdict": "acheter",
+   "pourquoi": "12,50 € la paire, moins cher que les Solognac à 14 €. Commande-les sur decathlon.fr avec retrait gratuit en magasin."
+  },
+  {
+   "nom": "Simond t-shirt manches longues mérinos Merino Fresh",
+   "role": "Sous-couche",
+   "marchand": "Decathlon",
+   "prix": 29.99,
+   "url": "https://www.decathlon.fr/p/t-shirt-manches-longues-de-trek-en-laine-merinos-homme-merino-fresh-kaki/4523/c363c363m8977572",
+   "taille": "S ou M",
+   "verdict": "attendre",
+   "quand_court": "→ 27/11",
+   "pourquoi": "Déjà vu à 23,99 € (−20 %) : regarde demain pour le Black Friday ; à 29,99 € il reste correct."
+  },
+  {
+   "nom": "Timberland 6-Inch Premium jaune",
+   "role": "Chaussures",
+   "marchand": "E.Leclerc (vendeur tiers)",
+   "prix": 190.79,
+   "url": "https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667",
+   "taille": "40",
+   "verdict": "attendre",
+   "quand_court": "< 160 €",
+   "article": "timberland",
+   "pourquoi": "Toujours 190 à 230 € ce matin, et la « remise » affichée chez E.Leclerc est trompeuse (le robot l'a marquée BIDON). Le Black Friday est demain : vise 160 €."
+  },
+  {
+   "nom": "CAT Colorado 2.0 Hiker WP jaune miel",
+   "role": "Chaussures (moins cher)",
+   "marchand": "Sportano",
+   "prix": 88.19,
+   "url": "https://sportano.fr/p/774751/chaussures-homme-caterpillar-colorado-2-0-hiker-wp-honey-reset",
+   "taille": "40",
+   "verdict": "acheter",
+   "article": "equivalent-moins-cher-timberland-6-inch",
+   "pourquoi": "Si tu ne veux pas attendre la Timberland : 88 €, son prix le plus bas relevé."
+  },
+  {
+   "nom": "Simond tour de cou mérinos MT500",
+   "role": "Tour de cou",
+   "marchand": "Decathlon",
+   "prix": 11.99,
+   "url": "https://www.decathlon.fr/tous-les-sports/randonnee-trek/vetements-en-laine-merinos-homme",
+   "verdict": "acheter",
+   "pourquoi": "Le tour de cou pour Québec et la trottinette, en mérinos."
+  }
+ ],
+ "pieges": [
+  "Amazon : n'achète que « vendu et expédié par Amazon » (contrefaçons The North Face et Timberland chez les vendeurs tiers). Un Levi's 501 à 151,99 € « en promo » circule : ce n'est pas le bon.",
+  "Prix barrés : la « remise » sur la Timberland chez E.Leclerc est calculée sur 220 €, alors qu'elle a déjà été vue à 132 €."
+ ],
+ "sources": [
+  {
+   "nom": "Ouest-France : Levi's 501 à moins de 50 € sur Amazon",
+   "url": "https://www.ouest-france.fr/shopping/black-friday/payez-votre-jean-levis-501-a-moins-de-50-euros-amazon-liquide-ses-stocks-quelques-jours-avant-le-black-friday-c82c346c-de9d-11f1-a62b-776e3051b0df"
+  },
+  {
+   "nom": "Decathlon, t-shirts mérinos",
+   "url": "https://www.decathlon.fr/vc/t-shirt-100-merinos-homme"
+  },
+  {
+   "nom": "Decathlon, chaussettes de randonnée homme",
+   "url": "https://www.decathlon.fr/tous-les-sports/randonnee-trek/chaussettes-homme"
+  }
+ ]
+}
