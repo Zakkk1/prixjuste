@@ -9,15 +9,16 @@
   {
    "nom": "The North Face McMurdo Parka",
    "role": "Parka",
-   "marchand": "The North Face (officiel)",
-   "prix": 325.0,
+   "marchand": "Le Dénicheur (meilleure offre en M)",
+   "prix": 277.95,
    "prix_avant": 500.0,
-   "url": "https://www.thenorthface.com/fr-fr/p/homme-211701/parka-mcmurdo-pour-homme-NF0A5GJF",
+   "url": "https://ledenicheur.fr/product.php?p=721217",
    "taille": "S ou M",
    "fin": "2026-12-01",
    "verdict": "acheter",
    "article": "mcmurdo",
-   "pourquoi": "−35 % jusqu'au 01/12, relevé par le robot. Les 278 € vus sur Amazon (Keepa) datent de mars 2026 : c'était le déstockage de fin d'hiver, pas un prix actuel. Snowleader et Le Dénicheur l'annoncent vers 297-300 € : à vérifier (taille adulte, ta taille) avant de payer."
+   "pourquoi": "Vérifié par le robot le 26/11 au soir : sur Le Dénicheur (18 offres), le moins cher est 277,95 € en M ; en S, 337,42 €. Sur le site The North Face : 325 € en S et en M, en stock. Les 278 € vus sur Amazon (Keepa) dataient de mars 2026.",
+   "quand": "Si tu prends du M : 277,95 € via Le Dénicheur (vérifie le vendeur). Si tu prends du S : 325 € chez The North Face."
   },
   {
    "nom": "Levi's 501 Original",
@@ -51,7 +52,7 @@
    "url": "https://www.decathlon.fr/tous-les-sports/randonnee-trek/chaussettes-homme",
    "taille": "39-42",
    "verdict": "acheter",
-   "pourquoi": "12,50 € la paire. Encore moins cher si dispo : les Norfolk en mérinos (60 %) en lot de 4 à 34,99 €, soit 8,75 € la paire, vendues sur decathlon.fr. Retrait gratuit en magasin."
+   "pourquoi": "Prix Decathlon non vérifiable par le robot (le site le bloque). Vérifié en revanche : Falke SoftMerino à 11,45 € la paire en 39/40 chez Zalando, mais c'est une chaussette de ville, plus fine."
   },
   {
    "nom": "Simond t-shirt manches longues mérinos Merino Fresh",
@@ -62,7 +63,7 @@
    "taille": "S ou M",
    "verdict": "attendre",
    "quand_court": "→ 27/11",
-   "pourquoi": "Déjà vu à 23,99 € (−20 %) : regarde demain pour le Black Friday ; à 29,99 € il reste correct."
+   "pourquoi": "Prix Decathlon non vérifiable par le robot (le site le bloque). Vérifié : Icebreaker 150 Tech Lite manches longues à 76,76 € chez Zalando, en S et M : bien plus cher."
   },
   {
    "nom": "Timberland 6-Inch Premium jaune",
