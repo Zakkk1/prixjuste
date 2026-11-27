@@ -35,6 +35,10 @@ Trois demandes possibles, un dossier JSON chacune dans `data/dossiers/` :
 - **Canada** (l'utilisateur va à Québec) : `python -m prixjuste convertir 230 CAD` donne le prix en euros, taxes du
   Québec comprises (TPS + TVQ, ajoutées en caisse). Rappel douane : 430 € d'achats hors UE par voyageur en avion.
 - **Comparateurs (Le Dénicheur, idealo) :** leur fiche peut mélanger plusieurs modèles ou versions (blouson et parka, enfant et adulte). Un prix de comparateur n'est jamais « vérifié » : on le confirme sur la page produit du marchand (modèle exact, taille adulte, coloris) avant de le donner.
+- **Amazon (et tout site qui refuse le robot) :** le robot ne voit jamais ses baisses. Dès qu'un article suivi
+  existe aussi sur Amazon, dis-le à l'utilisateur et fais-lui poser une alerte Keepa (ou camelcamelcamel) sur la
+  **variante exacte** (taille, coloris : chaque variante a son propre prix) au prix cible. Un prix bas vu sur Keepa
+  se date sur le graphique (une offre Black Friday peut ne durer que 1 à 2 jours) avant d'être écarté.
 - **Boutique fiable ?** Pendant les grosses promos, les fausses boutiques pullulent (« Timberland −70 % »). Ne
   recommande que des marchands connus ; un vendeur tiers de place de marché est signalé comme tel.
 - **Collecte honnête** : on lit ce qui est public ; jamais de contournement d'un site qui refuse les robots.
