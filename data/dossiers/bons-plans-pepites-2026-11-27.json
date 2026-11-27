@@ -1,0 +1,85 @@
+{
+ "type": "bons-plans",
+ "titre": "Black Friday : les pépites hors liste",
+ "le": "2026-11-27",
+ "valable_jusqu_au": "2026-11-30",
+ "demande": "Fouille Amazon et le net : les offres exceptionnelles, même hors de ce qu'on cible.",
+ "resume": "Deux vraies pépites vérifiées par le robot : la veste Carhartt WIP Detroit doublée à 149,95 € en M (202 € en L) et la tondeuse OneBlade 360 visage + corps à 39,99 € chez Philips. Sur Amazon, les AirPods Pro 3 sont annoncés à 188 €, mais le robot ne peut pas lire Amazon : à confirmer dans l'appli.",
+ "plans": [
+  {
+   "nom": "Carhartt WIP Detroit Jacket (Winter), bleu marine",
+   "reference": "C1422G00R-K11",
+   "image": "https://img01.ztat.net/article/spp-media-p1/5da4fd8d4e5442d3a6a997d4de04f5e9/0a82d6f411894ad3a7465dca30f75ecc.jpg?imwidth=400",
+   "marchand": "Zalando",
+   "prix": 149.95,
+   "prix_avant": 202.0,
+   "url": "https://www.zalando.fr/carhartt-wip-detroit-jacket-veste-mi-saison-dark-navyblack-c1422g00r-k11.html",
+   "taille": "M en stock",
+   "verdict": "acheter",
+   "pourquoi": "149,95 € en M, vérifié par le robot cette nuit ; la même veste est à 202 € en L, donc environ −26 %. C'est la veste de travail de tes photos new-yorkaises, version doublée : pour la France de novembre à mars. À Québec en plein hiver, c'est la McMurdo."
+  },
+  {
+   "nom": "Carhartt WIP Detroit Jacket (légère), marron Hamilton",
+   "reference": "C1422T0E7-O11",
+   "image": "https://img01.ztat.net/article/spp-media-p1/b2e6131fe8794daab14597c34cc977de/75e8a842fce143babb24295a7f578422.jpg?imwidth=400",
+   "marchand": "Zalando",
+   "prix": 137.95,
+   "url": "https://www.zalando.fr/carhartt-wip-detroit-veste-legere-hamilton-brown-c1422t0e7-o11.html",
+   "taille": "M en stock",
+   "verdict": "surveiller",
+   "pourquoi": "137,95 € en M (vérifié), le marron classique de Carhartt. Mais elle n'est pas doublée : prends plutôt la version Winter ci-dessus, 12 € de plus et portable tout l'hiver en France. Ne prends pas les deux."
+  },
+  {
+   "nom": "Philips OneBlade 360 Visage + Corps",
+   "reference": "QP2834/23",
+   "image": "https://images.philips.com/is/image/philipsconsumer/ac701c69ba5d4b8e84b5b15a00a1cbe9",
+   "marchand": "Philips (officiel)",
+   "prix": 39.99,
+   "url": "https://www.philips.fr/c-p/QP2834_23/oneblade-360-visage-et-corps",
+   "verdict": "acheter",
+   "pourquoi": "39,99 € en stock sur le site de Philips (vérifié) ; la version QP2824/31 est à 59,99 €. Livrée avec le kit corps (sabot et protection de peau)."
+  },
+  {
+   "nom": "Apple AirPods Pro 3",
+   "marchand": "Amazon (non vérifiable par le robot)",
+   "url": "https://www.amazon.fr/s?k=AirPods+Pro+3",
+   "verdict": "surveiller",
+   "quand_court": "≤ 190 €",
+   "pourquoi": "Annoncés à 188 € sur Amazon (MacGeneration, Consomac), au lieu de 249 € chez Apple ; un autre suivi donnait 209 €. Amazon refuse le robot : si l'appli affiche 190 € ou moins, vendu et expédié par Amazon, c'est le plus bas de l'année. Seulement si tu en as besoin."
+  }
+ ],
+ "pieges": [
+  "Le OneBlade à 29,99 € sur Amazon (Ouest-France, 23/11) est présenté comme rasoir de barbe : vérifie que la fiche dit « Visage + Corps » (avec le kit corps).",
+  "Carhartt WIP aux Galeries Lafayette : leur page Black Friday affiche « terminé ». COS aussi.",
+  "La Nuptse à 245 € sur le site The North Face : M épuisé dans le seul coloris lu par le robot. L'alerte à 250 € reste posée sur la noire de Zalando (263,95 € hier).",
+  "« Timberland −70 % », « North Face −80 % » sur des sites inconnus : fausses boutiques. Seulement les marchands connus."
+ ],
+ "conseils": [
+  "Amazon refuse le robot : vérifie toujours « vendu et expédié par Amazon » et compare au prix annoncé ici.",
+  "Une seule veste de travail suffit : la Detroit Winter bleu marine."
+ ],
+ "sources": [
+  {
+   "nom": "Robot PrixJuste (pages lues le 27/11)",
+   "url": "https://github.com/Zakkk1/prixjuste/actions/runs/45919649703",
+   "note": "Carhartt Detroit, OneBlade"
+  },
+  {
+   "nom": "Robot PrixJuste (2e passage)",
+   "url": "https://github.com/Zakkk1/prixjuste/actions/runs/45919740827",
+   "note": "Nuptse officielle, OneBlade QP2824"
+  },
+  {
+   "nom": "MacGeneration : récap Black Friday Apple",
+   "url": "https://www.macg.co/materiel/2026/11/black-friday-2026-notre-recap-des-meilleures-offres-airpods-chargeurs-apple-watch-312645"
+  },
+  {
+   "nom": "Consomac : offres Black Friday Apple",
+   "url": "https://consomac.fr/news-25203-les-meilleures-offres-du-black-friday-2026-sur-les-produits-d-apple.html"
+  },
+  {
+   "nom": "Ouest-France : OneBlade à moins de 30 €",
+   "url": "https://www.ouest-france.fr/shopping/black-friday/black-friday-philips-casse-le-prix-de-son-celebre-rasoir-electrique-oneblade-moins-de-30-euros-6dca2554-e4d0-11f1-afa7-9a0bb82a33d1"
+  }
+ ]
+}

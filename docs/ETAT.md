@@ -1,5 +1,6 @@
 RELAIS: non
 
+- 27/11 nuit : dossier « pépites hors liste » (Carhartt Detroit Winter 149,95 € en M, OneBlade 360 visage + corps 39,99 € chez Philips, vérifiés ; AirPods Pro 3 188 € sur Amazon, non vérifiable).
 - 24/11 nuit : 5 photos Pinterest → dossier « Tes looks Pinterest » (New York, workwear délavé, minimal) ; Nuptse 1996 suivie (alerte 250 €, Zalando 279,95 € en M) ; style ajouté au profil.
 
 - 24/11 nuit : dossier « Hiver : 3 looks » (workwear, gorpcore, clean) avec liens Pinterest ; polaire Glacier col zippé à 49 € (−30 %, M en stock) ajoutée aux bons plans. Levi's (403), Uniqlo (pas de JSON-LD), Carhartt WIP (prix en GBP pour le robot) : prix lus dans la recherche.
