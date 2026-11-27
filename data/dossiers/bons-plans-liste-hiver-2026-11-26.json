@@ -4,7 +4,7 @@
  "le": "2026-11-26",
  "valable_jusqu_au": "2026-12-01",
  "demande": "Chaussettes et t-shirt mérinos, Timberland, un jean regular pour aller avec, et ce que j'ai oublié.",
- "resume": "À acheter : la parka McMurdo (325 €), la polaire Glacier (49 €), un jean Levi's 501 sur Amazon (~50 €) et des chaussettes mérinos. À attendre demain (Black Friday) : la Timberland (vise 160 €) et le t-shirt mérinos.",
+ "resume": "Mise à jour du Black Friday (27/11, 10 h 35, prix vérifiés) : parka McMurdo 325 € (M en stock en bleu marine ; le noir est à vérifier sur la page), polaire Glacier 49 €, jean Levi's 501 à 53,95 € chez Zalando. La Timberland reste au-dessus de 160 € : attends.",
  "plans": [
   {
    "nom": "The North Face McMurdo Parka",
@@ -23,14 +23,14 @@
   {
    "nom": "Levi's 501 Original",
    "role": "Jean",
-   "marchand": "Amazon",
-   "prix": 49.9,
-   "prix_avant": 97.0,
-   "url": "https://www.amazon.fr/s?k=Levi%27s+501+Original+homme",
+   "marchand": "Zalando",
+   "prix": 53.95,
+   "url": "https://www.zalando.fr/levis-501-levisoriginal-jean-droit-brightside-le221000v-k45.html",
    "taille": "W29 ou W30, L32",
    "verdict": "acheter",
-   "pourquoi": "Le jean droit classique qui tombe bien sur des boots. Vu à 47-49,90 € sur Amazon pour le Black Friday (Ouest-France). Vérifie qu'il est vendu par Amazon.",
-   "quand": "Plan B vérifié par le robot ce soir : 65,95 € chez Zalando (délavage clair « brightside »), en stock en 29x32 et 30x32 : https://www.zalando.fr/levis-501-levisoriginal-jean-droit-brightside-le221000v-k45.html"
+   "pourquoi": "Black Friday (27/11, 10 h 35) : 53,95 € chez Zalando, vérifié par le robot, en stock en 29x32 et 30x32 (65,95 € la veille). Délavage clair « brightside », le jean droit qui tombe bien sur des boots.",
+   "quand": "Amazon l'annonçait vers 49,90 € (Ouest-France), mais le robot ne peut pas le vérifier : seulement si l'appli l'affiche vendu par Amazon dans ta taille.",
+   "image": "https://img01.ztat.net/article/spp-media-p1/254cd18955bf49bdb94f6be6a4d3ab53/96cdfe9612fb432a837d9a53b28a26bf.jpg?imwidth=400"
   },
   {
    "nom": "The North Face Glacier, polaire col zippé noire",
