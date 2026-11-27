@@ -34,6 +34,7 @@ Trois demandes possibles, un dossier JSON chacune dans `data/dossiers/` :
   compte ni payer.
 - **Canada** (l'utilisateur va à Québec) : `python -m prixjuste convertir 230 CAD` donne le prix en euros, taxes du
   Québec comprises (TPS + TVQ, ajoutées en caisse). Rappel douane : 430 € d'achats hors UE par voyageur en avion.
+- **Comparateurs (Le Dénicheur, idealo) :** leur fiche peut mélanger plusieurs modèles ou versions (blouson et parka, enfant et adulte). Un prix de comparateur n'est jamais « vérifié » : on le confirme sur la page produit du marchand (modèle exact, taille adulte, coloris) avant de le donner.
 - **Boutique fiable ?** Pendant les grosses promos, les fausses boutiques pullulent (« Timberland −70 % »). Ne
   recommande que des marchands connus ; un vendeur tiers de place de marché est signalé comme tel.
 - **Collecte honnête** : on lit ce qui est public ; jamais de contournement d'un site qui refuse les robots.
