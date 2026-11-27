@@ -10,6 +10,19 @@
  "autres_coloris_ok": false,
  "liens": [
   {
+   "marchand": "Zalando",
+   "coloris": "Wheat · 40",
+   "taille": "40",
+   "exact": true,
+   "url": "https://www.zalando.fr/timberland-premium-6-inch-bottines-a-lacets-wheat-ti112k0bg-b15.html"
+  },
+  {
+   "marchand": "Courir",
+   "coloris": "Miel (Wheat) · 40 (stock par pointure non publié)",
+   "exact": true,
+   "url": "https://www.courir.com/fr/p/timberland-6-inch-boot-miel-1207964.html"
+  },
+  {
    "marchand": "Timberland (officiel)",
    "coloris": "Jaune · 40",
    "taille": "40",

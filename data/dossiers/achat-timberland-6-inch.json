@@ -5,12 +5,12 @@
  "taille": "40",
  "demande": "La Timberland, j'aimerais bien l'acheter : je l'achète maintenant ou c'est mieux quand ?",
  "article": "timberland",
- "verdict": "attendre",
+ "verdict": "acheter",
  "quand_court": "→ 30/11",
  "quand": "2026-11-30",
  "prix_cible": 160,
  "valable_jusqu_au": "2026-12-01",
- "resume": "N'achète pas à 190–230 € : sur 12 mois elle est souvent descendue à 160 € ou moins (132 € en février). Attends le Black Friday (27/11) et le Cyber Monday (30/11) ; achète sous 160 €. Sinon, prochain bon moment : les soldes d'hiver du 6 janvier.",
+ "resume": "ACHÈTE chez Courir : 138 € (Black Weeks, environ −40 %), vérifié par le robot le 27/11 à 16 h, sous ton objectif de 160 €. Vérifie que le 40 est proposé à la commande ; sinon Zalando à 172,95 € en 40 (en stock).",
  "produit": {
   "nom": "Timberland 6-Inch Premium imperméable, homme",
   "reference": "TB110061713 (jaune Wheat)",
@@ -18,6 +18,24 @@
   "url": "https://www.timberland.com/fr-fr/p/homme-10029/6-inch-boot-impermeable-timberland-premium-pour-homme-en-jaune-TB110061713"
  },
  "offres": [
+  {
+   "nom": "Timberland 6-Inch Premium jaune (miel)",
+   "marchand": "Courir",
+   "prix": 138.0,
+   "prix_avant": 230.0,
+   "url": "https://www.courir.com/fr/p/timberland-6-inch-boot-miel-1207964.html",
+   "image": "https://www.courir.com/on/demandware.static/-/Sites-master-catalog-courir/default/dw59be6fef/images/hi-res/001207964_101.jpg?sw=1000&sh=1000&sm=fit",
+   "pourquoi": "138 € lu par le robot le 27/11 (16 h), réf. homme TB1100617131. Courir ne publie pas le stock par pointure : vérifie que le 40 est sélectionnable avant de payer."
+  },
+  {
+   "nom": "Timberland 6-Inch Premium jaune (wheat)",
+   "marchand": "Zalando",
+   "prix": 172.95,
+   "prix_avant": 229.95,
+   "url": "https://www.zalando.fr/timberland-premium-6-inch-bottines-a-lacets-wheat-ti112k0bg-b15.html",
+   "taille": "40",
+   "pourquoi": "172,95 € en 40, en stock (vérifié le 27/11) : le plan B si Courir n'a plus le 40."
+  },
   {
    "nom": "Timberland 6-Inch Premium jaune",
    "marchand": "E.Leclerc (vendeur tiers Infopavon)",

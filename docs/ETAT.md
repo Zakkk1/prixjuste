@@ -1,5 +1,6 @@
 RELAIS: non
 
+- 27/11 16 h : Timberland 40 à 138 € chez Courir (trouvée par Claude dans Chrome, prix confirmé par le robot ; stock par pointure non publié) → dossier achat passé à ACHÈTE ; Courir et Zalando (172,95 € en 40) ajoutés aux liens suivis.
 - 27/11 10 h 35 : relecture Black Friday par le robot : McMurdo 325 € (M, bleu marine ; noir illisible), Glacier 49 €, Levi's 501 Zalando 53,95 € (était 65,95), Timberland 40 : 230 € officiel / 190,79 € Leclerc / 230 $ CA, Nuptse Zalando M remontée à 350 €.
 - 27/11 nuit : Canada vérifié par le robot : Timberland Heritage soldée ÉPUISÉE (dossiers mis à jour) ; Premium 6-Inch 230 $ CA (≈ 170 €) en stock ; McMurdo plus chère au Canada (≈ 369 €) qu'en France (325 €). Mention du crédit Amazon retirée du site public.
 - 27/11 nuit : dossier « pépites hors liste » (Carhartt Detroit Winter 149,95 € en M, OneBlade 360 visage + corps 39,99 € chez Philips, vérifiés ; AirPods Pro 3 188 € sur Amazon, non vérifiable).
