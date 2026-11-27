@@ -26,7 +26,10 @@
   ]
  },
  "patagonia-better-sweater-1-4-zip": {
-  "motifs": []
+  "issue": 14,
+  "motifs": [
+   "acheter"
+  ]
  },
  "patagonia-sweater-fleece-jacket-taille-m": {
   "issue": 10,
@@ -37,8 +40,6 @@
  },
  "timberland": {
   "issue": 2,
-  "motifs": [
-   "bidon"
-  ]
+  "motifs": []
  }
 }
