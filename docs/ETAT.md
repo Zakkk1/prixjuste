@@ -1,5 +1,6 @@
 RELAIS: non
 
+- 27/11 nuit : Canada vérifié par le robot : Timberland Heritage soldée ÉPUISÉE (dossiers mis à jour) ; Premium 6-Inch 230 $ CA (≈ 170 €) en stock ; McMurdo plus chère au Canada (≈ 369 €) qu'en France (325 €). Mention du crédit Amazon retirée du site public.
 - 27/11 nuit : dossier « pépites hors liste » (Carhartt Detroit Winter 149,95 € en M, OneBlade 360 visage + corps 39,99 € chez Philips, vérifiés ; AirPods Pro 3 188 € sur Amazon, non vérifiable).
 - 24/11 nuit : 5 photos Pinterest → dossier « Tes looks Pinterest » (New York, workwear délavé, minimal) ; Nuptse 1996 suivie (alerte 250 €, Zalando 279,95 € en M) ; style ajouté au profil.
 

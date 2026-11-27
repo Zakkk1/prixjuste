@@ -78,10 +78,10 @@
    "prix": 129.99,
    "url": "https://www.timberland.com/en-ca/p/men/footwear-10039/mens-timberland-heritage-6-inch-waterproof-boot-TB0A5RNWEM4",
    "taille": "US 7 (40)",
-   "verdict": "acheter",
-   "quand_court": "à Québec",
-   "pourquoi": "Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
-   "quand": "À acheter sur place à Québec, tant que la promo dure."
+   "verdict": "surveiller",
+   "pourquoi": "Épuisée dans toutes les tailles sur Timberland Canada (relu par le robot le 27/11 à 2 h). Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
+   "quand": "À acheter sur place à Québec, tant que la promo dure.",
+   "en_stock": false
   },
   {
    "nom": "CAT Colorado 2.0 Hiker WP jaune miel",

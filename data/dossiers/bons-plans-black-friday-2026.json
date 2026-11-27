@@ -4,7 +4,7 @@
  "le": "2026-11-24",
  "valable_jusqu_au": "2026-12-01",
  "demande": "Il y a le Black Friday : déniche-moi des trucs.",
- "resume": "Deux vraies affaires en France : la parka McMurdo à 325 € (−35 %) et la polaire Glacier col zippé à 49 € (−30 %), en M. À Québec : la Timberland Heritage à environ 95 €. La Patagonia et la Timberland Premium jaune : attends.",
+ "resume": "Deux vraies affaires en France : la parka McMurdo à 325 € (−35 %) et la polaire Glacier col zippé à 49 € (−30 %), en M. La Timberland Heritage soldée au Canada est épuisée (27/11). La Patagonia et la Timberland Premium jaune : attends.",
  "plans": [
   {
    "nom": "The North Face McMurdo Parka homme",
@@ -57,10 +57,10 @@
    "prix": 129.99,
    "url": "https://www.timberland.com/en-ca/p/men/footwear-10039/mens-timberland-heritage-6-inch-waterproof-boot-TB0A5RNWEM4",
    "taille": "US 7 (40)",
-   "verdict": "acheter",
-   "quand_court": "à Québec",
-   "pourquoi": "Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
-   "quand": "À acheter sur place à Québec, tant que la promo dure."
+   "verdict": "surveiller",
+   "pourquoi": "Épuisée dans toutes les tailles sur Timberland Canada (relu par le robot le 27/11 à 2 h). Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
+   "quand": "À acheter sur place à Québec, tant que la promo dure.",
+   "en_stock": false
   },
   {
    "nom": "Timberland 6-Inch Premium jaune",

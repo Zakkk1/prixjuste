@@ -5,7 +5,7 @@
  "taille": "M · pointure 40",
  "demande": "Ma tenue d'hiver pour Québec, avec les pièces que je suis déjà.",
  "look": "Parka longue en duvet, polaire à col zippé, boots jaunes imperméables : chaud jusqu'à −20 °C, et le look outdoor classique.",
- "resume": "La tenue complète coûte environ 645 € au meilleur prix d'aujourd'hui, ou environ 520 € en achetant la parka et la Timberland Heritage soldée sur place à Québec.",
+ "resume": "La tenue complète coûte environ 645 € au meilleur prix d'aujourd'hui en France. Mise à jour du 27/11 : l'option « à Québec » ne tient plus (Heritage soldée épuisée, parka plus chère là-bas) ; achète en France.",
  "options": [
   {
    "nom": "Les pièces exactes",
@@ -51,7 +51,7 @@
   },
   {
    "nom": "Même allure, moins cher",
-   "idee": "Achetée sur place à Québec : la parka et la Timberland Heritage soldée.",
+   "idee": "Mise à jour du 27/11 : la Heritage soldée est épuisée et la McMurdo est plus chère au Canada (environ 499,99 $ CA, soit 369 € taxes comprises, contre 325 € en France). Option gardée pour mémoire.",
    "pieces": [
     {
      "role": "Manteau",
@@ -89,17 +89,17 @@
      "prix": 129.99,
      "url": "https://www.timberland.com/en-ca/p/men/footwear-10039/mens-timberland-heritage-6-inch-waterproof-boot-TB0A5RNWEM4",
      "taille": "US 7 (40)",
-     "verdict": "acheter",
-     "quand_court": "à Québec",
-     "pourquoi": "Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
+     "verdict": "surveiller",
+     "pourquoi": "Épuisée dans toutes les tailles sur Timberland Canada (relu par le robot le 27/11 à 2 h). Soldée à 129,99 $ CA, soit environ 95 € taxes du Québec comprises ; il en reste en US 7 (ton 40), vérifié le 24/11. C'est l'autre 6-Inch de la marque : même allure, nubuck blé, mais col et lacets bleus.",
      "quand": "À acheter sur place à Québec, tant que la promo dure.",
-     "role": "Chaussures"
+     "role": "Chaussures",
+     "en_stock": false
     }
    ]
   }
  ],
  "conseils": [
-  "Au retour en France : rien à payer à la douane jusqu'à 430 € d'achats faits au Canada (voyage en avion). Parka et Heritage ensemble, environ 391 € : ça passe.",
+  "Au retour en France : rien à payer à la douane jusqu'à 430 € d'achats faits au Canada (voyage en avion).",
   "Achète d'abord ce qui est au plus bas (la parka) ; la Patagonia quand elle passe sous 110 €, la Timberland Premium sous 160 € : tu es prévenu sur ton téléphone."
  ]
 }
