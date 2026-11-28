@@ -126,3 +126,12 @@
 {"ts":"2026-11-27T15:23:32","lien":"https://tascon.es/products/timberland-botas-hombre-6-inch-premium-boot-wheat-amarillo","action":"direct","statut":"ok","detail":"266.00 €"}
 {"ts":"2026-11-27T15:23:35","lien":"https://jdsports.ca/products/timberland-6-boot-wheat","action":"direct","statut":"ok","detail":"230.00 €"}
 {"ts":"2026-11-27T15:23:38","lien":"https://www.timberland.com/fr-ca/p/hommes/chaussures-10039/bottes-impermeables-timberland-premium-6-pouces-pour-hommes-TB110061713","action":"direct","statut":"ok","detail":"230.00 €"}
+{"ts":"2026-11-28T14:39:40","lien":"https://www.zalando.fr/timberland-premium-6-inch-bottines-a-lacets-wheat-ti112k0bg-b15.html#taille=40","action":"direct","statut":"bloqué","detail":"le site refuse l'accès aux robots (HTTP 403)"}
+{"ts":"2026-11-28T14:39:45","lien":"https://www.courir.com/fr/p/timberland-6-inch-boot-miel-1207964.html","action":"direct","statut":"ok","detail":"138.00 €"}
+{"ts":"2026-11-28T14:39:45","lien":"https://www.timberland.com/fr-fr/p/homme-10029/6-inch-boot-impermeable-timberland-premium-pour-homme-en-jaune-TB110061713#taille=40","action":"direct","statut":"bloqué","detail":"robots.txt interdit cette page (ou le site bloque les robots)"}
+{"ts":"2026-11-28T14:39:50","lien":"https://www.e.leclerc/fp/chaussures-timberland-premium-6-tb110061713-0197064590667","action":"direct","statut":"ok","detail":"198.76 €"}
+{"ts":"2026-11-28T14:39:53","lien":"https://www.sportsdirect.fr/timberland-premium-6-inch-hiker-boots-182098","action":"direct","statut":"ok","detail":"220.00 €"}
+{"ts":"2026-11-28T14:39:58","lien":"https://germainecollard.com/en/product/premium-6inch-118424","action":"direct","statut":"ok","detail":"219.99 €"}
+{"ts":"2026-11-28T14:40:01","lien":"https://tascon.es/products/timberland-botas-hombre-6-inch-premium-boot-wheat-amarillo","action":"direct","statut":"ok","detail":"265.00 €"}
+{"ts":"2026-11-28T14:40:04","lien":"https://jdsports.ca/products/timberland-6-boot-wheat","action":"direct","statut":"ok","detail":"230.00 €"}
+{"ts":"2026-11-28T14:40:04","lien":"https://www.timberland.com/fr-ca/p/hommes/chaussures-10039/bottes-impermeables-timberland-premium-6-pouces-pour-hommes-TB110061713","action":"direct","statut":"bloqué","detail":"robots.txt interdit cette page (ou le site bloque les robots)"}
